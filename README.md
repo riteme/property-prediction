@@ -18,3 +18,8 @@ sudo pip install scikit-learn colorama click
 ## Usage
 
 See `python src/main.py --help`.
+
+## Contributors
+
+* Lin Zihang ([@EZlzh](https://github.com/EZlzh))
+* Xue Zhenliang ([@riteme](https://github.com/riteme))
