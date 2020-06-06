@@ -12,7 +12,7 @@ from interface import ModelInterface
 
 from model import (
     BaseModel,
-    StupidModel
+    GCN
 )
 
 @click.group()
@@ -40,17 +40,20 @@ def train(directory: Text,
     assert data_folder.is_dir(), 'Invalid data folder'
 
     dev = require_device(cuda)
-    model = ModelInterface(StupidModel, dev)
-    optimizer = torch.optim.Adam(params=model.inst.parameters(), lr=learning_rate)
-
     for fold in sorted(data_folder.iterdir()):
         log.info(f'Processing "{fold}"...')
 
+        # model & optimizer
+        model = ModelInterface(GCN, dev)
+        optimizer = torch.optim.Adam(params=model.inst.parameters(), lr=learning_rate)
+
+        # load the fold
         raw = [
             util.load_csv(fold/name)
             for name in ['train.csv', 'test.csv', 'dev.csv']
         ]
 
+        # let the model parse these molecules
         data = []
         for i in range(len(raw)):
             buf = []
@@ -61,24 +64,39 @@ def train(directory: Text,
         test_batch, _test_label = util.separate_items(data[1])
         test_label = torch.tensor(_test_label)
 
+        # training phase
         data_ptr = util.RandomIterator(data[0])
         last_loss = None
+        sum_loss, batch_cnt = 0.0, 0
         while True:
+            # generate batch
             batch, _label = util.separate_items(data_ptr.iterate(batch_size))
             label = torch.tensor(_label)
 
-            loss = train_step(model, optimizer, batch, label)
-            pred = model.predict(test_batch)
-            correct = (pred == test_label).sum().item()
-            accuracy = correct / len(test_batch)
-            log.debug(f'loss = {loss}')
-            log.debug(f'accuracy = {accuracy}')
+            # train a mini-batch
+            batch_loss = train_step(model, optimizer, batch, label)
+            sum_loss += batch_loss
+            batch_cnt += 1
+            log.debug(f'{batch_loss}, {sum_loss}')
 
-            if last_loss and abs(loss - last_loss) < epsilon:
-                log.debug('Converged.')
-                break
-            last_loss = loss
+            # convergence test
+            if data_ptr.is_cycled():
+                loss = sum_loss / batch_cnt
+                sum_loss, batch_cnt = 0.0, 0
+                log.debug(f'loss = {loss}')
 
+                pred = model.predict(test_batch)
+                log.debug(f'pred = {pred}')
+                correct = (pred == test_label).sum().item()
+                accuracy = correct / len(test_batch)
+                log.debug(f'accuracy = {accuracy}')
+
+                if last_loss is not None and abs(loss - last_loss) < epsilon:
+                    log.debug('Converged.')
+                    break
+                last_loss = loss
+
+        # model evaluation on `dev.csv`
         roc_auc, prc_auc = evaluate_model(model, data[2])
         log.info(f'ROC-AUC: {roc_auc}')
         log.info(f'PRC-AUC: {prc_auc}')
@@ -91,7 +109,7 @@ def require_device(prefer_cuda: bool) -> torch.device:
 
 def train_step(
     model: ModelInterface,
-    # `torch.optim.optimizer.Optimizer` does not exist.
+    # `torch.optim.optimizer.Optimizer` is ghost.
     # WHY DOES MYPY NOT RECOGNIZE `torch.optim.Optimizer`?
     optimizer: 'torch.optim.optimizer.Optimizer',
     batch: Sequence[Any],
@@ -99,10 +117,12 @@ def train_step(
 ) -> float:
     criterion = torch.nn.CrossEntropyLoss()
     optimizer.zero_grad()
+
     pred = model.forward(batch)
     loss = criterion(pred, label)
     loss.backward()
     optimizer.step()
+
     return loss.item()
 
 def evaluate_model(
@@ -110,7 +130,7 @@ def evaluate_model(
     data: List[Item]
 ) -> Tuple[float, float]:
     batch, label = util.separate_items(data)
-    pred = model.predict(data)
+    pred = model.predict(batch)
     return util.evaluate_auc(label, pred.tolist())
 
 if __name__ == '__main__':

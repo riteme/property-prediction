@@ -7,9 +7,12 @@ from rdkit.Chem import MolFromSmiles
 
 class ModelInterface:
     def __init__(self, model: Type[BaseModel], dev: Optional[torch.device] = None):
-        self.inst = model(dev)
+        self.inst = model(dev=dev).to(dev)
 
     def process(self, smiles: Text) -> Any:
+        '''Parse molecule
+        '''
+
         mol = MolFromSmiles(smiles)
         assert mol is not None, 'Failed to parse SMILES string'
         result = self.inst.process(mol)

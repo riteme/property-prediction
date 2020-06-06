@@ -19,6 +19,17 @@ sudo pip install scikit-learn colorama click
 
 See `python src/main.py --help`.
 
+e.g.
+
+```
+python src/main.py -v train -e 0.01 -b 256
+```
+
+## TODO
+
+* [ ] Memory cache for molecule parsing.
+* [ ] Multiprocessing.
+
 ## Contributors
 
 * Lin Zihang ([@EZlzh](https://github.com/EZlzh))

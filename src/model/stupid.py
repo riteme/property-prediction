@@ -5,13 +5,14 @@ from random import random
 from .base import BaseModel
 
 import torch
-from torch import nn
 from rdkit.Chem import Mol
 
 class StupidModel(BaseModel):
     def __init__(self, dev: Optional[torch.device] = None):
         super().__init__(dev)
-        self.weight = nn.Parameter(torch.tensor([1.0, 1.0]), True)
+        self.weight = torch.nn.Parameter(
+            torch.tensor([1.0, 1.0]), True
+        )
 
     def process(self, mol: Mol):
         return None

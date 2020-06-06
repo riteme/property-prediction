@@ -2,7 +2,8 @@ from typing import (
     Union, Dict, TextIO,
     Text, Type, Sequence,
     Tuple, Iterable, List,
-    TypeVar, Iterator, Generic
+    TypeVar, Iterator, Generic,
+    NamedTuple, Any
 )
 T = TypeVar('T')
 
@@ -13,19 +14,38 @@ from collections import namedtuple
 
 from sklearn import metrics
 
-Item = namedtuple('Item', ['obj', 'activity'])
+# Item = namedtuple('Item', ['obj', 'activity'])
+class Item(NamedTuple):
+    obj: Any
+    activity: int
 
 class RandomIterator(Generic[T]):
+    '''iterate over a list and shuffle the list at each round.
+
+    self.data: target list.\n
+    self.pos: current position of the cursor.\n
+    self.cycled: is last round finished?
+    '''
+
     def __init__(self, data: List[T]):
         self.data = data
         self.pos = 0
+        self.cycled = False
+
+    def is_cycled(self) -> bool:
+        result = self.cycled
+        self.cycled = False
+        return result
 
     def iterate(self, count: int) -> Iterator[T]:
         for i in range(count):
+            yield self.data[self.pos]
+            self.pos += 1
+
             if self.pos >= len(self.data):
                 self.pos = 0
+                self.cycled = True
                 shuffle(self.data)
-            yield self.data[self.pos]
 
 def sha1hex(text: Text) -> Text:
     return sha1(text.encode('utf-8')).hexdigest()
@@ -64,7 +84,9 @@ def separate_items(items: Iterable[Item]) -> Tuple[List[object], List[int]]:
 
 def evaluate_auc(std: Sequence[int], pred: Sequence[float]) -> Tuple[float, float]:
     '''Evaluate ROC-AUC and PRC-AUC, returned in a tuple.
+    see <https://github.com/yangkevin2/coronavirus_data/blob/master/scripts/evaluate_auc.py>
     '''
+
     roc_auc = metrics.roc_auc_score(std, pred)
     prec, recall, _ = metrics.precision_recall_curve(std, pred)
     prc_auc = metrics.auc(recall, prec)
