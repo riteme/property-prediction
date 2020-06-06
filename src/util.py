@@ -1,8 +1,31 @@
-from typing import Union, Dict, TextIO, Text, Type, Sequence, Tuple
+from typing import (
+    Union, Dict, TextIO,
+    Text, Type, Sequence,
+    Tuple, Iterable, List,
+    TypeVar, Iterator, Generic
+)
+T = TypeVar('T')
+
+from random import shuffle
 from pathlib import Path
 from hashlib import sha1
+from collections import namedtuple
 
 from sklearn import metrics
+
+Item = namedtuple('Item', ['obj', 'activity'])
+
+class RandomIterator(Generic[T]):
+    def __init__(self, data: List[T]):
+        self.data = data
+        self.pos = 0
+
+    def iterate(self, count: int) -> Iterator[T]:
+        for i in range(count):
+            if self.pos >= len(self.data):
+                self.pos = 0
+                shuffle(self.data)
+            yield self.data[self.pos]
 
 def sha1hex(text: Text) -> Text:
     return sha1(text.encode('utf-8')).hexdigest()
@@ -30,6 +53,14 @@ def load_csv(src: Union[Text, Path, TextIO]) -> Dict[Text, int]:
     finally:
         if fp is not src:
             fp.close()
+
+def separate_items(items: Iterable[Item]) -> Tuple[List[object], List[int]]:
+    objs = []
+    labels = []
+    for x in items:
+        objs.append(x.obj)
+        labels.append(x.activity)
+    return objs, labels
 
 def evaluate_auc(std: Sequence[int], pred: Sequence[float]) -> Tuple[float, float]:
     '''Evaluate ROC-AUC and PRC-AUC, returned in a tuple.

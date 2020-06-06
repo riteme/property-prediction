@@ -1,5 +1,6 @@
-import sys
 from typing import Text, TextIO, Optional
+
+import sys
 
 from colorama import Fore
 

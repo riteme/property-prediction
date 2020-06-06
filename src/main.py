@@ -1,53 +1,25 @@
-from random import shuffle
-from pathlib import Path
-from collections import namedtuple
 from typing import Text, List, Sequence, Any, Tuple
+
+from pathlib import Path
 
 import click
 import torch
 
 import log
 import util
-from model import BaseModel
+from util import Item
 from interface import ModelInterface
 
-Item = namedtuple('Item', ['obj', 'activity'])
+from model import (
+    BaseModel,
+    StupidModel
+)
 
 @click.group()
 @click.option('-v', '--verbose', is_flag=True, help='Show debug messages.')
 def cli(verbose: bool) -> None:
     if verbose:
         log.LOG_LEVEL = 0
-
-def require_device(prefer_cuda: bool) -> torch.device:
-    if prefer_cuda and not torch.cuda.is_available():
-        log.warn('CUDA not available.')
-        prefer_cuda = False
-    return torch.device('cuda' if prefer_cuda else 'cpu')
-
-def train_step(
-    model: ModelInterface,
-    optimizer: torch.optim.optimizer.Optimizer,
-    batch: Sequence[Any],
-    label: torch.Tensor
-) -> float:
-    criterion = torch.nn.CrossEntropyLoss()
-    optimizer.zero_grad()
-    pred = model.forward(batch)
-    loss = criterion(pred, label)
-    loss.backward()
-    optimizer.step()
-    return loss.item()
-
-def evaluate_model(model: ModelInterface, data: List[Item]) -> Tuple[float, float]:
-    batch = []
-    label = []
-    for x in data:
-        batch.append(x.obj)
-        label.append(x.activity)
-
-    pred = model.predict(data)
-    return util.evaluate_auc(label, pred)
 
 @cli.command(short_help='Train model.')
 @click.option('-d', '--directory', type=str, default='data',
@@ -68,7 +40,7 @@ def train(directory: Text,
     assert data_folder.is_dir(), 'Invalid data folder'
 
     dev = require_device(cuda)
-    model = ModelInterface(BaseModel, dev)
+    model = ModelInterface(StupidModel, dev)
     optimizer = torch.optim.Adam(params=model.inst.parameters(), lr=learning_rate)
 
     for fold in sorted(data_folder.iterdir()):
@@ -79,28 +51,29 @@ def train(directory: Text,
             for name in ['train.csv', 'test.csv', 'dev.csv']
         ]
 
-        data: List[List[Item]] = []
+        data = []
         for i in range(len(raw)):
-            buf: List[Item] = []
-            for smiles, activity in data[i]:
+            buf = []
+            for smiles, activity in raw[i].items():
                 buf.append(Item(model.process(smiles), activity))
             data.append(buf)
 
-        data_ptr = len(data[0])
+        test_batch, _test_label = util.separate_items(data[1])
+        test_label = torch.tensor(_test_label)
+
+        data_ptr = util.RandomIterator(data[0])
         last_loss = None
         while True:
-            batch = [None] * batch_size
-            label = torch.zeros(batch_size)
-            for i in range(batch_size):
-                if data_ptr >= len(data[0]):
-                    data_ptr = 0
-                    shuffle(data[0])
-                batch[i] = data[0][i].obj
-                label[i] = data[0][i].activity
+            batch, _label = util.separate_items(data_ptr.iterate(batch_size))
+            label = torch.tensor(_label)
 
             loss = train_step(model, optimizer, batch, label)
-
+            pred = model.predict(test_batch)
+            correct = (pred == test_label).sum().item()
+            accuracy = correct / len(test_batch)
             log.debug(f'loss = {loss}')
+            log.debug(f'accuracy = {accuracy}')
+
             if last_loss and abs(loss - last_loss) < epsilon:
                 log.debug('Converged.')
                 break
@@ -109,6 +82,36 @@ def train(directory: Text,
         roc_auc, prc_auc = evaluate_model(model, data[2])
         log.info(f'ROC-AUC: {roc_auc}')
         log.info(f'PRC-AUC: {prc_auc}')
+
+def require_device(prefer_cuda: bool) -> torch.device:
+    if prefer_cuda and not torch.cuda.is_available():
+        log.warn('CUDA not available.')
+        prefer_cuda = False
+    return torch.device('cuda' if prefer_cuda else 'cpu')
+
+def train_step(
+    model: ModelInterface,
+    # `torch.optim.optimizer.Optimizer` does not exist.
+    # WHY DOES MYPY NOT RECOGNIZE `torch.optim.Optimizer`?
+    optimizer: 'torch.optim.optimizer.Optimizer',
+    batch: Sequence[Any],
+    label: torch.Tensor
+) -> float:
+    criterion = torch.nn.CrossEntropyLoss()
+    optimizer.zero_grad()
+    pred = model.forward(batch)
+    loss = criterion(pred, label)
+    loss.backward()
+    optimizer.step()
+    return loss.item()
+
+def evaluate_model(
+    model: ModelInterface,
+    data: List[Item]
+) -> Tuple[float, float]:
+    batch, label = util.separate_items(data)
+    pred = model.predict(data)
+    return util.evaluate_auc(label, pred.tolist())
 
 if __name__ == '__main__':
     cli()
