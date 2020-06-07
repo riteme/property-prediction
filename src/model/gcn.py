@@ -12,13 +12,12 @@ import log
 
 class GCNGraph(NamedTuple):
     n: int
-    adj: List[List[int]]
-    deg: torch.Tensor
+    adj: torch.Tensor
     x: torch.Tensor
 
 class GCN(BaseModel):
     def __init__(self,
-        num_iteration: int = 3,
+        num_iteration: int = 10,
         max_atomic_num: int = 100,
         dev: Optional[torch.device] = None
     ):
@@ -26,42 +25,45 @@ class GCN(BaseModel):
         self.num_iteration = num_iteration
         self.max_atomic_num = max_atomic_num
 
-        self.agg = nn.Linear(self.max_atomic_num, self.max_atomic_num, False)
+        self.agg = nn.Linear(self.max_atomic_num, self.max_atomic_num, bias=False)
         self.fc = nn.Linear(self.max_atomic_num, 2)
-        self.relu = nn.ReLU()
+        self.activate = nn.Tanh()
 
     def process(self, mol: chem.Mol) -> GCNGraph:
         n = mol.GetNumAtoms()
-        adj = [
-            list(map(lambda x: x.GetIdx(), u.GetNeighbors())) + [u.GetIdx()]
-            for u in mol.GetAtoms()
-        ]
-        deg = [
+
+        # all edges (including all self-loops) as index
+        begin_idx = [u.GetBeginAtomIdx() for u in mol.GetBonds()]
+        end_idx = [u.GetEndAtomIdx() for u in mol.GetBonds()]
+        ran = list(range(n))
+        index = [begin_idx + end_idx + ran, end_idx + begin_idx + ran]
+
+        # construct coefficients adjacent matrix
+        deg = torch.tensor([
             sqrt(1 / (len(u.GetNeighbors()) + 1))
             for u in mol.GetAtoms()
-        ]  # +1 for disconnected nodes
-        idx = [u.GetAtomicNum() - 1 for u in mol.GetAtoms()]
+        ], device=self.device)  # +1 for disconnected nodes
+        coeff = deg.reshape(-1, 1) @ deg[None, :]  # pairwise coefficients
+        adj = torch.zeros((n, n), device=self.device)
+        adj[index] = coeff[index]
 
-        return GCNGraph(
-            n, adj,
-            torch.tensor(deg, dtype=torch.float, device=self.device),
-            nn.functional.one_hot(
-                torch.tensor(idx, device=self.device),
-                num_classes=self.max_atomic_num
-            )
-        )
+        # node embedding
+        idx = [u.GetAtomicNum() - 1 for u in mol.GetAtoms()]
+        vec = nn.functional.one_hot(
+            torch.tensor(idx, device=self.device),
+            num_classes=self.max_atomic_num
+        ).to(torch.float)
+
+        return GCNGraph(n, adj, vec)
 
     def forward(self, data):
         data: GCNGraph  # cue to mypy
 
-        h0 = data.x
+        h = data.x
         for _ in range(self.num_iteration):
-            h = torch.zeros((data.n, self.max_atomic_num), device=self.device)
-            for i, idx in enumerate(data.adj):
-                y = data.deg[idx] * data.deg[i]
-                z = (h0[idx] * y.reshape(-1, 1)).sum(dim=0)
-                h[i] = self.relu(self.agg(z))
-            h0 = h
+            y = data.adj @ h
+            h = self.activate(self.agg(y))
 
-        pred = self.fc(h0.sum(dim=0) / data.n)
+        z = h.sum(dim=0) / data.n
+        pred = self.fc(z)
         return pred
