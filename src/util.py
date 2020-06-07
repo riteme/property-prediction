@@ -1,13 +1,8 @@
-from typing import (
-    Union, Dict, TextIO,
-    Text, Type, Sequence,
-    Tuple, Iterable, List,
-    TypeVar, Iterator, Generic,
-    NamedTuple, Any
-)
+from typing import *
+from typing import TextIO
 T = TypeVar('T')
 
-from random import shuffle
+from random import shuffle, random
 from pathlib import Path
 from hashlib import sha1
 from collections import namedtuple
@@ -23,12 +18,17 @@ class RandomIterator(Generic[T]):
     '''iterate over a list and shuffle the list at each round.
 
     self.data: target list.\n
+    self.drop_fn: a function to determine dropout probabilities.\n
     self.pos: current position of the cursor.\n
     self.cycled: is last round finished?
     '''
 
-    def __init__(self, data: List[T]):
+    def __init__(self,
+        data: List[T],
+        drop_fn: Optional[Callable[[T], float]] = None
+    ):
         self.data = data
+        self.drop_fn = drop_fn
         self.pos = 0
         self.cycled = False
 
@@ -39,13 +39,19 @@ class RandomIterator(Generic[T]):
 
     def iterate(self, count: int) -> Iterator[T]:
         for i in range(count):
-            yield self.data[self.pos]
-            self.pos += 1
+            while True:
+                item = self.data[self.pos]
+                self.pos += 1
 
-            if self.pos >= len(self.data):
-                self.pos = 0
-                self.cycled = True
-                shuffle(self.data)
+                if self.pos >= len(self.data):
+                    self.pos = 0
+                    self.cycled = True
+                    shuffle(self.data)
+
+                if self.drop_fn is None or self.drop_fn(item) <= random():
+                    break
+
+            yield item
 
 def sha1hex(text: Text) -> Text:
     return sha1(text.encode('utf-8')).hexdigest()

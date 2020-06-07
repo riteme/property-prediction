@@ -17,9 +17,9 @@ class GCNGraph(NamedTuple):
 
 class GCN(BaseModel):
     def __init__(self,
-        num_iteration: int = 3,
+        num_iteration: int = 2,
         max_atomic_num: int = 32,
-        embedding_dim: int = 10,
+        embedding_dim: int = 64,
         dev: Optional[torch.device] = None
     ):
         super().__init__(dev)
@@ -30,7 +30,7 @@ class GCN(BaseModel):
         self.embed = nn.Embedding(self.max_atomic_num, self.embedding_dim)
         self.agg = nn.Linear(self.embedding_dim, self.embedding_dim, bias=False)
         self.fc = nn.Linear(self.embedding_dim, 2)
-        self.activate = nn.ReLU()
+        self.activate = nn.LeakyReLU()
 
     def process(self, mol: chem.Mol, atom_map: Dict[int, int]) -> GCNGraph:
         n = mol.GetNumAtoms()

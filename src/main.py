@@ -1,4 +1,4 @@
-from typing import Text, List, Sequence, Any, Tuple
+from typing import Text, List, Sequence, Any, Tuple, Optional
 
 from pathlib import Path
 
@@ -30,11 +30,20 @@ def cli(verbose: bool) -> None:
     help='Learning rate for optimizer.')
 @click.option('-e', '--epsilon', type=float, default=1e-3,
     help='Maximum difference assumed to be converged.')
+@click.option('--train-with-test', is_flag=True,
+    help='Train with test data (data[1]).')
+@click.option('--min-iteration', type=int,
+    help='Minimum number of iterations.')
+@click.option('--ndrop', type=float,
+    help='Probability to drop negative items during training.')
 @click.option('--cuda', is_flag=True,
     help='Prefer CUDA for PyTorch.')
 def train(directory: Text,
     batch_size: int, learning_rate: float,
-    epsilon: float, cuda: bool
+    epsilon: float, cuda: bool,
+    train_with_test: bool,
+    min_iteration: int,
+    ndrop: Optional[float] = None
 ) -> None:
     data_folder = Path(directory)
     assert data_folder.is_dir(), 'Invalid data folder'
@@ -66,8 +75,14 @@ def train(directory: Text,
         test_label = torch.tensor(_test_label)
 
         # training phase
-        data_ptr = util.RandomIterator(data[0])
-        last_loss = None
+        drop_fn = lambda x: 0.8 if x.activity == 0 else 0
+        train_data = data[0] + data[1] if train_with_test else data[0]
+        data_ptr = util.RandomIterator(train_data,
+            drop_fn=drop_fn if ndrop is not None else None
+        )
+
+        countdown = min_iteration
+        min_loss = 1e99  # as infinite
         sum_loss, batch_cnt = 0.0, 0
         while True:
             # generate batch
@@ -83,19 +98,19 @@ def train(directory: Text,
             # convergence test
             if data_ptr.is_cycled():
                 loss = sum_loss / batch_cnt
-                sum_loss, batch_cnt = 0.0, 0
-                log.debug(f'loss = {loss}')
-
                 pred = model.predict(test_batch)
-                log.debug(f'pred = {pred}')
-                correct = (pred == test_label).sum().item()
-                accuracy = correct / len(test_batch)
-                log.debug(f'accuracy = {accuracy}')
 
-                if last_loss is not None and abs(loss - last_loss) < epsilon:
-                    log.debug('Converged.')
-                    break
-                last_loss = loss
+                count = util.metrics.confusion_matrix(test_label, pred)
+                log.debug(f'tn={count[0][0]},fp={count[0][1]}/tp={count[1][1]},fn={count[1][0]}. loss={loss},min={min_loss}')
+
+                if loss <= min_loss:
+                    if countdown <= 0 and min_loss - loss < epsilon:
+                        log.debug('Converged.')
+                        break
+                    min_loss = loss
+
+                countdown -= 1
+                sum_loss, batch_cnt = 0.0, 0
 
         # model evaluation on `dev.csv`
         roc_auc, prc_auc = evaluate_model(model, data[2])
@@ -117,8 +132,8 @@ def train_step(
     batch: Sequence[Any],
     label: torch.Tensor
 ) -> float:
-    criterion = torch.nn.CrossEntropyLoss(weight=torch.tensor([1.0, 60.0]))
-    # criterion = torch.nn.CrossEntropyLoss()
+    # criterion = torch.nn.CrossEntropyLoss(weight=torch.tensor([1.0, 60.0]))
+    criterion = torch.nn.CrossEntropyLoss()
     optimizer.zero_grad()
 
     pred = model.forward(batch)
