@@ -13,20 +13,23 @@ import log
 class GCNGraph(NamedTuple):
     n: int
     adj: torch.Tensor
-    x: torch.Tensor
+    num: torch.Tensor  # atomic numbers
 
 class GCN(BaseModel):
     def __init__(self,
-        num_iteration: int = 10,
+        num_iteration: int = 3,
         max_atomic_num: int = 32,
+        embedding_dim: int = 10,
         dev: Optional[torch.device] = None
     ):
         super().__init__(dev)
         self.num_iteration = num_iteration
         self.max_atomic_num = max_atomic_num
+        self.embedding_dim = embedding_dim
 
-        self.agg = nn.Linear(self.max_atomic_num, self.max_atomic_num, bias=False)
-        self.fc = nn.Linear(self.max_atomic_num, 2)
+        self.embed = nn.Embedding(self.max_atomic_num, self.embedding_dim)
+        self.agg = nn.Linear(self.embedding_dim, self.embedding_dim, bias=False)
+        self.fc = nn.Linear(self.embedding_dim, 2)
         self.activate = nn.ReLU()
 
     def process(self, mol: chem.Mol, atom_map: Dict[int, int]) -> GCNGraph:
@@ -48,18 +51,17 @@ class GCN(BaseModel):
         adj[index] = coeff[index]
 
         # node embedding
-        idx = [atom_map[u.GetAtomicNum()] for u in mol.GetAtoms()]
-        vec = nn.functional.one_hot(
-            torch.tensor(idx, device=self.device),
-            num_classes=self.max_atomic_num
-        ).to(torch.float)
+        num = torch.tensor(
+            [atom_map[u.GetAtomicNum()] for u in mol.GetAtoms()],
+            device=self.device
+        )
 
-        return GCNGraph(n, adj, vec)
+        return GCNGraph(n, adj, num)
 
     def forward(self, data):
         data: GCNGraph  # cue to mypy
 
-        h = data.x
+        h = self.embed(data.num)
         for _ in range(self.num_iteration):
             y = data.adj @ h
             h = self.activate(self.agg(y))

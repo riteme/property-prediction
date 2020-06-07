@@ -101,7 +101,7 @@ def train(directory: Text,
         roc_auc, prc_auc = evaluate_model(model, data[2])
         log.info(f'ROC-AUC: {roc_auc}')
         log.info(f'PRC-AUC: {prc_auc}')
-        log.debug(f'parameters: {list(model.inst.parameters())}')
+        # log.debug(f'parameters: {list(model.inst.parameters())}')
 
 def require_device(prefer_cuda: bool) -> torch.device:
     if prefer_cuda and not torch.cuda.is_available():
@@ -117,7 +117,8 @@ def train_step(
     batch: Sequence[Any],
     label: torch.Tensor
 ) -> float:
-    criterion = torch.nn.CrossEntropyLoss()
+    criterion = torch.nn.CrossEntropyLoss(weight=torch.tensor([1.0, 60.0]))
+    # criterion = torch.nn.CrossEntropyLoss()
     optimizer.zero_grad()
 
     pred = model.forward(batch)
