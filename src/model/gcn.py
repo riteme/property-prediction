@@ -1,5 +1,7 @@
 from typing import Optional, List, NamedTuple
 
+from math import sqrt
+
 from .base import BaseModel
 
 import torch
@@ -34,7 +36,10 @@ class GCN(BaseModel):
             list(map(lambda x: x.GetIdx(), u.GetNeighbors())) + [u.GetIdx()]
             for u in mol.GetAtoms()
         ]
-        deg = [len(u.GetNeighbors()) + 1 for u in mol.GetAtoms()]  # +1 for disconnected nodes
+        deg = [
+            sqrt(1 / (len(u.GetNeighbors()) + 1))
+            for u in mol.GetAtoms()
+        ]  # +1 for disconnected nodes
         idx = [u.GetAtomicNum() - 1 for u in mol.GetAtoms()]
 
         return GCNGraph(
@@ -53,9 +58,8 @@ class GCN(BaseModel):
         for _ in range(self.num_iteration):
             h = torch.zeros((data.n, self.max_atomic_num), device=self.device)
             for i, idx in enumerate(data.adj):
-                assert data.deg[i] > 0
                 y = data.deg[idx] * data.deg[i]
-                z = (h0[idx] / y.sqrt().reshape(-1, 1)).sum(dim=0)
+                z = (h0[idx] * y.reshape(-1, 1)).sum(dim=0)
                 h[i] = self.relu(self.agg(z))
             h0 = h
 
