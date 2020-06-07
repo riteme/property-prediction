@@ -1,4 +1,4 @@
-from typing import Optional, List, NamedTuple
+from typing import Optional, List, NamedTuple, Dict
 
 from math import sqrt
 
@@ -18,7 +18,7 @@ class GCNGraph(NamedTuple):
 class GCN(BaseModel):
     def __init__(self,
         num_iteration: int = 10,
-        max_atomic_num: int = 100,
+        max_atomic_num: int = 32,
         dev: Optional[torch.device] = None
     ):
         super().__init__(dev)
@@ -27,9 +27,9 @@ class GCN(BaseModel):
 
         self.agg = nn.Linear(self.max_atomic_num, self.max_atomic_num, bias=False)
         self.fc = nn.Linear(self.max_atomic_num, 2)
-        self.activate = nn.Tanh()
+        self.activate = nn.ReLU()
 
-    def process(self, mol: chem.Mol) -> GCNGraph:
+    def process(self, mol: chem.Mol, atom_map: Dict[int, int]) -> GCNGraph:
         n = mol.GetNumAtoms()
 
         # all edges (including all self-loops) as index
@@ -48,7 +48,7 @@ class GCN(BaseModel):
         adj[index] = coeff[index]
 
         # node embedding
-        idx = [u.GetAtomicNum() - 1 for u in mol.GetAtoms()]
+        idx = [atom_map[u.GetAtomicNum()] for u in mol.GetAtoms()]
         vec = nn.functional.one_hot(
             torch.tensor(idx, device=self.device),
             num_classes=self.max_atomic_num

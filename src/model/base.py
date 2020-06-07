@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Any, Optional, Dict
 
 import torch
 from torch import nn
@@ -9,7 +9,7 @@ class BaseModel(nn.Module):
         super().__init__()
         self.device = dev
 
-    def process(self, mol: Mol) -> Any:
+    def process(self, mol: Mol, atom_map: Dict[int, int]) -> Any:
         ...
 
     def forward(self, data):

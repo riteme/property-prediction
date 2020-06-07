@@ -60,6 +60,7 @@ def train(directory: Text,
             for smiles, activity in raw[i].items():
                 buf.append(Item(model.process(smiles), activity))
             data.append(buf)
+        log.debug(f'atom_map: {model.atom_map}')
 
         test_batch, _test_label = util.separate_items(data[1])
         test_label = torch.tensor(_test_label)
@@ -77,7 +78,7 @@ def train(directory: Text,
             batch_loss = train_step(model, optimizer, batch, label)
             sum_loss += batch_loss
             batch_cnt += 1
-            log.debug(f'{batch_loss}, {sum_loss}')
+            # log.debug(f'{batch_loss}, {sum_loss}')
 
             # convergence test
             if data_ptr.is_cycled():
@@ -100,6 +101,7 @@ def train(directory: Text,
         roc_auc, prc_auc = evaluate_model(model, data[2])
         log.info(f'ROC-AUC: {roc_auc}')
         log.info(f'PRC-AUC: {prc_auc}')
+        log.debug(f'parameters: {list(model.inst.parameters())}')
 
 def require_device(prefer_cuda: bool) -> torch.device:
     if prefer_cuda and not torch.cuda.is_available():

@@ -14,7 +14,7 @@ class StupidModel(BaseModel):
             torch.tensor([1.0, 1.0]), True
         )
 
-    def process(self, mol: Mol):
+    def process(self, mol: Mol, *args):
         return None
 
     def forward(self, data):
