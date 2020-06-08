@@ -1,5 +1,6 @@
 from typing import *
 from typing import TextIO
+S = TypeVar('S')
 T = TypeVar('T')
 
 from random import shuffle, random
@@ -97,3 +98,10 @@ def evaluate_auc(std: Sequence[int], pred: Sequence[float]) -> Tuple[float, floa
     prec, recall, _ = metrics.precision_recall_curve(std, pred)
     prc_auc = metrics.auc(recall, prec)
     return roc_auc, prc_auc
+
+def dict_filter(d: Dict[S, T], fn: Callable[[S, T], bool]) -> Dict[S, T]:
+    result = {}
+    for key, value in d.items():
+        if fn(key, value):
+            result[key] = value
+    return result

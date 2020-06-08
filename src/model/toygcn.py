@@ -15,7 +15,7 @@ class GCNGraph(NamedTuple):
     adj: torch.Tensor
     num: torch.Tensor  # atomic numbers
 
-class GCN(BaseModel):
+class ToyGCN(BaseModel):
     def __init__(self,
         num_iteration: int = 2,
         max_atomic_num: int = 32,

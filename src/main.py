@@ -12,7 +12,7 @@ from interface import ModelInterface
 
 from model import (
     BaseModel,
-    GCN
+    ToyGCN
 )
 
 @click.group()
@@ -38,13 +38,18 @@ def cli(verbose: bool) -> None:
     help='Probability to drop negative items during training.')
 @click.option('--cuda', is_flag=True,
     help='Prefer CUDA for PyTorch.')
+@click.option('--embedding-dim', type=int)
 def train(directory: Text,
     batch_size: int, learning_rate: float,
     epsilon: float, cuda: bool,
     train_with_test: bool,
     min_iteration: int,
-    ndrop: Optional[float] = None
+    ndrop: Optional[float] = None,
+    **kwargs
 ) -> None:
+    # filter out options that are not set in command line
+    kwargs = util.dict_filter(kwargs, lambda k, v: v is not None)
+
     data_folder = Path(directory)
     assert data_folder.is_dir(), 'Invalid data folder'
 
@@ -53,7 +58,7 @@ def train(directory: Text,
         log.info(f'Processing "{fold}"...')
 
         # model & optimizer
-        model = ModelInterface(GCN, dev)
+        model = ModelInterface(ToyGCN, dev, **kwargs)
         optimizer = torch.optim.Adam(params=model.inst.parameters(), lr=learning_rate)
 
         # load the fold

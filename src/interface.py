@@ -6,9 +6,13 @@ import torch
 from rdkit.Chem import MolFromSmiles
 
 class ModelInterface:
-    def __init__(self, model: Type[BaseModel], dev: Optional[torch.device] = None):
+    def __init__(self,
+        model: Type[BaseModel],
+        dev: Optional[torch.device] = None,
+        **kwargs
+    ):
         self.atom_map: Dict[int, int] = {}
-        self.inst = model(dev=dev).to(dev)
+        self.inst = model(dev=dev, **kwargs).to(dev)
 
     def process(self, smiles: Text) -> Any:
         '''Parse molecule

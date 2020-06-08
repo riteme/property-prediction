@@ -1,3 +1,3 @@
 from .base import BaseModel
 from .stupid import StupidModel
-from .gcn import GCN, GCNGraph
+from .toygcn import ToyGCN
