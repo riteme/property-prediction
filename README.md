@@ -26,6 +26,20 @@ e.g. train GCN (from DGL):
 python src/main.py -v train -e 0.001 --train-with-test -m gcn --ndrop 0.90 --cuda
 ```
 
+## Results
+
+* ToyGCN
+
+```
+python src/main.py -v train -m toy-gcn --ndrop=0.85 > result/toy-gcn.txt
+```
+
+* GCN
+
+```
+python src/main.py -v train -m gcn > result/gcn.txt
+```
+
 ## TODO
 
 * [ ] Memory cache for molecule parsing.

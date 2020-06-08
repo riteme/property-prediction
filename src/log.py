@@ -13,6 +13,7 @@ def _output(level: int, fp: TextIO, header: Text, color: Text, message: object):
         fp.write(f'{color}({header}){Fore.RESET} {message}\n')
     else:
         fp.write(f'({header}) {message}\n')
+    fp.flush()
 
 def debug(message: object):
     _output(0, sys.stdout, 'debug', Fore.GREEN, message)
