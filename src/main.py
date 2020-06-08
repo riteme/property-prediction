@@ -1,6 +1,12 @@
-from typing import Text, List, Sequence, Any, Tuple, Optional
+from typing import (
+    Text, List, Sequence,
+    Any, Tuple, Optional,
+    Iterable
+)
 
+import time
 from pathlib import Path
+from math import ceil
 
 import click
 import torch
@@ -28,11 +34,13 @@ def cli(verbose: bool) -> None:
     help='Learning rate for optimizer.')
 @click.option('-e', '--epsilon', type=float, default=1e-3,
     help='Maximum difference assumed to be converged.')
-@click.option('--train-with-test', is_flag=True,
-    help='Train with test data (data[1]).')
-@click.option('--min-iteration', type=int, default=10,
+@click.option('--maximal-count', type=int, default=10,
+    help='Number of maximals assumed to be converged.')
+@click.option('--train-validate', is_flag=True,
+    help='Train with validate set (data[1]).')
+@click.option('--min-iteration', type=int, default=6,
     help='Minimum number of iterations.')
-@click.option('--max-iteration', type=int, default=100,
+@click.option('--max-iteration', type=int, default=50,
     help='Maximum number of iterations.')
 @click.option('--ndrop', type=float,
     help='Probability to drop negative items during training.')
@@ -47,7 +55,8 @@ def train(
     model_name: Text,
     batch_size: int, learning_rate: float,
     epsilon: float, cuda: bool,
-    train_with_test: bool,
+    train_validate: bool,
+    maximal_count: int,
     min_iteration: int,
     max_iteration: int,
     ndrop: Optional[float] = None,
@@ -68,75 +77,108 @@ def train(
         model = ModelInterface(model_type, dev, **kwargs)
         optimizer = torch.optim.Adam(params=model.inst.parameters(), lr=learning_rate)
 
-        # load the fold
-        raw = [
-            util.load_csv(fold/name)
-            for name in ['train.csv', 'test.csv', 'dev.csv']
-        ]
-
-        # let the model parse these molecules
-        data = []
-        for i in range(len(raw)):
-            buf = []
-            for smiles, activity in raw[i].items():
-                obj = model.process(smiles)
-                buf.append(Item(obj, activity))
-            data.append(buf)
+        # load the fold and let the model parse these molecules
+        # data[0]: training set
+        # data[1]: validate set
+        # data[2]: test set
+        data = load_data(model, fold, ['train.csv', 'dev.csv', 'test.csv'])
         log.debug(f'atom_map: {model.atom_map}')
 
-        test_batch, _test_label = util.separate_items(data[1])
-        test_label = torch.tensor(_test_label)
+        # prepare data
+        val_batch, val_label = util.separate_items(data[1])
+        test_batch, test_label = util.separate_items(data[2])
+        train_data = data[0] + data[1] if train_validate else data[0]
+
+        sampler: util.Sampler
+        if ndrop is not None:
+            log.debug('with --ndrop')
+            # set up to randomly drop negative samples
+            # see util.RandomIterator for details
+            drop_fn = lambda x: ndrop if x.activity == 0 else 0
+            sampler = util.RandomIterator(train_data,
+                batch_size=batch_size,
+                drop_fn=drop_fn
+            )
+        else:
+            half = batch_size // 2
+            sampler = util.SeparateSampling(train_data, {0: half, 1: half}, lambda x: x.activity)
 
         # training phase
-        train_data = data[0] + data[1] if train_with_test else data[0]
-
-        # set up to randomly drop negative samples
-        # see util.RandomIterator for details
-        drop_prob = ndrop if ndrop is not None else 0
-        drop_fn = lambda x: drop_prob if x.activity == 0 else 0
-        data_ptr = util.RandomIterator(train_data,
-            drop_fn=drop_fn if ndrop is not None else None
-        )
-
-        countdown = min_iteration
         min_loss = 1e99  # track history minimal loss
-        sum_loss, batch_cnt = 0.0, 0
-        for _ in range(max_iteration):
-            # generate batch
-            batch, _label = util.separate_items(data_ptr.iterate(batch_size))
-            label = torch.tensor(_label)
+        batch_per_epoch = ceil(len(train_data) / batch_size)
+        log.debug(f'batch_per_epoch={batch_per_epoch}')
 
-            # train a mini-batch
-            batch_loss = train_step(model, optimizer, batch, label)
-            sum_loss += batch_loss
-            batch_cnt += 1
-            # log.debug(f'{batch_loss}, {sum_loss}')
+        watcher = util.MaximalCounter()
+        for i in range(max_iteration):  # epochs
+            sum_loss = 0.0
+            epoch_start = time.time()
 
-            # convergence test
-            if data_ptr.is_cycled():
-                loss = sum_loss / batch_cnt
-                pred = model.predict(test_batch)
-                log.debug(f'{util.stat_string(_test_label, pred)}. loss={loss},min={min_loss}')
+            for _ in range(batch_per_epoch):  # batches
+                # generate batch
+                batch, _label = util.separate_items(sampler.get_batch())
+                label = torch.tensor(_label)
+                # log.debug(f'batch: size={len(batch)},p={label.sum().item()}')
 
-                if countdown <= 0 and abs(min_loss - loss) < epsilon:
-                    log.debug('Converged.')
-                    break
+                # train a mini-batch
+                batch_loss = train_step(model, optimizer, batch, label)
+                sum_loss += batch_loss
 
-                countdown -= 1
-                min_loss = min(min_loss, loss)
-                sum_loss, batch_cnt = 0.0, 0
+            loss = sum_loss / batch_per_epoch
+            roc_auc, prc_auc, pred = evaluate_model(model, val_batch, val_label)
+            watcher.record((prc_auc, roc_auc))
+            time_used = time.time() - epoch_start
+
+            log.debug(f'[{i}] train:    loss={loss},min={min_loss}')
+            log.debug(f'[{i}] validate: {util.stat_string(val_label, pred)}. roc={roc_auc},prc={prc_auc}')
+            log.debug(f'[{i}] watcher: {watcher}')
+            log.debug(f'[{i}] epoch time={"%.3f" % time_used}s')
+
+            # if i >= min_iteration and abs(min_loss - loss) < epsilon:
+            #     break
+
+            # save state
+            if watcher.is_updated():
+                model.save_checkpoint()
+            if i >= min_iteration and watcher.count >= maximal_count:
+                break
+
+            min_loss = min(min_loss, loss)
+            sum_loss = 0.0
+
+        # load best model
+        model.load_checkpoint()
 
         # model evaluation on `dev.csv`
-        roc_auc, prc_auc = evaluate_model(model, data[2])
+        roc_auc, prc_auc, pred = evaluate_model(model, test_batch, test_label)
+        log.info(f'test: {util.stat_string(test_label, pred)}')
         log.info(f'ROC-AUC: {roc_auc}')
         log.info(f'PRC-AUC: {prc_auc}')
-        # log.debug(f'parameters: {list(model.inst.parameters())}')
 
 def require_device(prefer_cuda: bool) -> torch.device:
     if prefer_cuda and not torch.cuda.is_available():
         log.warn('CUDA not available.')
         prefer_cuda = False
     return torch.device('cuda' if prefer_cuda else 'cpu')
+
+def load_data(
+    model: ModelInterface,
+    folder: Path,
+    files: Iterable[Text]
+) -> List[List[Item]]:
+    raw = [
+        util.load_csv(folder/name)
+        for name in files
+    ]
+
+    data = []
+    for i in range(len(raw)):
+        buf = []
+        for smiles, activity in raw[i].items():
+            obj = model.process(smiles)
+            buf.append(Item(obj, activity))
+        data.append(buf)
+
+    return data
 
 def train_step(
     model: ModelInterface,
@@ -146,25 +188,30 @@ def train_step(
     batch: Sequence[Any],
     label: torch.Tensor
 ) -> float:
-    # criterion = torch.nn.CrossEntropyLoss(weight=torch.tensor([1.0, 60.0]))
-    criterion = torch.nn.CrossEntropyLoss()
+    loss = evaluate_loss(model, batch, label)
     optimizer.zero_grad()
-
-    pred = model.forward(batch)
-    loss = criterion(pred, label)
     loss.backward()
     optimizer.step()
-
     return loss.item()
+
+def evaluate_loss(
+    model: ModelInterface,
+    batch: Sequence[Any],
+    label: torch.Tensor
+) -> torch.Tensor:
+    # criterion = torch.nn.CrossEntropyLoss(weight=torch.tensor([1.0, 60.0]))
+    criterion = torch.nn.CrossEntropyLoss()
+    pred = model.forward(batch)
+    loss = criterion(pred, label)
+    return loss
 
 def evaluate_model(
     model: ModelInterface,
-    data: List[Item]
-) -> Tuple[float, float]:
-    batch, label = util.separate_items(data)
+    batch: List[object],
+    label: List[int]
+) -> Tuple[float, float, torch.Tensor]:
     pred = model.predict(batch)
-    log.debug(f'final: {util.stat_string(label, pred)}')
-    return util.evaluate_auc(label, pred)
+    return *util.evaluate_auc(label, pred), pred
 
 if __name__ == '__main__':
     cli()
