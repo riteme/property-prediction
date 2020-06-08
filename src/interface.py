@@ -1,6 +1,6 @@
 from typing import Text, Any, Type, Optional, Sequence, List, Dict
 
-from model import BaseModel
+from models import BaseModel
 
 import torch
 from rdkit.Chem import MolFromSmiles

@@ -8,6 +8,7 @@ from pathlib import Path
 from hashlib import sha1
 from collections import namedtuple
 
+import torch
 from sklearn import metrics
 
 # Item = namedtuple('Item', ['obj', 'activity'])
@@ -89,7 +90,11 @@ def separate_items(items: Iterable[Item]) -> Tuple[List[object], List[int]]:
         labels.append(x.activity)
     return objs, labels
 
-def evaluate_auc(std: Sequence[int], pred: Sequence[float]) -> Tuple[float, float]:
+def stat_string(std: Sequence[int], pred: torch.Tensor) -> Text:
+    c = metrics.confusion_matrix(std, pred)
+    return f'tn={c[0][0]},fp={c[0][1]}/tp={c[1][1]},fn={c[1][0]}'
+
+def evaluate_auc(std: Sequence[int], pred: torch.Tensor) -> Tuple[float, float]:
     '''Evaluate ROC-AUC and PRC-AUC, returned in a tuple.
     see <https://github.com/yangkevin2/coronavirus_data/blob/master/scripts/evaluate_auc.py>
     '''
