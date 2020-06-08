@@ -33,26 +33,27 @@ class GCN(BaseModel):
         self.activate = nn.LeakyReLU()
 
     def process(self, mol: chem.Mol, atom_map: Dict[int, int]) -> GCNGraph:
-        n = mol.GetNumAtoms()
+        n = mol.GetNumAtoms() + 1  # allocate a new node for graph embedding
 
         # all edges (including all self-loops) as index
-        begin_idx = [u.GetBeginAtomIdx() for u in mol.GetBonds()]
-        end_idx = [u.GetEndAtomIdx() for u in mol.GetBonds()]
+        begin_idx = [u.GetBeginAtomIdx() for u in mol.GetBonds()] + [n - 1] * (n - 1)
+        end_idx = [u.GetEndAtomIdx() for u in mol.GetBonds()] + list(range(n - 1))
+        assert len(begin_idx) == len(end_idx)
         ran = list(range(n))
         index = [begin_idx + end_idx + ran, end_idx + begin_idx + ran]
 
         # construct coefficients adjacent matrix
         deg = torch.tensor([
-            sqrt(1 / (len(u.GetNeighbors()) + 1))
+            sqrt(1 / (len(u.GetNeighbors()) + 2))
             for u in mol.GetAtoms()
-        ], device=self.device)  # +1 for disconnected nodes
+        ] + [sqrt(1 / n)], device=self.device)
         coeff = deg.reshape(-1, 1) @ deg[None, :]  # pairwise coefficients
         adj = torch.zeros((n, n), device=self.device)
         adj[index] = coeff[index]
 
         # node embedding
         num = torch.tensor(
-            [atom_map[u.GetAtomicNum()] for u in mol.GetAtoms()],
+            [atom_map[u.GetAtomicNum()] for u in mol.GetAtoms()] + [len(atom_map)],
             device=self.device
         )
 
@@ -66,6 +67,7 @@ class GCN(BaseModel):
             y = data.adj @ h
             h = self.activate(self.agg(y))
 
-        z = h.sum(dim=0) / data.n
+        # z = h.sum(dim=0) / data.n
+        z = h[data.n - 1, :]
         pred = self.fc(z)
         return pred
