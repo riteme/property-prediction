@@ -36,8 +36,8 @@ def cli(verbose: bool) -> None:
     help='Maximum difference assumed to be converged.')
 @click.option('--beta', type=float, default=1.0, show_default=True,
     help='Parameter for F_β score.')
-@click.option('-s', '--score-expression', type=str, default='(prc_auc, roc_auc)', show_default=True,
-    help='The expression of score for maximal counter. Available metrics: "prc_auc", "roc_auc", "f_score".')
+@click.option('-s', '--score-expression', type=str, default='(prc_auc,roc_auc)', show_default=True,
+    help='The expression of score for maximal counter. Available metrics: "prc_auc", "roc_auc", "f_score", "loss".')
 @click.option('--maximal-count', type=int, default=10, show_default=True,
     help='Number of maximals assumed to be converged.')
 @click.option('--train-validate', is_flag=True,
@@ -46,6 +46,8 @@ def cli(verbose: bool) -> None:
     help='Minimum number of iterations.')
 @click.option('--max-iteration', type=int, default=50, show_default=True,
     help='Maximum number of iterations.')
+@click.option('-p', '--positive-percentage', type=float, default=0.5, show_default=True,
+    help='Percentage of positive samples in one batch.')
 @click.option('--ndrop', type=float,
     help='Probability to drop negative items during training.')
 @click.option('--cuda', is_flag=True,
@@ -64,6 +66,7 @@ def train(
     maximal_count: int,
     min_iteration: int,
     max_iteration: int,
+    positive_percentage: float,
     cuda: bool,
     ndrop: Optional[float] = None,
     **kwargs
@@ -106,8 +109,10 @@ def train(
                 drop_fn=drop_fn
             )
         else:
-            half = batch_size // 2
-            sampler = util.SeparateSampling(train_data, {0: half, 1: half}, lambda x: x.activity)
+            num_positive = round(batch_size * positive_percentage)
+            num_negative = batch_size - num_positive
+            type_fn = lambda x: x.activity
+            sampler = util.SeparateSampling(train_data, {0: num_negative, 1: num_positive}, type_fn)
 
         # training phase
         min_loss = 1e99  # track history minimal loss
@@ -134,7 +139,8 @@ def train(
             watcher.record(eval(score_expression, None, {
                 'prc_auc': prc_auc,
                 'roc_auc': roc_auc,
-                'f_score': f_score
+                'f_score': f_score,
+                'loss': loss
             }))
             time_used = time.time() - epoch_start
 
