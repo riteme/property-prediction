@@ -8,12 +8,12 @@ from torch import nn
 from rdkit.Chem import Mol
 from dgl import DGLGraph
 
-# NOTICE: GraphConv is somewhat slow. Consider DenseGraphConv
-from dgl.nn.pytorch import GraphConv
+# NOTICE: GraphConv is somewhat slow. Use DenseGraphConv instead.
+from dgl.nn.pytorch import GraphConv, DenseGraphConv
 
 class GCNData(NamedTuple):
     n: int
-    graph: DGLGraph
+    adj: torch.Tensor
     feature: torch.Tensor
 
 class GCN(BaseModel):
@@ -25,8 +25,8 @@ class GCN(BaseModel):
         self.feature_dim = feature_dim
         self.embedding_dim = embedding_dim
 
-        self.embed = GraphConv(feature_dim, embedding_dim)
-        self.conv = GraphConv(embedding_dim, embedding_dim)
+        self.embed = DenseGraphConv(feature_dim, embedding_dim)
+        self.conv = DenseGraphConv(embedding_dim, embedding_dim)
         self.fc = nn.Linear(embedding_dim, 2)
         self.activate = nn.ReLU()
 
@@ -42,6 +42,7 @@ class GCN(BaseModel):
             u, v = e.GetBeginAtomIdx(), e.GetEndAtomIdx()
             graph.add_edge(u + 1, v + 1)
             graph.add_edge(v + 1, u + 1)
+        adj = graph.adjacency_matrix(transpose=False).to_dense()
 
         feature = torch.cat([
             torch.zeros((1, self.feature_dim), device=self.device),  # node 0
@@ -53,14 +54,14 @@ class GCN(BaseModel):
             ).to(torch.float)
         ])
 
-        return GCNData(n, graph, feature)
+        return GCNData(n, adj, feature)
 
     def forward(self, data):
         data: GCNData
 
-        x0 = self.embed(data.graph, data.feature)
+        x0 = self.embed(data.adj, data.feature)
         x = self.activate(x0)
-        y0 = self.conv(data.graph, x)
+        y0 = self.conv(data.adj, x)
         y = self.activate(y0)
         z = self.fc(y[0])
         return z
