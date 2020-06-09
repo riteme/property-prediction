@@ -18,7 +18,7 @@ sudo pip install scikit-learn colorama click
 
 ## Usage
 
-See `python src/main.py --help`.
+See `python src/main.py train --help`.
 
 e.g. train GCN (from DGL):
 
