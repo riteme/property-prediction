@@ -24,25 +24,27 @@ def cli(verbose: bool) -> None:
         log.LOG_LEVEL = 0
 
 @cli.command(short_help='Train model.')
-@click.option('-d', '--directory', type=str, default='data',
+@click.option('-d', '--directory', type=str, default='data', show_default=True,
     help='Data directory.')
 @click.option('-m', '--model-name', type=str, required=True,
     help='The name of the model to be trained.')
-@click.option('-b', '--batch-size', type=int, default=64,
+@click.option('-b', '--batch-size', type=int, default=64, show_default=True,
     help='Batch size.')
-@click.option('-l', '--learning-rate', type=float, default=0.03,
+@click.option('-l', '--learning-rate', type=float, default=0.03, show_default=True,
     help='Learning rate for optimizer.')
-@click.option('-e', '--epsilon', type=float, default=1e-3,
+@click.option('-e', '--epsilon', type=float, default=1e-3, show_default=True,
     help='Maximum difference assumed to be converged.')
-@click.option('--beta', type=float, default=1.0,
-    help='Parameter for F_Β score.')
-@click.option('--maximal-count', type=int, default=10,
+@click.option('--beta', type=float, default=1.0, show_default=True,
+    help='Parameter for F_β score.')
+@click.option('-s', '--score-expression', type=str, default='(prc_auc, roc_auc)', show_default=True,
+    help='The expression of score for maximal counter. Available metrics: "prc_auc", "roc_auc", "f_score".')
+@click.option('--maximal-count', type=int, default=10, show_default=True,
     help='Number of maximals assumed to be converged.')
 @click.option('--train-validate', is_flag=True,
     help='Train with validate set (data[1]).')
-@click.option('--min-iteration', type=int, default=6,
+@click.option('--min-iteration', type=int, default=6, show_default=True,
     help='Minimum number of iterations.')
-@click.option('--max-iteration', type=int, default=50,
+@click.option('--max-iteration', type=int, default=50, show_default=True,
     help='Maximum number of iterations.')
 @click.option('--ndrop', type=float,
     help='Probability to drop negative items during training.')
@@ -58,6 +60,7 @@ def train(
     batch_size: int, learning_rate: float,
     epsilon: float, beta: float,
     train_validate: bool,
+    score_expression: Text,
     maximal_count: int,
     min_iteration: int,
     max_iteration: int,
@@ -120,7 +123,6 @@ def train(
                 # generate batch
                 batch, _label = util.separate_items(sampler.get_batch())
                 label = torch.tensor(_label)
-                # log.debug(f'batch: size={len(batch)},p={label.sum().item()}')
 
                 # train a mini-batch
                 batch_loss = train_step(model, optimizer, batch, label)
@@ -129,8 +131,11 @@ def train(
             loss = sum_loss / batch_per_epoch
             roc_auc, prc_auc, pred = evaluate_model(model, val_batch, val_label)
             f_score = util.metrics.fbeta_score(val_label, pred, beta=beta)
-            # watcher.record((prc_auc, roc_auc))
-            watcher.record(f_score)
+            watcher.record(eval(score_expression, None, {
+                'prc_auc': prc_auc,
+                'roc_auc': roc_auc,
+                'f_score': f_score
+            }))
             time_used = time.time() - epoch_start
 
             log.debug(f'[{i}] train:    loss={loss},min={min_loss}')
