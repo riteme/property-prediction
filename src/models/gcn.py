@@ -1,6 +1,7 @@
 from typing import NamedTuple
 
 from .base import BaseModel
+from . import feature
 import log
 
 import torch
@@ -14,25 +15,23 @@ from dgl.nn.pytorch import GraphConv, DenseGraphConv
 class GCNData(NamedTuple):
     n: int
     adj: torch.Tensor
-    feature: torch.Tensor
+    vec: torch.Tensor
 
 class GCN(BaseModel):
     def __init__(self, dev,
-        feature_dim: int = 32,
         embedding_dim: int = 64,
         no_shortcut: bool = False,
     ):
         super().__init__(dev)
-        self.feature_dim = feature_dim
         self.embedding_dim = embedding_dim
         self.no_shortcut = no_shortcut
 
-        self.embed = DenseGraphConv(feature_dim, embedding_dim)
+        self.embed = DenseGraphConv(feature.FEATURE_DIM, embedding_dim)
         self.conv = DenseGraphConv(embedding_dim, embedding_dim)
         self.fc = nn.Linear(embedding_dim, 2)
         self.activate = nn.ReLU()
 
-    def process(self, mol: Mol, atom_map):
+    def process(self, mol: Mol, *args):
         n = mol.GetNumAtoms() + 1
 
         graph = DGLGraph()
@@ -46,22 +45,18 @@ class GCN(BaseModel):
             graph.add_edge(v + 1, u + 1)
         adj = graph.adjacency_matrix(transpose=False).to_dense()
 
-        feature = torch.cat([
-            torch.zeros((1, self.feature_dim), device=self.device),  # node 0
-            torch.nn.functional.one_hot(
-                torch.tensor(
-                    [atom_map[u.GetAtomicNum()] for u in mol.GetAtoms()],
-                    device=self.device
-                ), num_classes=self.feature_dim
-            ).to(torch.float)
-        ])
+        v, m = feature.mol_feature(mol)
+        vec = torch.cat([
+            torch.zeros((1, m)),
+            v
+        ]).to(self.device)
 
-        return GCNData(n, adj, feature)
+        return GCNData(n, adj, vec)
 
     def forward(self, data):
         data: GCNData
 
-        x0 = self.embed(data.adj, data.feature)
+        x0 = self.embed(data.adj, data.vec)
         x = self.activate(x0)
         y0 = self.conv(data.adj, x)
         y = self.activate(y0)
