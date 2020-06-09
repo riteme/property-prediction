@@ -10,6 +10,7 @@ from collections import namedtuple
 
 import torch
 from sklearn import metrics
+from rdkit.Chem import MolFromSmiles as parse_smiles
 
 # Item = namedtuple('Item', ['obj', 'activity'])
 class Item(NamedTuple):
@@ -143,13 +144,15 @@ def separate_items(items: Iterable[Item]) -> Tuple[List[object], List[int]]:
         labels.append(x.activity)
     return objs, labels
 
-def stat_string(std: Sequence[int], pred: torch.Tensor) -> Text:
-    c = metrics.confusion_matrix(std, pred)
+def stat_string(std: Sequence[int], pred_label: Sequence[int]) -> Text:
+    c = metrics.confusion_matrix(std, pred_label)
     return f'tn={c[0][0]},fp={c[0][1]}/tp={c[1][1]},fn={c[1][0]}'
 
 def evaluate_auc(std: Sequence[int], pred: torch.Tensor) -> Tuple[float, float]:
     '''Evaluate ROC-AUC and PRC-AUC, returned in a tuple.
     see <https://github.com/yangkevin2/coronavirus_data/blob/master/scripts/evaluate_auc.py>
+
+    pred: probabilities for label 1.
     '''
 
     roc_auc = metrics.roc_auc_score(std, pred)

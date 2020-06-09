@@ -3,12 +3,12 @@ from typing import Optional, List, NamedTuple, Dict
 from math import sqrt
 
 from .base import BaseModel
+from . import feature
+import log
 
 import torch
 from torch import nn
 from rdkit import Chem as chem
-
-import log
 
 class GCNGraph(NamedTuple):
     n: int
@@ -32,7 +32,7 @@ class ToyGCN(BaseModel):
         self.fc = nn.Linear(self.embedding_dim, 2)
         self.activate = nn.LeakyReLU()
 
-    def process(self, mol: chem.Mol, atom_map: Dict[int, int]) -> GCNGraph:
+    def process(self, mol: chem.Mol) -> GCNGraph:
         n = mol.GetNumAtoms() + 1  # allocate a new node for graph embedding
 
         # all edges (including all self-loops) as index
@@ -53,7 +53,8 @@ class ToyGCN(BaseModel):
 
         # node embedding
         num = torch.tensor(
-            [atom_map[u.GetAtomicNum()] for u in mol.GetAtoms()] + [len(atom_map)],
+            [feature.ATOM_MAP[u.GetAtomicNum()] for u in mol.GetAtoms()] +
+            [len(feature.ATOM_MAP)],
             device=self.device
         )
 

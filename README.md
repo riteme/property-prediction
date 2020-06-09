@@ -42,8 +42,13 @@ python src/main.py -v train -m gcn > result/gcn.txt
 
 ## TODO
 
-* [ ] Memory cache for molecule parsing.
-* [ ] Multiprocessing.
+* Training framework
+    * [x] Memory cache for molecule parsing.
+    * [ ] Disk cache for molecule parsing.
+    * [ ] Multiprocessing.
+* Models
+    * [x] GCN
+    * [ ] GAT
 
 ## Contributors
 
