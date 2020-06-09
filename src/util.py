@@ -103,7 +103,7 @@ class MaximalCounter:
         return result
 
     def record(self, value):
-        if self.maximal is None or value >= self.maximal:
+        if self.maximal is None or value > self.maximal:
             self.maximal = value
             self.count += 1
             self.updated = True

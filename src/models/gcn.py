@@ -63,5 +63,5 @@ class GCN(BaseModel):
         x = self.activate(x0)
         y0 = self.conv(data.adj, x)
         y = self.activate(y0)
-        z = self.fc(y[0])
+        z = self.fc(y[0] + x[0])  # a shortcut connection
         return z
