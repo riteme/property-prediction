@@ -19,11 +19,13 @@ class GCNData(NamedTuple):
 class GCN(BaseModel):
     def __init__(self, dev,
         feature_dim: int = 32,
-        embedding_dim: int = 64
+        embedding_dim: int = 64,
+        no_shortcut: bool = False,
     ):
         super().__init__(dev)
         self.feature_dim = feature_dim
         self.embedding_dim = embedding_dim
+        self.no_shortcut = no_shortcut
 
         self.embed = DenseGraphConv(feature_dim, embedding_dim)
         self.conv = DenseGraphConv(embedding_dim, embedding_dim)
@@ -63,5 +65,10 @@ class GCN(BaseModel):
         x = self.activate(x0)
         y0 = self.conv(data.adj, x)
         y = self.activate(y0)
-        z = self.fc(y[0] + x[0])  # a shortcut connection
+
+        if self.no_shortcut:
+            z = self.fc(y[0])
+        else:
+            z = self.fc(y[0] + x[0])
+
         return z

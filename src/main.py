@@ -38,7 +38,7 @@ def cli(verbose: bool) -> None:
     help='Parameter for F_β score.')
 @click.option('-s', '--score-expression', type=str, default='(prc_auc,roc_auc)', show_default=True,
     help='The expression of score for maximal counter. Available metrics: "prc_auc", "roc_auc", "f_score", "loss".')
-@click.option('--maximal-count', type=int, default=10, show_default=True,
+@click.option('--maximal-count', type=int, default=15, show_default=True,
     help='Number of maximals assumed to be converged.')
 @click.option('--train-validate', is_flag=True,
     help='Train with validate set (data[1]).')
@@ -56,6 +56,7 @@ def cli(verbose: bool) -> None:
 # if you want to pass some parameters directly to models,
 # store them in kwargs. e.g. "embedding_dim" below
 @click.option('--embedding-dim', type=int)
+@click.option('--no-shortcut', is_flag=True)
 def train(
     directory: Text,
     model_name: Text,
@@ -79,6 +80,8 @@ def train(
 
     dev = require_device(cuda)
     for fold in sorted(data_folder.iterdir()):
+        if not fold.is_dir():
+            continue
         log.info(f'Processing "{fold}"...')
 
         # model & optimizer
@@ -134,8 +137,8 @@ def train(
                 sum_loss += batch_loss
 
             loss = sum_loss / batch_per_epoch
-            roc_auc, prc_auc, pred = evaluate_model(model, val_batch, val_label)
-            f_score = util.metrics.fbeta_score(val_label, pred, beta=beta)
+            roc_auc, prc_auc, pred_label = evaluate_model(model, val_batch, val_label)
+            f_score = util.metrics.fbeta_score(val_label, pred_label, beta=beta)
             watcher.record(eval(score_expression, None, {
                 'prc_auc': prc_auc,
                 'roc_auc': roc_auc,
@@ -145,7 +148,7 @@ def train(
             time_used = time.time() - epoch_start
 
             log.debug(f'[{i}] train:    loss={loss},min={min_loss}')
-            log.debug(f'[{i}] validate: {util.stat_string(val_label, pred)}. roc={roc_auc},prc={prc_auc},fβ={f_score}')
+            log.debug(f'[{i}] validate: {util.stat_string(val_label, pred_label)}. roc={roc_auc},prc={prc_auc},fβ={f_score}')
             log.debug(f'[{i}] watcher: {watcher}')
             log.debug(f'[{i}] epoch time={"%.3f" % time_used}s')
 
@@ -165,8 +168,10 @@ def train(
         model.load_checkpoint()
 
         # model evaluation on `dev.csv`
-        roc_auc, prc_auc, pred = evaluate_model(model, test_batch, test_label)
-        log.info(f'test: {util.stat_string(test_label, pred)}')
+        roc_auc, prc_auc, pred_label = evaluate_model(
+            model, test_batch, test_label, show_stats=True
+        )
+        log.info(f'test: {util.stat_string(test_label, pred_label)}')
         log.info(f'ROC-AUC: {roc_auc}')
         log.info(f'PRC-AUC: {prc_auc}')
 
@@ -224,10 +229,26 @@ def evaluate_loss(
 def evaluate_model(
     model: ModelInterface,
     batch: List[object],
-    label: List[int]
-) -> Tuple[float, float, torch.Tensor]:
-    pred = model.predict(batch)
-    return *util.evaluate_auc(label, pred), pred
+    label: List[int],
+    show_stats: bool = False
+) -> Tuple[float, float, List[int]]:
+    with torch.no_grad():
+        pred = model.predict(batch)
+        pred_label = pred.argmax(dim=1)
+        index = pred_label.to(torch.bool)
+
+        if show_stats:
+            stats = torch.cat([
+                pred[index].to('cpu'),
+                torch.tensor(label, dtype=torch.float).reshape(-1, 1)[index]
+            ], dim=1)
+            log.info(stats)
+
+    return *util.evaluate_auc(label, pred[:, 1]), pred_label.tolist()
+
+@cli.command(short_help='Show statistics of data.')
+def stat():
+    ...
 
 if __name__ == '__main__':
     cli()

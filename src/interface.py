@@ -63,6 +63,6 @@ class ModelInterface:
 
     def predict(self, batch: Sequence[Any]) -> torch.Tensor:
         with torch.no_grad():
-            result = self.forward(batch)
-            index = result.argmax(dim=1)
-        return index
+            raw = self.forward(batch)
+            pred = raw.softmax(dim=1)
+        return pred
