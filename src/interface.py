@@ -4,6 +4,7 @@ import os
 from tempfile import TemporaryFile
 
 from models import BaseModel
+from cache import memcached
 
 import torch
 
@@ -16,7 +17,6 @@ class ModelInterface:
         dev: Optional[torch.device] = None,
         **kwargs
     ):
-        self.atom_map: Dict[int, int] = {}
         self.model_type = model_type
         self.device = dev
         self.kwargs = kwargs
@@ -39,20 +39,14 @@ class ModelInterface:
         self.inst.load_state_dict(state_dict)
         log.debug(f'checkpoint loaded.')
 
+    @memcached(ignore_self=True)
     def process(self, smiles: Text) -> Any:
-        '''Parse molecule
+        '''Parse molecules.
         '''
-
         mol = util.parse_smiles(smiles)
         assert mol is not None, 'Failed to parse SMILES string'
 
-        for u in mol.GetAtoms():
-            num = u.GetAtomicNum()
-            if num not in self.atom_map:
-                idx = len(self.atom_map)
-                self.atom_map[num] = idx
-
-        result = self.inst.process(mol, self.atom_map)
+        result = self.inst.process(mol)
         return result
 
     def forward(self, batch: Sequence[Any]) -> torch.Tensor:

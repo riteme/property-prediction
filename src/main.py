@@ -76,7 +76,8 @@ def train(
     **kwargs
 ) -> None:
     # filter out options that are not set in command line
-    kwargs = util.dict_filter(kwargs, lambda k, v: v is not None)
+    # default to ignore both None and False (for flag options)
+    kwargs = util.dict_filter(kwargs, lambda k, v: bool(v))
 
     data_folder = Path(directory)
     assert data_folder.is_dir(), 'Invalid data folder'
@@ -97,7 +98,6 @@ def train(
         # data[1]: validate set
         # data[2]: test set
         data = load_data(model, fold, ['train.csv', 'dev.csv', 'test.csv'])
-        log.debug(f'atom_map: {model.atom_map}')
 
         # prepare data
         val_batch, val_label = util.separate_items(data[1])

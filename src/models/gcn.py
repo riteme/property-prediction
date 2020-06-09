@@ -31,7 +31,7 @@ class GCN(BaseModel):
         self.fc = nn.Linear(embedding_dim, 2)
         self.activate = nn.ReLU()
 
-    def process(self, mol: Mol, *args):
+    def process(self, mol: Mol):
         n = mol.GetNumAtoms() + 1
 
         graph = DGLGraph()
