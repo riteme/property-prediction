@@ -34,6 +34,8 @@ def cli(verbose: bool) -> None:
     help='Learning rate for optimizer.')
 @click.option('-e', '--epsilon', type=float, default=1e-3,
     help='Maximum difference assumed to be converged.')
+@click.option('--beta', type=float, default=1.0,
+    help='Parameter for F_Β score.')
 @click.option('--maximal-count', type=int, default=10,
     help='Number of maximals assumed to be converged.')
 @click.option('--train-validate', is_flag=True,
@@ -54,11 +56,12 @@ def train(
     directory: Text,
     model_name: Text,
     batch_size: int, learning_rate: float,
-    epsilon: float, cuda: bool,
+    epsilon: float, beta: float,
     train_validate: bool,
     maximal_count: int,
     min_iteration: int,
     max_iteration: int,
+    cuda: bool,
     ndrop: Optional[float] = None,
     **kwargs
 ) -> None:
@@ -125,11 +128,13 @@ def train(
 
             loss = sum_loss / batch_per_epoch
             roc_auc, prc_auc, pred = evaluate_model(model, val_batch, val_label)
-            watcher.record((prc_auc, roc_auc))
+            f_score = util.metrics.fbeta_score(val_label, pred, beta=beta)
+            # watcher.record((prc_auc, roc_auc))
+            watcher.record(f_score)
             time_used = time.time() - epoch_start
 
             log.debug(f'[{i}] train:    loss={loss},min={min_loss}')
-            log.debug(f'[{i}] validate: {util.stat_string(val_label, pred)}. roc={roc_auc},prc={prc_auc}')
+            log.debug(f'[{i}] validate: {util.stat_string(val_label, pred)}. roc={roc_auc},prc={prc_auc},fβ={f_score}')
             log.debug(f'[{i}] watcher: {watcher}')
             log.debug(f'[{i}] epoch time={"%.3f" % time_used}s')
 
