@@ -6,8 +6,8 @@ from tempfile import TemporaryFile
 from models import BaseModel
 
 import torch
-from rdkit.Chem import MolFromSmiles
 
+import util
 import log
 
 class ModelInterface:
@@ -43,7 +43,7 @@ class ModelInterface:
         '''Parse molecule
         '''
 
-        mol = MolFromSmiles(smiles)
+        mol = util.parse_smiles(smiles)
         assert mol is not None, 'Failed to parse SMILES string'
 
         for u in mol.GetAtoms():

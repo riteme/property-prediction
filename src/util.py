@@ -10,6 +10,7 @@ from collections import namedtuple
 
 import torch
 from sklearn import metrics
+from rdkit.Chem import MolFromSmiles as parse_smiles
 
 # Item = namedtuple('Item', ['obj', 'activity'])
 class Item(NamedTuple):

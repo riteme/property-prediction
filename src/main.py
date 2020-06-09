@@ -1,12 +1,15 @@
 from typing import (
     Text, List, Sequence,
     Any, Tuple, Optional,
-    Iterable
+    Iterable, TextIO,
+    DefaultDict, Hashable
 )
+from typing import Counter as TCounter
 
 import time
 from pathlib import Path
 from math import ceil
+from collections import Counter, defaultdict
 
 import click
 import torch
@@ -247,8 +250,29 @@ def evaluate_model(
     return *util.evaluate_auc(label, pred[:, 1]), pred_label.tolist()
 
 @cli.command(short_help='Show statistics of data.')
-def stat():
-    ...
+@click.argument('data', type=click.File('r'))
+def stats(data: TextIO):
+    fn_list = [
+        'GetAtomicNum', 'GetExplicitValence', 'GetImplicitValence',
+        'GetHybridization', 'GetMass', 'GetTotalNumHs',
+        'GetNumRadicalElectrons', 'IsInRing', 'GetChiralTag',
+        'GetDegree', 'GetFormalCharge', 'GetIsAromatic'
+    ]
+
+    TStats = DefaultDict[Text, TCounter[Hashable]]
+    stats: TStats = defaultdict(lambda: Counter())
+    csv = util.load_csv(data)
+
+    for smiles in csv.keys():
+        mol = util.parse_smiles(smiles)
+        for fn_name in fn_list:
+            stats[fn_name].update(
+                getattr(atom, fn_name)()
+                for atom in mol.GetAtoms()
+            )
+
+    for fn_name, cnt in stats.items():
+        log.info(f'{fn_name}: ({len(cnt)} items)\n\t{dict(cnt)}')
 
 if __name__ == '__main__':
     cli()
