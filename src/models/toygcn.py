@@ -1,4 +1,4 @@
-from typing import Optional, List, NamedTuple, Dict
+from typing import List, NamedTuple, Dict
 
 from math import sqrt
 
@@ -16,13 +16,13 @@ class GCNGraph(NamedTuple):
     num: torch.Tensor  # atomic numbers
 
 class ToyGCN(BaseModel):
-    def __init__(self,
+    def __init__(self, device: torch.device, *,
         num_iteration: int = 2,
         max_atomic_num: int = 32,
         embedding_dim: int = 64,
-        dev: Optional[torch.device] = None
+        **kwargs
     ):
-        super().__init__(dev)
+        super().__init__(device)
         self.num_iteration = num_iteration
         self.max_atomic_num = max_atomic_num
         self.embedding_dim = embedding_dim
@@ -32,7 +32,8 @@ class ToyGCN(BaseModel):
         self.fc = nn.Linear(self.embedding_dim, 2)
         self.activate = nn.LeakyReLU()
 
-    def process(self, mol: chem.Mol) -> GCNGraph:
+    @staticmethod
+    def process(mol: chem.Mol, device: torch.device) -> GCNGraph:
         n = mol.GetNumAtoms() + 1  # allocate a new node for graph embedding
 
         # all edges (including all self-loops) as index
@@ -46,16 +47,16 @@ class ToyGCN(BaseModel):
         deg = torch.tensor([
             sqrt(1 / (len(u.GetNeighbors()) + 2))
             for u in mol.GetAtoms()
-        ] + [sqrt(1 / n)], device=self.device)
+        ] + [sqrt(1 / n)], device=device)
         coeff = deg.reshape(-1, 1) @ deg[None, :]  # pairwise coefficients
-        adj = torch.zeros((n, n), device=self.device)
+        adj = torch.zeros((n, n), device=device)
         adj[index] = coeff[index]
 
         # node embedding
         num = torch.tensor(
             [feature.ATOM_MAP[u.GetAtomicNum()] for u in mol.GetAtoms()] +
             [len(feature.ATOM_MAP)],
-            device=self.device
+            device=device
         )
 
         return GCNGraph(n, adj, num)

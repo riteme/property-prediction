@@ -136,7 +136,7 @@ def load_csv(src: Union[Text, Path, TextIO]) -> Dict[Text, int]:
         if fp is not src:
             fp.close()
 
-def separate_items(items: Iterable[Item]) -> Tuple[List[object], List[int]]:
+def separate_items(items: Iterable[Item]) -> Tuple[List[Any], List[int]]:
     objs = []
     labels = []
     for x in items:

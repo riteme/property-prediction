@@ -18,11 +18,12 @@ class GCNData(NamedTuple):
     vec: torch.Tensor
 
 class GCN(BaseModel):
-    def __init__(self, dev,
+    def __init__(self, device: torch.device, *,
         embedding_dim: int = 64,
         no_shortcut: bool = False,
+        **kwargs
     ):
-        super().__init__(dev)
+        super().__init__(device)
         self.embedding_dim = embedding_dim
         self.no_shortcut = no_shortcut
 
@@ -31,7 +32,8 @@ class GCN(BaseModel):
         self.fc = nn.Linear(embedding_dim, 2)
         self.activate = nn.ReLU()
 
-    def process(self, mol: Mol):
+    @staticmethod
+    def process(mol: Mol, device: torch.device):
         n = mol.GetNumAtoms() + 1
 
         graph = DGLGraph()
@@ -49,7 +51,7 @@ class GCN(BaseModel):
         vec = torch.cat([
             torch.zeros((1, m)),
             v
-        ]).to(self.device)
+        ]).to(device)
 
         return GCNData(n, adj, vec)
 
