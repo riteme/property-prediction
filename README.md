@@ -26,6 +26,10 @@ e.g. train GCN (from DGL):
 python src/main.py -v train -e 0.001 --train-with-test -m gcn --ndrop 0.90 --cuda
 ```
 
+* To implement a new model, see `src/models/README.md`.
+* To inspect command line processing, check out `src/main.py`.
+* To inspect training phases, check out `src/train.py`.
+
 ## Results
 
 * ToyGCN
