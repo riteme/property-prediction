@@ -12,10 +12,12 @@ from dgl import DGLGraph
 # NOTICE: GraphConv is somewhat slow. Use DenseGraphConv instead.
 from dgl.nn.pytorch import GraphConv, DenseGraphConv
 
+
 class GCNData(NamedTuple):
     n: int
     adj: torch.Tensor
     vec: torch.Tensor
+
 
 class GCN(BaseModel):
     def __init__(self, device: torch.device, *,

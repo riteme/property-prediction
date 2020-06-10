@@ -10,10 +10,12 @@ import torch
 from torch import nn
 from rdkit import Chem as chem
 
+
 class GCNGraph(NamedTuple):
     n: int
     adj: torch.Tensor
     num: torch.Tensor  # atomic numbers
+
 
 class ToyGCN(BaseModel):
     def __init__(self, device: torch.device, *,

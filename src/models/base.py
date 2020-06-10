@@ -4,6 +4,7 @@ import torch
 from torch import nn
 from rdkit.Chem import Mol
 
+
 class BaseModel(nn.Module):
     def __init__(self, device: torch.device, **kwargs):
         super().__init__()

@@ -10,6 +10,7 @@ import util
 from util import Item
 from interface import ModelInterface
 
+
 def train_fold(
     model: ModelInterface,
     sampler: util.Sampler,

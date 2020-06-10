@@ -48,15 +48,22 @@ python src/main.py -v train -m gcn > result/gcn.txt
 
 * Training framework
     * [x] Memory cache for molecule parsing.
-    * [ ] Disk cache for molecule parsing.
-    * [x] Multiprocessing.
+    * [x] Disk cache for molecule parsing. See `cache` subcommand and `--cache-file` (`-c`) option.
+    * [x] Multiprocessing. See `--num-threads` (`-t`), `--num-workers` (`-j`) and `--spawn-method` (`-sp`) options.
 * Models
     * [x] GCN
     * [ ] GAT
 
 ## Notes
 
-Since PyTorch uses OpenMP for multithreaded training, it will incur great penalty for Python's multiprocessing. It is suggested that use `-t1 -j5` to run cross validation (5 single-threaded worker processes).
+Since PyTorch uses OpenMP for multithreaded training, it will incur great penalty for Python's multiprocessing. It is suggested that use `-t1 -j5 -sp fork` to run cross validation (5 single-threaded worker processes). The reason for using "fork" method is that it preserves memory cache.
+
+e.g.
+
+```
+python src/main.py cache data/train.csv -m gcn -o .cache/gcn.out
+time python src/main.py -v train -m gcn --embedding-dim=64 -s f_score --max-iteration=7 -t1 -j5 --cache-file .cache/gcn.out -sp fork
+```
 
 ## Contributors
 

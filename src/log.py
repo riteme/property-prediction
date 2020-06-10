@@ -4,8 +4,10 @@ import sys
 
 from colorama import Fore
 
+
 LOG_LEVEL = 1
 PROC_NAME: Optional[Text] = None
+
 
 def _output(level: int, fp: TextIO, header: Text, color: Text, message: object):
     if level < LOG_LEVEL:

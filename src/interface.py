@@ -11,6 +11,7 @@ import torch
 import util
 import log
 
+
 class ModelInterface:
     def __init__(self,
         model_type: Type[BaseModel],

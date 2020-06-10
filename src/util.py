@@ -12,10 +12,12 @@ import torch
 from sklearn import metrics
 from rdkit.Chem import MolFromSmiles as parse_smiles
 
+
 # Item = namedtuple('Item', ['obj', 'activity'])
 class Item(NamedTuple):
     obj: Any
     activity: int
+
 
 class Sampler(Generic[T]):
     def get_batch(self) -> Iterator[T]:
@@ -86,6 +88,7 @@ class SeparateSampling(Sampler, Generic[T]):
         for it in self.iters.values():
             yield from it.get_batch()
 
+
 class MaximalCounter:
     def __init__(self):
         self.maximal = None
@@ -109,8 +112,10 @@ class MaximalCounter:
             self.count += 1
             self.updated = True
 
+
 def sha1hex(text: Text) -> Text:
     return sha1(text.encode('utf-8')).hexdigest()
+
 
 def load_csv(src: Union[Text, Path, TextIO]) -> Dict[Text, int]:
     if isinstance(src, Text):
@@ -136,6 +141,7 @@ def load_csv(src: Union[Text, Path, TextIO]) -> Dict[Text, int]:
         if fp is not src:
             fp.close()
 
+
 def separate_items(items: Iterable[Item]) -> Tuple[List[Any], List[int]]:
     objs = []
     labels = []
@@ -144,9 +150,11 @@ def separate_items(items: Iterable[Item]) -> Tuple[List[Any], List[int]]:
         labels.append(x.activity)
     return objs, labels
 
+
 def stat_string(std: Sequence[int], pred_label: Sequence[int]) -> Text:
     c = metrics.confusion_matrix(std, pred_label)
     return f'tn={c[0][0]},fp={c[0][1]}/tp={c[1][1]},fn={c[1][0]}'
+
 
 def evaluate_auc(std: Sequence[int], pred: torch.Tensor) -> Tuple[float, float]:
     '''Evaluate ROC-AUC and PRC-AUC, returned in a tuple.
@@ -159,6 +167,7 @@ def evaluate_auc(std: Sequence[int], pred: torch.Tensor) -> Tuple[float, float]:
     prec, recall, _ = metrics.precision_recall_curve(std, pred)
     prc_auc = metrics.auc(recall, prec)
     return roc_auc, prc_auc
+
 
 def dict_filter(d: Dict[S, T], fn: Callable[[S, T], bool]) -> Dict[S, T]:
     result = {}

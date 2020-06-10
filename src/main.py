@@ -3,10 +3,11 @@ from typing import (
     Any, Tuple, Optional,
     Iterable, TextIO, Dict,
     DefaultDict, Hashable, Type,
-    NamedTuple
+    NamedTuple, BinaryIO
 )
 from typing import Counter as TCounter
 
+import pickle
 from itertools import repeat
 from pathlib import Path
 from collections import Counter, defaultdict
@@ -17,15 +18,22 @@ import multiprocessing as mp
 
 import log
 import util
+import cache
 import models
 from util import Item
 from train import train_fold, evaluate_model
 from interface import ModelInterface
 
+
+TModelInfo = Tuple[Type[models.BaseModel], torch.device, Dict[Text, Any]]
+
+
 class GlobalInitArgs:
     verbose: bool = False
     num_threads: int = mp.cpu_count()
+    cache_file: Optional[Text] = None
 _GLOBAL_INITARGS = GlobalInitArgs()
+
 
 @click.group()
 @click.option('-v', '--verbose', is_flag=True, help='Show debug messages.')
@@ -39,9 +47,14 @@ def cli(verbose: bool) -> None:
 def global_initialize(args: GlobalInitArgs):
     if args.verbose:
         log.LOG_LEVEL = 0
+
     torch.set_num_threads(args.num_threads)
 
-@cli.command(short_help='Train model.')
+    if args.cache_file is not None:
+        cache.register_provider(ModelInterface.process, args.cache_file)
+
+
+@cli.command('train', short_help='Train model.')
 @click.option('-d', '--directory', type=str, default='data', show_default=True,
     help='Data directory.')
 @click.option('-m', '--model-name', type=str, required=True,
@@ -74,25 +87,32 @@ def global_initialize(args: GlobalInitArgs):
     help='Number of PyTorch threads for OpenMP.')
 @click.option('-j', '--num-workers', type=int, default=1, show_default=True,
     help='Number of worker processes. "--no-reset" is not available in multiprocessing mode.')
+@click.option('-sp', '--spawn-method', type=click.Choice(['fork', 'spawn', 'forkserver']), default='spawn', show_default=True,
+    help='Method for multiprocessing module to spawn new worker processes.')
 @click.option('--cuda', is_flag=True,
     help='Prefer CUDA for PyTorch.')
+@click.option('-c', '--cache-file', type=click.Path(exists=True),
+    help='Path for cache file.')
 
 # if you want to pass some parameters directly to models,
 # store them in kwargs. e.g. "embedding_dim" below
 @click.option('--embedding-dim', type=int)
 @click.option('--no-shortcut', is_flag=True)
-def train(
+def _train(
     directory: Text,
     model_name: Text,
     cuda: bool,
     num_threads: int,
     num_workers: int,
+    spawn_method: Text,
+    cache_file: Optional[Text],
     **kwargs
 ) -> None:
     # configure PyTorch's OpenMP
     log.info(f'Number of threads: {num_threads}')
     _GLOBAL_INITARGS.num_threads = num_threads
-    torch.set_num_threads(num_threads)
+    _GLOBAL_INITARGS.cache_file = cache_file
+    global_initialize(_GLOBAL_INITARGS)
 
     data_folder = Path(directory)
     assert data_folder.is_dir(), 'Invalid data folder'
@@ -131,8 +151,13 @@ def train(
     else:
         log.info(f'Number of workers: {num_workers}')
 
-        # PyTorch seems to be not compatible with the "fork" method
-        ctx = mp.get_context('spawn')
+        # PyTorch's OpenMP seems to be not compatible with the "fork" method
+        if spawn_method == 'fork' and num_threads > 1:
+            log.warn('the "fork" method may result in deadlock with multithreaded training.')
+        if spawn_method == 'spawn':
+            log.warn('the "spawn" method will invalidate memory molecule caches.')
+
+        ctx = mp.get_context(spawn_method)
         with ctx.Pool(num_workers, global_initialize, (_GLOBAL_INITARGS, )) as workers:
             args_iterator = zip(folds, repeat(model_info), repeat(kwargs))
             results = workers.imap_unordered(task_wrapper, args_iterator)
@@ -150,8 +175,6 @@ def train(
     log.info('All folds: ROC-AUC = %.3f±%.3f, PRC-AUC = %.3f±%.3f' % (
         roc.mean(), roc.std(), prc.mean(), prc.std()
     ))
-
-TModelInfo = Tuple[Type[models.BaseModel], torch.device, Dict[Text, Any]]
 
 def get_model(model_info: TModelInfo, no_initialize: bool = False) -> ModelInterface:
     model_type, device, kwargs = model_info
@@ -249,6 +272,7 @@ def load_data(
 
     return data
 
+
 @cli.command(short_help='Show statistics of data.')
 @click.argument('data', type=click.File('r'))
 def stats(data: TextIO):
@@ -273,6 +297,27 @@ def stats(data: TextIO):
 
     for fn_name, cnt in stats.items():
         log.info(f'{fn_name}: ({len(cnt)} items)\n\t{dict(cnt)}')
+
+
+@cli.command('cache', short_help='Build cache.')
+@click.argument('data', type=click.File('r'))
+@click.option('-m', '--model-name', type=str, required=True,
+    help='The name of the model to be cached.')
+@click.option('-o', '--output', type=click.File('wb'), required=True,
+    help='Path to place the cache file.')
+def _cache(data: TextIO, model_name: Text, output: BinaryIO):
+    cpu = require_device(False)
+    model_type = models.select(model_name)
+    model = ModelInterface(model_type, cpu, False)
+
+    csv = util.load_csv(data)
+    cache = {}
+    for smiles in csv.keys():
+        cache_key = (smiles, )  # memcached is indexed on argument list
+        cache[cache_key] = model.process(smiles)
+
+    pickle.dump(cache, output)
+
 
 if __name__ == '__main__':
     cli()

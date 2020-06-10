@@ -5,6 +5,7 @@ from .base import BaseModel
 import torch
 from rdkit.Chem import Mol
 
+
 class StupidModel(BaseModel):
     def __init__(self, dev: torch.device, **kwargs):
         super().__init__(dev)

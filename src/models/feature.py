@@ -3,6 +3,7 @@ from typing import Tuple
 import torch
 from rdkit.Chem import Mol, Atom, HybridizationType
 
+
 # see docstring of `atom_feature`
 FEATURE_DIM = 63
 OFFSET = torch.tensor([  # mass excluded
@@ -24,6 +25,7 @@ HYBRID_MAP = {
     HybridizationType.SP3D2: 5,
     HybridizationType.SP3D: 6
 }
+
 
 def atom_feature(atom: Atom) -> Tuple[torch.Tensor, int]:
     '''
