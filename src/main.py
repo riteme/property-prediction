@@ -1,16 +1,19 @@
 from typing import (
     Text, List, Sequence,
     Any, Tuple, Optional,
-    Iterable, TextIO,
-    DefaultDict, Hashable
+    Iterable, TextIO, Dict,
+    DefaultDict, Hashable, Type,
+    NamedTuple
 )
 from typing import Counter as TCounter
 
+from itertools import repeat
 from pathlib import Path
 from collections import Counter, defaultdict
 
 import click
 import torch
+import multiprocessing as mp
 
 import log
 import util
@@ -19,11 +22,24 @@ from util import Item
 from train import train_fold, evaluate_model
 from interface import ModelInterface
 
+class GlobalInitArgs:
+    verbose: bool = False
+    num_threads: int = mp.cpu_count()
+_GLOBAL_INITARGS = GlobalInitArgs()
+
 @click.group()
 @click.option('-v', '--verbose', is_flag=True, help='Show debug messages.')
 def cli(verbose: bool) -> None:
-    if verbose:
+    global GLOBAL_INITARGS
+    _GLOBAL_INITARGS.verbose = verbose
+    global_initialize(_GLOBAL_INITARGS)
+
+# since multiprocessing has to choose the "spawn" method,
+# every global state must be re-configured.
+def global_initialize(args: GlobalInitArgs):
+    if args.verbose:
         log.LOG_LEVEL = 0
+    torch.set_num_threads(args.num_threads)
 
 @cli.command(short_help='Train model.')
 @click.option('-d', '--directory', type=str, default='data', show_default=True,
@@ -54,6 +70,10 @@ def cli(verbose: bool) -> None:
     help='Probability to drop negative items during training.')
 @click.option('--no-reset', is_flag=True,
     help='Do not reset model instance during cross validation.')
+@click.option('-t', '--num-threads', type=int, default=mp.cpu_count(), show_default=True,
+    help='Number of PyTorch threads for OpenMP.')
+@click.option('-j', '--num-workers', type=int, default=1, show_default=True,
+    help='Number of worker processes. "--no-reset" is not available in multiprocessing mode.')
 @click.option('--cuda', is_flag=True,
     help='Prefer CUDA for PyTorch.')
 
@@ -65,8 +85,15 @@ def train(
     directory: Text,
     model_name: Text,
     cuda: bool,
+    num_threads: int,
+    num_workers: int,
     **kwargs
 ) -> None:
+    # configure PyTorch's OpenMP
+    log.info(f'Number of threads: {num_threads}')
+    _GLOBAL_INITARGS.num_threads = num_threads
+    torch.set_num_threads(num_threads)
+
     data_folder = Path(directory)
     assert data_folder.is_dir(), 'Invalid data folder'
 
@@ -76,26 +103,43 @@ def train(
     # filter out options that are not set in command line
     # default to ignore both None and False (for flag options)
     model_kwargs = util.dict_filter(kwargs, lambda k, v: bool(v))
-    model = ModelInterface(model_type, device, **model_kwargs)
+    model_info = (model_type, device, model_kwargs)
+    model = get_model(model_info, no_initialize=True)
 
     # preload data into memcache
-    log.info('Preloading data.')
+    log.info('Preparing data...')
     full_data = util.load_csv(data_folder/'train.csv')
     for smiles in full_data.keys():
         _ = model.process(smiles)
 
     # process folds
+    folds = []
     roc_record = []
     prc_record = []
     for fold in sorted(data_folder.iterdir()):
         if not fold.is_dir():
             log.debug(f'Ignored "{fold}".')
             continue
-        log.info(f'Processing "{fold}"...')
+        folds.append(fold)
 
-        roc_auc, prc_auc = process_fold(model, fold, **kwargs)
-        roc_record.append(roc_auc)
-        prc_record.append(prc_auc)
+    if num_workers == 1:
+        model = get_model(model_info)
+        for fold in folds:
+            roc_auc, prc_auc = process_fold(model, fold, **kwargs)
+            roc_record.append(roc_auc)
+            prc_record.append(prc_auc)
+    else:
+        log.info(f'Number of workers: {num_workers}')
+
+        # PyTorch seems to be not compatible with the "fork" method
+        ctx = mp.get_context('spawn')
+        with ctx.Pool(num_workers, global_initialize, (_GLOBAL_INITARGS, )) as workers:
+            args_iterator = zip(folds, repeat(model_info), repeat(kwargs))
+            results = workers.imap_unordered(task_wrapper, args_iterator)
+
+            for roc_auc, prc_auc in results:
+                roc_record.append(roc_auc)
+                prc_record.append(prc_auc)
 
     # basic statistics
     roc = torch.tensor(roc_record)
@@ -107,6 +151,23 @@ def train(
         roc.mean(), roc.std(), prc.mean(), prc.std()
     ))
 
+TModelInfo = Tuple[Type[models.BaseModel], torch.device, Dict[Text, Any]]
+
+def get_model(model_info: TModelInfo, no_initialize: bool = False) -> ModelInterface:
+    model_type, device, kwargs = model_info
+    return ModelInterface(model_type, device, no_initialize=no_initialize, **kwargs)
+
+def task_wrapper(arg_pack: Tuple[Path, TModelInfo, Dict[Text, Any]]) -> Tuple[float, float]:
+    '''For multiprocessing.
+    '''
+    fold, model_info, kwargs = arg_pack
+    log.PROC_NAME = fold.name
+
+    # each worker has to instantiate its own model.
+    # molecule memory cache is shared among all `ModelInterface`.
+    model = get_model(model_info)
+    return process_fold(model, fold, **kwargs)
+
 def process_fold(
     model: ModelInterface,
     fold: Path,
@@ -117,6 +178,8 @@ def process_fold(
     ndrop: Optional[float] = None,
     **kwargs
 ) -> Tuple[float, float]:
+    log.info(f'Processing "{fold}"...')
+
     # load the fold and let the model parse these molecules
     # data[0]: training set
     # data[1]: validate set

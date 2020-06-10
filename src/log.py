@@ -5,14 +5,17 @@ import sys
 from colorama import Fore
 
 LOG_LEVEL = 1
+PROC_NAME: Optional[Text] = None
 
 def _output(level: int, fp: TextIO, header: Text, color: Text, message: object):
     if level < LOG_LEVEL:
         return
+
+    proc_name = '' if PROC_NAME is None else f'/"{PROC_NAME}"'
     if fp.isatty():
-        fp.write(f'{color}({header}){Fore.RESET} {message}\n')
+        fp.write(f'{color}({header}{proc_name}){Fore.RESET} {message}\n')
     else:
-        fp.write(f'({header}) {message}\n')
+        fp.write(f'({header}{proc_name}) {message}\n')
     fp.flush()
 
 def debug(message: object):
