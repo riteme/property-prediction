@@ -117,6 +117,8 @@ def _train(
     data_folder = Path(directory)
     assert data_folder.is_dir(), 'Invalid data folder'
 
+    if cuda and cache_file is not None:
+        log.warn('Disk cache file may not be compatible with CUDA tensors.')
     device = require_device(cuda)
     model_type = models.select(model_name)  # see models/__init__.py
 
@@ -153,9 +155,9 @@ def _train(
 
         # PyTorch's OpenMP seems to be not compatible with the "fork" method
         if spawn_method == 'fork' and num_threads > 1:
-            log.warn('the "fork" method may result in deadlock with multithreaded training.')
+            log.warn('The "fork" method may result in deadlock with multithreaded training.')
         if spawn_method == 'spawn':
-            log.warn('the "spawn" method will invalidate memory molecule caches.')
+            log.warn('The "spawn" method will invalidate memory molecule caches.')
 
         ctx = mp.get_context(spawn_method)
         with ctx.Pool(num_workers, global_initialize, (_GLOBAL_INITARGS, )) as workers:

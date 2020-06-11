@@ -1,0 +1,1125 @@
+(info) Number of threads: 1
+(info) Preparing data...
+(debug) no cache loaded.
+(debug) Ignored "data/train.csv".
+(info) Number of workers: 5
+(info/"fold_0") Processing "data/fold_0"...
+(debug/"fold_0") no cache loaded.
+(info/"fold_4") Processing "data/fold_4"...
+(info/"fold_3") Processing "data/fold_3"...
+(debug/"fold_4") no cache loaded.
+(debug/"fold_3") no cache loaded.
+(info/"fold_1") Processing "data/fold_1"...
+(debug/"fold_1") no cache loaded.
+(info/"fold_2") Processing "data/fold_2"...
+(debug/"fold_2") no cache loaded.
+(debug/"fold_3") batch_per_epoch=27
+(debug/"fold_0") batch_per_epoch=27
+(debug/"fold_1") batch_per_epoch=27
+(debug/"fold_4") batch_per_epoch=27
+(debug/"fold_2") batch_per_epoch=27
+(debug/"fold_0") [0] train:    loss=0.7017741335762872,min=1e+99
+(debug/"fold_0") [0] validate: tn=151,fp=37/tp=6,fn=8. roc=0.7838145896656535,prc=0.2840269958542645,fβ=0.2105263157894737
+(debug/"fold_0") [0] watcher: maximal=(0.2840269958542645, 0.7838145896656535),count=1
+(debug/"fold_0") [0] epoch time=17.634s
+(debug/"fold_0") checkpoint saved.
+(debug/"fold_3") [0] train:    loss=0.6262652907106612,min=1e+99
+(debug/"fold_3") [0] validate: tn=186,fp=9/tp=4,fn=2. roc=0.9076923076923078,prc=0.6581209252896347,fβ=0.42105263157894735
+(debug/"fold_3") [0] watcher: maximal=(0.6581209252896347, 0.9076923076923078),count=1
+(debug/"fold_3") [0] epoch time=18.003s
+(debug/"fold_3") checkpoint saved.
+(debug/"fold_1") [0] train:    loss=0.6782462221604807,min=1e+99
+(debug/"fold_1") [0] validate: tn=141,fp=56/tp=3,fn=1. roc=0.8045685279187816,prc=0.4495229173928198,fβ=0.09523809523809525
+(debug/"fold_1") [0] watcher: maximal=(0.4495229173928198, 0.8045685279187816),count=1
+(debug/"fold_1") [0] epoch time=17.666s
+(debug/"fold_1") checkpoint saved.
+(debug/"fold_4") [0] train:    loss=0.7121302993209274,min=1e+99
+(debug/"fold_4") [0] validate: tn=181,fp=17/tp=3,fn=0. roc=0.9427609427609428,prc=0.10695167405693722,fβ=0.2608695652173913
+(debug/"fold_4") [0] watcher: maximal=(0.10695167405693722, 0.9427609427609428),count=1
+(debug/"fold_4") [0] epoch time=17.348s
+(debug/"fold_4") checkpoint saved.
+(debug/"fold_2") [0] train:    loss=0.6695797719337322,min=1e+99
+(debug/"fold_2") [0] validate: tn=186,fp=12/tp=0,fn=4. roc=0.6035353535353536,prc=0.024748348081395165,fβ=0.0
+(debug/"fold_2") [0] watcher: maximal=(0.024748348081395165, 0.6035353535353536),count=1
+(debug/"fold_2") [0] epoch time=17.734s
+(debug/"fold_2") checkpoint saved.
+(debug/"fold_3") [1] train:    loss=0.3905494428343243,min=0.6262652907106612
+(debug/"fold_3") [1] validate: tn=124,fp=71/tp=5,fn=1. roc=0.7905982905982906,prc=0.09104884938473731,fβ=0.12195121951219512
+(debug/"fold_3") [1] watcher: maximal=(0.6581209252896347, 0.9076923076923078),count=1
+(debug/"fold_3") [1] epoch time=17.792s
+(debug/"fold_1") [1] train:    loss=0.4776669470248399,min=0.6782462221604807
+(debug/"fold_1") [1] validate: tn=188,fp=9/tp=0,fn=4. roc=0.7639593908629442,prc=0.07843838605233229,fβ=0.0
+(debug/"fold_1") [1] watcher: maximal=(0.4495229173928198, 0.8045685279187816),count=1
+(debug/"fold_1") [1] epoch time=17.963s
+(debug/"fold_0") [1] train:    loss=0.5106451997050533,min=0.7017741335762872
+(debug/"fold_0") [1] validate: tn=73,fp=115/tp=13,fn=1. roc=0.821048632218845,prc=0.3748617652465139,fβ=0.18309859154929575
+(debug/"fold_0") [1] watcher: maximal=(0.3748617652465139, 0.821048632218845),count=2
+(debug/"fold_0") [1] epoch time=19.054s
+(debug/"fold_0") checkpoint saved.
+(debug/"fold_4") [1] train:    loss=0.4873199098640018,min=0.7121302993209274
+(debug/"fold_4") [1] validate: tn=160,fp=38/tp=2,fn=1. roc=0.8956228956228955,prc=0.373645954316686,fβ=0.09302325581395349
+(debug/"fold_4") [1] watcher: maximal=(0.373645954316686, 0.8956228956228955),count=2
+(debug/"fold_4") [1] epoch time=18.625s
+(debug/"fold_4") checkpoint saved.
+(debug/"fold_2") [1] train:    loss=0.4815643286263501,min=0.6695797719337322
+(debug/"fold_2") [1] validate: tn=185,fp=13/tp=0,fn=4. roc=0.6616161616161615,prc=0.03227305593261845,fβ=0.0
+(debug/"fold_2") [1] watcher: maximal=(0.03227305593261845, 0.6616161616161615),count=2
+(debug/"fold_2") [1] epoch time=18.180s
+(debug/"fold_2") checkpoint saved.
+(debug/"fold_3") [2] train:    loss=0.27314267887009513,min=0.3905494428343243
+(debug/"fold_3") [2] validate: tn=173,fp=22/tp=4,fn=2. roc=0.8905982905982905,prc=0.5287253045548116,fβ=0.25
+(debug/"fold_3") [2] watcher: maximal=(0.6581209252896347, 0.9076923076923078),count=1
+(debug/"fold_3") [2] epoch time=17.490s
+(debug/"fold_1") [2] train:    loss=0.3072707931752558,min=0.4776669470248399
+(debug/"fold_1") [2] validate: tn=160,fp=37/tp=2,fn=2. roc=0.8096446700507615,prc=0.41752688431986396,fβ=0.09302325581395347
+(debug/"fold_1") [2] watcher: maximal=(0.4495229173928198, 0.8045685279187816),count=1
+(debug/"fold_1") [2] epoch time=18.417s
+(debug/"fold_0") [2] train:    loss=0.3235080181448548,min=0.5106451997050533
+(debug/"fold_0") [2] validate: tn=172,fp=16/tp=13,fn=1. roc=0.9122340425531915,prc=0.604588982312394,fβ=0.6046511627906977
+(debug/"fold_0") [2] watcher: maximal=(0.604588982312394, 0.9122340425531915),count=3
+(debug/"fold_0") [2] epoch time=18.057s
+(debug/"fold_0") checkpoint saved.
+(debug/"fold_4") [2] train:    loss=0.4095818102359772,min=0.4873199098640018
+(debug/"fold_4") [2] validate: tn=175,fp=23/tp=2,fn=1. roc=0.9276094276094276,prc=0.17977716727716725,fβ=0.14285714285714285
+(debug/"fold_4") [2] watcher: maximal=(0.373645954316686, 0.8956228956228955),count=2
+(debug/"fold_4") [2] epoch time=18.385s
+(debug/"fold_2") [2] train:    loss=0.33197615544001263,min=0.4815643286263501
+(debug/"fold_2") [2] validate: tn=171,fp=27/tp=0,fn=4. roc=0.5366161616161615,prc=0.01979422175428396,fβ=0.0
+(debug/"fold_2") [2] watcher: maximal=(0.03227305593261845, 0.6616161616161615),count=2
+(debug/"fold_2") [2] epoch time=17.873s
+(debug/"fold_3") [3] train:    loss=0.2246572493954941,min=0.27314267887009513
+(debug/"fold_3") [3] validate: tn=167,fp=28/tp=5,fn=1. roc=0.8641025641025641,prc=0.3510409472574606,fβ=0.25641025641025644
+(debug/"fold_3") [3] watcher: maximal=(0.6581209252896347, 0.9076923076923078),count=1
+(debug/"fold_3") [3] epoch time=17.505s
+(debug/"fold_1") [3] train:    loss=0.18747344419912057,min=0.3072707931752558
+(debug/"fold_1") [3] validate: tn=186,fp=11/tp=3,fn=1. roc=0.83248730964467,prc=0.19249770521898768,fβ=0.3333333333333333
+(debug/"fold_1") [3] watcher: maximal=(0.4495229173928198, 0.8045685279187816),count=1
+(debug/"fold_1") [3] epoch time=18.257s
+(debug/"fold_0") [3] train:    loss=0.2568029314279556,min=0.3235080181448548
+(debug/"fold_0") [3] validate: tn=156,fp=32/tp=12,fn=2. roc=0.8848784194528877,prc=0.6258023768815572,fβ=0.41379310344827586
+(debug/"fold_0") [3] watcher: maximal=(0.6258023768815572, 0.8848784194528877),count=4
+(debug/"fold_0") [3] epoch time=18.302s
+(debug/"fold_0") checkpoint saved.
+(debug/"fold_4") [3] train:    loss=0.31560630323710265,min=0.4095818102359772
+(debug/"fold_4") [3] validate: tn=112,fp=86/tp=2,fn=1. roc=0.8063973063973063,prc=0.3640287059297593,fβ=0.04395604395604396
+(debug/"fold_4") [3] watcher: maximal=(0.373645954316686, 0.8956228956228955),count=2
+(debug/"fold_4") [3] epoch time=18.007s
+(debug/"fold_2") [3] train:    loss=0.21970298831109647,min=0.33197615544001263
+(debug/"fold_2") [3] validate: tn=178,fp=20/tp=0,fn=4. roc=0.5833333333333333,prc=0.021922794939572075,fβ=0.0
+(debug/"fold_2") [3] watcher: maximal=(0.03227305593261845, 0.6616161616161615),count=2
+(debug/"fold_2") [3] epoch time=18.311s
+(debug/"fold_3") [4] train:    loss=0.12485689614658002,min=0.2246572493954941
+(debug/"fold_3") [4] validate: tn=187,fp=8/tp=3,fn=3. roc=0.8581196581196582,prc=0.16614268417733397,fβ=0.3529411764705882
+(debug/"fold_3") [4] watcher: maximal=(0.6581209252896347, 0.9076923076923078),count=1
+(debug/"fold_3") [4] epoch time=18.874s
+(debug/"fold_1") [4] train:    loss=0.14022503227547364,min=0.18747344419912057
+(debug/"fold_1") [4] validate: tn=174,fp=23/tp=3,fn=1. roc=0.8591370558375635,prc=0.551387982377417,fβ=0.19999999999999998
+(debug/"fold_1") [4] watcher: maximal=(0.551387982377417, 0.8591370558375635),count=2
+(debug/"fold_1") [4] epoch time=18.022s
+(debug/"fold_1") checkpoint saved.
+(debug/"fold_0") [4] train:    loss=0.17322642825267934,min=0.2568029314279556
+(debug/"fold_0") [4] validate: tn=173,fp=15/tp=13,fn=1. roc=0.9338905775075989,prc=0.835899613882933,fβ=0.6190476190476191
+(debug/"fold_0") [4] watcher: maximal=(0.835899613882933, 0.9338905775075989),count=5
+(debug/"fold_0") [4] epoch time=18.959s
+(debug/"fold_0") checkpoint saved.
+(debug/"fold_4") [4] train:    loss=0.26651860276858014,min=0.31560630323710265
+(debug/"fold_4") [4] validate: tn=155,fp=43/tp=2,fn=1. roc=0.8838383838383839,prc=0.4538150042625746,fβ=0.08333333333333334
+(debug/"fold_4") [4] watcher: maximal=(0.4538150042625746, 0.8838383838383839),count=3
+(debug/"fold_4") [4] epoch time=18.332s
+(debug/"fold_4") checkpoint saved.
+(debug/"fold_2") [4] train:    loss=0.13042712225406258,min=0.21970298831109647
+(debug/"fold_2") [4] validate: tn=196,fp=2/tp=0,fn=4. roc=0.49873737373737376,prc=0.018087851776977845,fβ=0.0
+(debug/"fold_2") [4] watcher: maximal=(0.03227305593261845, 0.6616161616161615),count=2
+(debug/"fold_2") [4] epoch time=19.914s
+(debug/"fold_3") [5] train:    loss=0.17092729966949533,min=0.12485689614658002
+(debug/"fold_3") [5] validate: tn=162,fp=33/tp=5,fn=1. roc=0.8957264957264958,prc=0.7174254547992601,fβ=0.22727272727272727
+(debug/"fold_3") [5] watcher: maximal=(0.7174254547992601, 0.8957264957264958),count=2
+(debug/"fold_3") [5] epoch time=19.345s
+(debug/"fold_3") checkpoint saved.
+(debug/"fold_1") [5] train:    loss=0.1105735526178722,min=0.14022503227547364
+(debug/"fold_1") [5] validate: tn=171,fp=26/tp=3,fn=1. roc=0.7664974619289341,prc=0.20948034915720673,fβ=0.18181818181818182
+(debug/"fold_1") [5] watcher: maximal=(0.551387982377417, 0.8591370558375635),count=2
+(debug/"fold_1") [5] epoch time=19.570s
+(debug/"fold_0") [5] train:    loss=0.12908219387409864,min=0.17322642825267934
+(debug/"fold_0") [5] validate: tn=183,fp=5/tp=7,fn=7. roc=0.922112462006079,prc=0.7736620284362741,fβ=0.5384615384615384
+(debug/"fold_0") [5] watcher: maximal=(0.835899613882933, 0.9338905775075989),count=5
+(debug/"fold_0") [5] epoch time=18.867s
+(debug/"fold_4") [5] train:    loss=0.21231102971015153,min=0.26651860276858014
+(debug/"fold_4") [5] validate: tn=188,fp=10/tp=2,fn=1. roc=0.776094276094276,prc=0.17860311867945455,fβ=0.26666666666666666
+(debug/"fold_4") [5] watcher: maximal=(0.4538150042625746, 0.8838383838383839),count=3
+(debug/"fold_4") [5] epoch time=19.062s
+(debug/"fold_2") [5] train:    loss=0.13580482756650006,min=0.13042712225406258
+(debug/"fold_2") [5] validate: tn=177,fp=21/tp=0,fn=4. roc=0.5934343434343434,prc=0.022288846002000155,fβ=0.0
+(debug/"fold_2") [5] watcher: maximal=(0.03227305593261845, 0.6616161616161615),count=2
+(debug/"fold_2") [5] epoch time=18.721s
+(debug/"fold_3") [6] train:    loss=0.11925649832658193,min=0.12485689614658002
+(debug/"fold_3") [6] validate: tn=184,fp=11/tp=5,fn=1. roc=0.9521367521367522,prc=0.7705602608052698,fβ=0.45454545454545453
+(debug/"fold_3") [6] watcher: maximal=(0.7705602608052698, 0.9521367521367522),count=3
+(debug/"fold_3") [6] epoch time=18.784s
+(debug/"fold_3") checkpoint saved.
+(debug/"fold_1") [6] train:    loss=0.11002895953478636,min=0.1105735526178722
+(debug/"fold_1") [6] validate: tn=168,fp=29/tp=3,fn=1. roc=0.8045685279187818,prc=0.5381325654561937,fβ=0.16666666666666666
+(debug/"fold_1") [6] watcher: maximal=(0.551387982377417, 0.8591370558375635),count=2
+(debug/"fold_1") [6] epoch time=18.595s
+(debug/"fold_0") [6] train:    loss=0.10913895125742312,min=0.12908219387409864
+(debug/"fold_0") [6] validate: tn=175,fp=13/tp=13,fn=1. roc=0.9289513677811551,prc=0.82056998640375,fβ=0.65
+(debug/"fold_0") [6] watcher: maximal=(0.835899613882933, 0.9338905775075989),count=5
+(debug/"fold_0") [6] epoch time=19.587s
+(debug/"fold_4") [6] train:    loss=0.12437211970488231,min=0.21231102971015153
+(debug/"fold_4") [6] validate: tn=186,fp=12/tp=2,fn=1. roc=0.8585858585858587,prc=0.38714209766841345,fβ=0.23529411764705882
+(debug/"fold_4") [6] watcher: maximal=(0.4538150042625746, 0.8838383838383839),count=3
+(debug/"fold_4") [6] epoch time=19.393s
+(debug/"fold_2") [6] train:    loss=0.20396973316868147,min=0.13042712225406258
+(debug/"fold_2") [6] validate: tn=189,fp=9/tp=0,fn=4. roc=0.6856060606060607,prc=0.04011817290796118,fβ=0.0
+(debug/"fold_2") [6] watcher: maximal=(0.04011817290796118, 0.6856060606060607),count=3
+(debug/"fold_2") [6] epoch time=18.426s
+(debug/"fold_2") checkpoint saved.
+(debug/"fold_3") [7] train:    loss=0.08334965196748574,min=0.11925649832658193
+(debug/"fold_3") [7] validate: tn=188,fp=7/tp=5,fn=1. roc=0.9743589743589743,prc=0.8591269841269842,fβ=0.5555555555555556
+(debug/"fold_3") [7] watcher: maximal=(0.8591269841269842, 0.9743589743589743),count=4
+(debug/"fold_3") [7] epoch time=18.991s
+(debug/"fold_3") checkpoint saved.
+(debug/"fold_1") [7] train:    loss=0.200327610803975,min=0.11002895953478636
+(debug/"fold_1") [7] validate: tn=150,fp=47/tp=3,fn=1. roc=0.8654822335025381,prc=0.5399128045867176,fβ=0.1111111111111111
+(debug/"fold_1") [7] watcher: maximal=(0.551387982377417, 0.8591370558375635),count=2
+(debug/"fold_1") [7] epoch time=18.943s
+(debug/"fold_0") [7] train:    loss=0.10700434680890154,min=0.10913895125742312
+(debug/"fold_0") [7] validate: tn=176,fp=12/tp=13,fn=1. roc=0.9202127659574467,prc=0.7377404764600549,fβ=0.6666666666666666
+(debug/"fold_0") [7] watcher: maximal=(0.835899613882933, 0.9338905775075989),count=5
+(debug/"fold_0") [7] epoch time=18.888s
+(debug/"fold_4") [7] train:    loss=0.07564852276334057,min=0.12437211970488231
+(debug/"fold_4") [7] validate: tn=190,fp=8/tp=1,fn=2. roc=0.8518518518518517,prc=0.08533354186144568,fβ=0.16666666666666666
+(debug/"fold_4") [7] watcher: maximal=(0.4538150042625746, 0.8838383838383839),count=3
+(debug/"fold_4") [7] epoch time=18.554s
+(debug/"fold_2") [7] train:    loss=0.11217983591335791,min=0.13042712225406258
+(debug/"fold_2") [7] validate: tn=193,fp=5/tp=0,fn=4. roc=0.6616161616161615,prc=0.028537331592391434,fβ=0.0
+(debug/"fold_2") [7] watcher: maximal=(0.04011817290796118, 0.6856060606060607),count=3
+(debug/"fold_2") [7] epoch time=18.573s
+(debug/"fold_3") [8] train:    loss=0.07381318921775178,min=0.08334965196748574
+(debug/"fold_3") [8] validate: tn=187,fp=8/tp=5,fn=1. roc=0.9547008547008546,prc=0.7494772384478267,fβ=0.5263157894736842
+(debug/"fold_3") [8] watcher: maximal=(0.8591269841269842, 0.9743589743589743),count=4
+(debug/"fold_3") [8] epoch time=18.612s
+(debug/"fold_1") [8] train:    loss=0.14098345840142834,min=0.11002895953478636
+(debug/"fold_1") [8] validate: tn=179,fp=18/tp=2,fn=2. roc=0.8705583756345178,prc=0.5378937023839778,fβ=0.16666666666666669
+(debug/"fold_1") [8] watcher: maximal=(0.551387982377417, 0.8591370558375635),count=2
+(debug/"fold_1") [8] epoch time=18.587s
+(debug/"fold_0") [8] train:    loss=0.10261462615044029,min=0.10700434680890154
+(debug/"fold_0") [8] validate: tn=179,fp=9/tp=11,fn=3. roc=0.9593465045592706,prc=0.7550293432303267,fβ=0.6470588235294117
+(debug/"fold_0") [8] watcher: maximal=(0.835899613882933, 0.9338905775075989),count=5
+(debug/"fold_0") [8] epoch time=19.374s
+(debug/"fold_4") [8] train:    loss=0.2931453426954923,min=0.07564852276334057
+(debug/"fold_4") [8] validate: tn=180,fp=18/tp=2,fn=1. roc=0.7289562289562289,prc=0.36896580008749374,fβ=0.1739130434782609
+(debug/"fold_4") [8] watcher: maximal=(0.4538150042625746, 0.8838383838383839),count=3
+(debug/"fold_4") [8] epoch time=19.183s
+(debug/"fold_2") [8] train:    loss=0.11567118046460328,min=0.11217983591335791
+(debug/"fold_2") [8] validate: tn=190,fp=8/tp=0,fn=4. roc=0.5378787878787878,prc=0.01952703399276434,fβ=0.0
+(debug/"fold_2") [8] watcher: maximal=(0.04011817290796118, 0.6856060606060607),count=3
+(debug/"fold_2") [8] epoch time=19.026s
+(debug/"fold_3") [9] train:    loss=0.05532903531221328,min=0.07381318921775178
+(debug/"fold_3") [9] validate: tn=189,fp=6/tp=5,fn=1. roc=0.9606837606837606,prc=0.8511186525892408,fβ=0.5882352941176471
+(debug/"fold_3") [9] watcher: maximal=(0.8591269841269842, 0.9743589743589743),count=4
+(debug/"fold_3") [9] epoch time=18.339s
+(debug/"fold_1") [9] train:    loss=0.09603378325010892,min=0.11002895953478636
+(debug/"fold_1") [9] validate: tn=188,fp=9/tp=2,fn=2. roc=0.8210659898477157,prc=0.5387669006423539,fβ=0.26666666666666666
+(debug/"fold_1") [9] watcher: maximal=(0.551387982377417, 0.8591370558375635),count=2
+(debug/"fold_1") [9] epoch time=19.383s
+(debug/"fold_0") [9] train:    loss=0.1327836034750497,min=0.10261462615044029
+(debug/"fold_0") [9] validate: tn=170,fp=18/tp=11,fn=3. roc=0.9388297872340424,prc=0.5460818621772305,fβ=0.5116279069767441
+(debug/"fold_0") [9] watcher: maximal=(0.835899613882933, 0.9338905775075989),count=5
+(debug/"fold_0") [9] epoch time=18.879s
+(debug/"fold_4") [9] train:    loss=0.16768249620993933,min=0.07564852276334057
+(debug/"fold_4") [9] validate: tn=187,fp=11/tp=2,fn=1. roc=0.7929292929292929,prc=0.12057299341782099,fβ=0.25
+(debug/"fold_4") [9] watcher: maximal=(0.4538150042625746, 0.8838383838383839),count=3
+(debug/"fold_4") [9] epoch time=18.960s
+(debug/"fold_2") [9] train:    loss=0.12641178147384413,min=0.11217983591335791
+(debug/"fold_2") [9] validate: tn=191,fp=7/tp=0,fn=4. roc=0.6755050505050505,prc=0.028054271994140227,fβ=0.0
+(debug/"fold_2") [9] watcher: maximal=(0.04011817290796118, 0.6856060606060607),count=3
+(debug/"fold_2") [9] epoch time=18.969s
+(debug/"fold_3") [10] train:    loss=0.054441756241161515,min=0.05532903531221328
+(debug/"fold_3") [10] validate: tn=185,fp=10/tp=5,fn=1. roc=0.9709401709401709,prc=0.7804232804232804,fβ=0.47619047619047616
+(debug/"fold_3") [10] watcher: maximal=(0.8591269841269842, 0.9743589743589743),count=4
+(debug/"fold_3") [10] epoch time=18.957s
+(debug/"fold_1") [10] train:    loss=0.09658197341141878,min=0.09603378325010892
+(debug/"fold_1") [10] validate: tn=178,fp=19/tp=2,fn=2. roc=0.7918781725888324,prc=0.5221494720537545,fβ=0.16
+(debug/"fold_1") [10] watcher: maximal=(0.551387982377417, 0.8591370558375635),count=2
+(debug/"fold_1") [10] epoch time=19.154s
+(debug/"fold_0") [10] train:    loss=0.14057334471080038,min=0.10261462615044029
+(debug/"fold_0") [10] validate: tn=172,fp=16/tp=13,fn=1. roc=0.90919452887538,prc=0.6634912401199238,fβ=0.6046511627906977
+(debug/"fold_0") [10] watcher: maximal=(0.835899613882933, 0.9338905775075989),count=5
+(debug/"fold_0") [10] epoch time=18.990s
+(debug/"fold_4") [10] train:    loss=0.0904712727362359,min=0.07564852276334057
+(debug/"fold_4") [10] validate: tn=192,fp=6/tp=1,fn=2. roc=0.7272727272727273,prc=0.06137135463848007,fβ=0.2
+(debug/"fold_4") [10] watcher: maximal=(0.4538150042625746, 0.8838383838383839),count=3
+(debug/"fold_4") [10] epoch time=19.040s
+(debug/"fold_2") [10] train:    loss=0.17871116446676077,min=0.11217983591335791
+(debug/"fold_2") [10] validate: tn=188,fp=10/tp=0,fn=4. roc=0.6578282828282829,prc=0.027849960040651777,fβ=0.0
+(debug/"fold_2") [10] watcher: maximal=(0.04011817290796118, 0.6856060606060607),count=3
+(debug/"fold_2") [10] epoch time=18.534s
+(debug/"fold_3") [11] train:    loss=0.09962086448514904,min=0.054441756241161515
+(debug/"fold_3") [11] validate: tn=172,fp=23/tp=6,fn=0. roc=0.9786324786324786,prc=0.797400109469075,fβ=0.34285714285714286
+(debug/"fold_3") [11] watcher: maximal=(0.8591269841269842, 0.9743589743589743),count=4
+(debug/"fold_3") [11] epoch time=19.338s
+(debug/"fold_1") [11] train:    loss=0.047600837527877755,min=0.09603378325010892
+(debug/"fold_1") [11] validate: tn=194,fp=3/tp=2,fn=2. roc=0.7969543147208122,prc=0.5363680072879412,fβ=0.4444444444444445
+(debug/"fold_1") [11] watcher: maximal=(0.551387982377417, 0.8591370558375635),count=2
+(debug/"fold_1") [11] epoch time=19.128s
+(debug/"fold_2") [11] train:    loss=0.11940620736115509,min=0.11217983591335791
+(debug/"fold_2") [11] validate: tn=179,fp=19/tp=2,fn=2. roc=0.6717171717171717,prc=0.042956631285942015,fβ=0.16
+(debug/"fold_2") [11] watcher: maximal=(0.042956631285942015, 0.6717171717171717),count=4
+(debug/"fold_2") [11] epoch time=18.134s
+(debug/"fold_2") checkpoint saved.
+(debug/"fold_0") [11] train:    loss=0.11506434185085473,min=0.10261462615044029
+(debug/"fold_0") [11] validate: tn=180,fp=8/tp=13,fn=1. roc=0.9384498480243162,prc=0.8505429405850716,fβ=0.742857142857143
+(debug/"fold_0") [11] watcher: maximal=(0.8505429405850716, 0.9384498480243162),count=6
+(debug/"fold_0") [11] epoch time=19.022s
+(debug/"fold_0") checkpoint saved.
+(debug/"fold_4") [11] train:    loss=0.12294854396195323,min=0.07564852276334057
+(debug/"fold_4") [11] validate: tn=195,fp=3/tp=1,fn=2. roc=0.7457912457912457,prc=0.14094827586206896,fβ=0.28571428571428575
+(debug/"fold_4") [11] watcher: maximal=(0.4538150042625746, 0.8838383838383839),count=3
+(debug/"fold_4") [11] epoch time=20.051s
+(debug/"fold_3") [12] train:    loss=0.07566257943916652,min=0.054441756241161515
+(debug/"fold_3") [12] validate: tn=187,fp=8/tp=5,fn=1. roc=0.8982905982905983,prc=0.42288809536131383,fβ=0.5263157894736842
+(debug/"fold_3") [12] watcher: maximal=(0.8591269841269842, 0.9743589743589743),count=4
+(debug/"fold_3") [12] epoch time=18.868s
+(debug/"fold_1") [12] train:    loss=0.04702206316438538,min=0.047600837527877755
+(debug/"fold_1") [12] validate: tn=186,fp=11/tp=2,fn=2. roc=0.782994923857868,prc=0.5246997691850632,fβ=0.23529411764705882
+(debug/"fold_1") [12] watcher: maximal=(0.551387982377417, 0.8591370558375635),count=2
+(debug/"fold_1") [12] epoch time=19.392s
+(debug/"fold_2") [12] train:    loss=0.13199203916721874,min=0.11217983591335791
+(debug/"fold_2") [12] validate: tn=183,fp=15/tp=1,fn=3. roc=0.6022727272727273,prc=0.027325269793048244,fβ=0.1
+(debug/"fold_2") [12] watcher: maximal=(0.042956631285942015, 0.6717171717171717),count=4
+(debug/"fold_2") [12] epoch time=19.391s
+(debug/"fold_4") [12] train:    loss=0.05101186569987072,min=0.07564852276334057
+(debug/"fold_4") [12] validate: tn=194,fp=4/tp=2,fn=1. roc=0.8518518518518519,prc=0.4816280785381909,fβ=0.4444444444444444
+(debug/"fold_4") [12] watcher: maximal=(0.4816280785381909, 0.8518518518518519),count=4
+(debug/"fold_4") [12] epoch time=17.762s
+(debug/"fold_4") checkpoint saved.
+(debug/"fold_0") [12] train:    loss=0.08053577153219117,min=0.10261462615044029
+(debug/"fold_0") [12] validate: tn=180,fp=8/tp=10,fn=4. roc=0.9281914893617021,prc=0.7314514454150128,fβ=0.6250000000000001
+(debug/"fold_0") [12] watcher: maximal=(0.8505429405850716, 0.9384498480243162),count=6
+(debug/"fold_0") [12] epoch time=19.396s
+(debug/"fold_3") [13] train:    loss=0.06002859239190541,min=0.054441756241161515
+(debug/"fold_3") [13] validate: tn=173,fp=22/tp=5,fn=1. roc=0.9367521367521368,prc=0.8448575949367089,fβ=0.303030303030303
+(debug/"fold_3") [13] watcher: maximal=(0.8591269841269842, 0.9743589743589743),count=4
+(debug/"fold_3") [13] epoch time=19.495s
+(debug/"fold_1") [13] train:    loss=0.0372443615924567,min=0.04702206316438538
+(debug/"fold_1") [13] validate: tn=196,fp=1/tp=2,fn=2. roc=0.7588832487309645,prc=0.5210208245072525,fβ=0.5714285714285715
+(debug/"fold_1") [13] watcher: maximal=(0.551387982377417, 0.8591370558375635),count=2
+(debug/"fold_1") [13] epoch time=19.375s
+(debug/"fold_2") [13] train:    loss=0.06624822028809124,min=0.11217983591335791
+(debug/"fold_2") [13] validate: tn=187,fp=11/tp=1,fn=3. roc=0.6982323232323232,prc=0.05436723475525147,fβ=0.125
+(debug/"fold_2") [13] watcher: maximal=(0.05436723475525147, 0.6982323232323232),count=5
+(debug/"fold_2") [13] epoch time=18.553s
+(debug/"fold_2") checkpoint saved.
+(debug/"fold_0") [13] train:    loss=0.061243769333318425,min=0.08053577153219117
+(debug/"fold_0") [13] validate: tn=183,fp=5/tp=7,fn=7. roc=0.9099544072948328,prc=0.6651255917302653,fβ=0.5384615384615384
+(debug/"fold_0") [13] watcher: maximal=(0.8505429405850716, 0.9384498480243162),count=6
+(debug/"fold_0") [13] epoch time=18.861s
+(debug/"fold_4") [13] train:    loss=0.04593595355335209,min=0.05101186569987072
+(debug/"fold_4") [13] validate: tn=188,fp=10/tp=1,fn=2. roc=0.7676767676767677,prc=0.07342698878182749,fβ=0.14285714285714288
+(debug/"fold_4") [13] watcher: maximal=(0.4816280785381909, 0.8518518518518519),count=4
+(debug/"fold_4") [13] epoch time=19.888s
+(debug/"fold_3") [14] train:    loss=0.1489633182408633,min=0.054441756241161515
+(debug/"fold_3") [14] validate: tn=191,fp=4/tp=5,fn=1. roc=0.9760683760683762,prc=0.7943436379928316,fβ=0.6666666666666667
+(debug/"fold_3") [14] watcher: maximal=(0.8591269841269842, 0.9743589743589743),count=4
+(debug/"fold_3") [14] epoch time=19.163s
+(debug/"fold_1") [14] train:    loss=0.028753291616643157,min=0.0372443615924567
+(debug/"fold_1") [14] validate: tn=193,fp=4/tp=2,fn=2. roc=0.7855329949238579,prc=0.5204608600589389,fβ=0.4
+(debug/"fold_1") [14] watcher: maximal=(0.551387982377417, 0.8591370558375635),count=2
+(debug/"fold_1") [14] epoch time=18.753s
+(debug/"fold_0") [14] train:    loss=0.07518144948752942,min=0.061243769333318425
+(debug/"fold_0") [14] validate: tn=167,fp=21/tp=7,fn=7. roc=0.8586626139817629,prc=0.5858767535687865,fβ=0.3333333333333333
+(debug/"fold_0") [14] watcher: maximal=(0.8505429405850716, 0.9384498480243162),count=6
+(debug/"fold_0") [14] epoch time=18.856s
+(debug/"fold_2") [14] train:    loss=0.07944834273722437,min=0.06624822028809124
+(debug/"fold_2") [14] validate: tn=185,fp=13/tp=1,fn=3. roc=0.6414141414141414,prc=0.03702469360974386,fβ=0.11111111111111112
+(debug/"fold_2") [14] watcher: maximal=(0.05436723475525147, 0.6982323232323232),count=5
+(debug/"fold_2") [14] epoch time=19.806s
+(debug/"fold_4") [14] train:    loss=0.07314076276789247,min=0.04593595355335209
+(debug/"fold_4") [14] validate: tn=191,fp=7/tp=1,fn=2. roc=0.7811447811447811,prc=0.07779336169166678,fβ=0.18181818181818182
+(debug/"fold_4") [14] watcher: maximal=(0.4816280785381909, 0.8518518518518519),count=4
+(debug/"fold_4") [14] epoch time=19.093s
+(debug/"fold_3") [15] train:    loss=0.1984533918676553,min=0.054441756241161515
+(debug/"fold_3") [15] validate: tn=148,fp=47/tp=5,fn=1. roc=0.9495726495726496,prc=0.8172040343915344,fβ=0.1724137931034483
+(debug/"fold_3") [15] watcher: maximal=(0.8591269841269842, 0.9743589743589743),count=4
+(debug/"fold_3") [15] epoch time=19.311s
+(debug/"fold_0") [15] train:    loss=0.08966058509907236,min=0.061243769333318425
+(debug/"fold_0") [15] validate: tn=181,fp=7/tp=7,fn=7. roc=0.9004559270516718,prc=0.6301625323333967,fβ=0.5
+(debug/"fold_0") [15] watcher: maximal=(0.8505429405850716, 0.9384498480243162),count=6
+(debug/"fold_0") [15] epoch time=18.466s
+(debug/"fold_1") [15] train:    loss=0.01106358262714585,min=0.028753291616643157
+(debug/"fold_1") [15] validate: tn=192,fp=5/tp=2,fn=2. roc=0.7588832487309645,prc=0.5225630701456173,fβ=0.36363636363636365
+(debug/"fold_1") [15] watcher: maximal=(0.551387982377417, 0.8591370558375635),count=2
+(debug/"fold_1") [15] epoch time=19.840s
+(debug/"fold_2") [15] train:    loss=0.04630222742411273,min=0.06624822028809124
+(debug/"fold_2") [15] validate: tn=196,fp=2/tp=0,fn=4. roc=0.6047979797979799,prc=0.03333272920785574,fβ=0.0
+(debug/"fold_2") [15] watcher: maximal=(0.05436723475525147, 0.6982323232323232),count=5
+(debug/"fold_2") [15] epoch time=19.917s
+(debug/"fold_4") [15] train:    loss=0.24524307364804876,min=0.04593595355335209
+(debug/"fold_4") [15] validate: tn=156,fp=42/tp=3,fn=0. roc=0.9074074074074073,prc=0.07387566137566137,fβ=0.125
+(debug/"fold_4") [15] watcher: maximal=(0.4816280785381909, 0.8518518518518519),count=4
+(debug/"fold_4") [15] epoch time=19.161s
+(debug/"fold_3") [16] train:    loss=0.26056257858699944,min=0.054441756241161515
+(debug/"fold_3") [16] validate: tn=172,fp=23/tp=5,fn=1. roc=0.9581196581196582,prc=0.5759786101891364,fβ=0.29411764705882354
+(debug/"fold_3") [16] watcher: maximal=(0.8591269841269842, 0.9743589743589743),count=4
+(debug/"fold_3") [16] epoch time=19.605s
+(debug/"fold_0") [16] train:    loss=0.15675953561785044,min=0.061243769333318425
+(debug/"fold_0") [16] validate: tn=182,fp=6/tp=8,fn=6. roc=0.915273556231003,prc=0.5097358729767574,fβ=0.5714285714285714
+(debug/"fold_0") [16] watcher: maximal=(0.8505429405850716, 0.9384498480243162),count=6
+(debug/"fold_0") [16] epoch time=18.682s
+(debug/"fold_1") [16] train:    loss=0.05061734364911293,min=0.01106358262714585
+(debug/"fold_1") [16] validate: tn=189,fp=8/tp=2,fn=2. roc=0.782994923857868,prc=0.5221456710934258,fβ=0.28571428571428575
+(debug/"fold_1") [16] watcher: maximal=(0.551387982377417, 0.8591370558375635),count=2
+(debug/"fold_1") [16] epoch time=18.673s
+(debug/"fold_2") [16] train:    loss=0.04966263476483248,min=0.04630222742411273
+(debug/"fold_2") [16] validate: tn=196,fp=2/tp=0,fn=4. roc=0.6338383838383839,prc=0.03276675294725288,fβ=0.0
+(debug/"fold_2") [16] watcher: maximal=(0.05436723475525147, 0.6982323232323232),count=5
+(debug/"fold_2") [16] epoch time=19.214s
+(debug/"fold_4") [16] train:    loss=0.10721898416954058,min=0.04593595355335209
+(debug/"fold_4") [16] validate: tn=188,fp=10/tp=1,fn=2. roc=0.8535353535353535,prc=0.10922410922410922,fβ=0.14285714285714288
+(debug/"fold_4") [16] watcher: maximal=(0.4816280785381909, 0.8518518518518519),count=4
+(debug/"fold_4") [16] epoch time=19.132s
+(debug/"fold_3") [17] train:    loss=0.11715690770910846,min=0.054441756241161515
+(debug/"fold_3") [17] validate: tn=172,fp=23/tp=5,fn=1. roc=0.9641025641025641,prc=0.7669189122677494,fβ=0.29411764705882354
+(debug/"fold_3") [17] watcher: maximal=(0.8591269841269842, 0.9743589743589743),count=4
+(debug/"fold_3") [17] epoch time=19.944s
+(debug/"fold_1") [17] train:    loss=0.08598080436112704,min=0.01106358262714585
+(debug/"fold_1") [17] validate: tn=165,fp=32/tp=3,fn=1. roc=0.8096446700507614,prc=0.5311244862008221,fβ=0.15384615384615383
+(debug/"fold_1") [17] watcher: maximal=(0.551387982377417, 0.8591370558375635),count=2
+(debug/"fold_1") [17] epoch time=18.724s
+(debug/"fold_0") [17] train:    loss=0.17942899382776684,min=0.061243769333318425
+(debug/"fold_0") [17] validate: tn=185,fp=3/tp=7,fn=7. roc=0.9376899696048633,prc=0.7668776415807362,fβ=0.5833333333333334
+(debug/"fold_0") [17] watcher: maximal=(0.8505429405850716, 0.9384498480243162),count=6
+(debug/"fold_0") [17] epoch time=19.546s
+(debug/"fold_2") [17] train:    loss=0.044893319753033144,min=0.04630222742411273
+(debug/"fold_2") [17] validate: tn=194,fp=4/tp=1,fn=3. roc=0.7159090909090909,prc=0.06615940579556921,fβ=0.22222222222222224
+(debug/"fold_2") [17] watcher: maximal=(0.06615940579556921, 0.7159090909090909),count=6
+(debug/"fold_2") [17] epoch time=18.577s
+(debug/"fold_2") checkpoint saved.
+(debug/"fold_4") [17] train:    loss=0.12071362375799152,min=0.04593595355335209
+(debug/"fold_4") [17] validate: tn=195,fp=3/tp=1,fn=2. roc=0.8518518518518519,prc=0.1406425364758698,fβ=0.28571428571428575
+(debug/"fold_4") [17] watcher: maximal=(0.4816280785381909, 0.8518518518518519),count=4
+(debug/"fold_4") [17] epoch time=19.969s
+(debug/"fold_3") [18] train:    loss=0.07617164660176193,min=0.054441756241161515
+(debug/"fold_3") [18] validate: tn=184,fp=11/tp=5,fn=1. roc=0.9632478632478633,prc=0.852217970521542,fβ=0.45454545454545453
+(debug/"fold_3") [18] watcher: maximal=(0.8591269841269842, 0.9743589743589743),count=4
+(debug/"fold_3") [18] epoch time=19.747s
+(debug/"fold_1") [18] train:    loss=0.16248930502613937,min=0.01106358262714585
+(debug/"fold_1") [18] validate: tn=193,fp=4/tp=2,fn=2. roc=0.75,prc=0.5148934407718394,fβ=0.4
+(debug/"fold_1") [18] watcher: maximal=(0.551387982377417, 0.8591370558375635),count=2
+(debug/"fold_1") [18] epoch time=19.603s
+(debug/"fold_0") [18] train:    loss=0.061671149640999456,min=0.061243769333318425
+(debug/"fold_0") [18] validate: tn=182,fp=6/tp=10,fn=4. roc=0.9293313069908815,prc=0.7462772416275465,fβ=0.6666666666666666
+(debug/"fold_0") [18] watcher: maximal=(0.8505429405850716, 0.9384498480243162),count=6
+(debug/"fold_0") [18] epoch time=19.312s
+(debug/"fold_2") [18] train:    loss=0.035050914799622086,min=0.044893319753033144
+(debug/"fold_2") [18] validate: tn=197,fp=1/tp=0,fn=4. roc=0.6325757575757576,prc=0.02676080214961067,fβ=0.0
+(debug/"fold_2") [18] watcher: maximal=(0.06615940579556921, 0.7159090909090909),count=6
+(debug/"fold_2") [18] epoch time=18.832s
+(debug/"fold_4") [18] train:    loss=0.06520420088674184,min=0.04593595355335209
+(debug/"fold_4") [18] validate: tn=189,fp=9/tp=1,fn=2. roc=0.9006734006734006,prc=0.39241395859042916,fβ=0.15384615384615383
+(debug/"fold_4") [18] watcher: maximal=(0.4816280785381909, 0.8518518518518519),count=4
+(debug/"fold_4") [18] epoch time=19.426s
+(debug/"fold_3") [19] train:    loss=0.11896924605524098,min=0.054441756241161515
+(debug/"fold_3") [19] validate: tn=171,fp=24/tp=5,fn=1. roc=0.9615384615384616,prc=0.7359485815602836,fβ=0.28571428571428575
+(debug/"fold_3") [19] watcher: maximal=(0.8591269841269842, 0.9743589743589743),count=4
+(debug/"fold_3") [19] epoch time=18.454s
+(debug/"fold_3") checkpoint loaded.
+(debug/"fold_1") [19] train:    loss=0.07691261146424545,min=0.01106358262714585
+(debug/"fold_1") [19] validate: tn=193,fp=4/tp=2,fn=2. roc=0.6497461928934011,prc=0.5107963750634862,fβ=0.4
+(debug/"fold_1") [19] watcher: maximal=(0.551387982377417, 0.8591370558375635),count=2
+(debug/"fold_1") [19] epoch time=19.106s
+(debug/"fold_1") checkpoint loaded.
+(debug/"fold_3") tensor([[0.3522, 0.6478, 0.0000],
+        [0.2297, 0.7703, 0.0000],
+        [0.0377, 0.9623, 1.0000],
+        [0.1546, 0.8454, 0.0000],
+        [0.1375, 0.8625, 0.0000],
+        [0.1716, 0.8284, 0.0000],
+        [0.1335, 0.8665, 0.0000],
+        [0.0911, 0.9089, 0.0000],
+        [0.1830, 0.8170, 0.0000]])
+(info/"fold_3") test: tn=190,fp=8/tp=1,fn=3
+(info/"fold_3") ROC-AUC: 0.5555555555555556
+(info/"fold_3") PRC-AUC: 0.28823723341166363
+(info/"fold_5") Processing "data/fold_5"...
+(debug/"fold_5") batch_per_epoch=26
+(debug/"fold_1") tensor([[4.9904e-01, 5.0096e-01, 1.0000e+00],
+        [3.1745e-01, 6.8255e-01, 1.0000e+00],
+        [1.9553e-01, 8.0447e-01, 1.0000e+00],
+        [3.1168e-01, 6.8832e-01, 1.0000e+00],
+        [2.2629e-01, 7.7371e-01, 1.0000e+00],
+        [3.3961e-01, 6.6039e-01, 1.0000e+00],
+        [1.8709e-01, 8.1291e-01, 0.0000e+00],
+        [3.5707e-04, 9.9964e-01, 1.0000e+00],
+        [2.2731e-03, 9.9773e-01, 1.0000e+00],
+        [3.7550e-04, 9.9962e-01, 1.0000e+00],
+        [7.9267e-04, 9.9921e-01, 1.0000e+00],
+        [7.7883e-04, 9.9922e-01, 1.0000e+00],
+        [2.8793e-01, 7.1207e-01, 0.0000e+00],
+        [4.1835e-01, 5.8165e-01, 0.0000e+00],
+        [2.5624e-01, 7.4376e-01, 0.0000e+00],
+        [4.8633e-02, 9.5137e-01, 1.0000e+00],
+        [1.1067e-03, 9.9889e-01, 1.0000e+00],
+        [6.1436e-02, 9.3856e-01, 0.0000e+00],
+        [4.8001e-01, 5.1999e-01, 0.0000e+00],
+        [3.6251e-01, 6.3749e-01, 0.0000e+00],
+        [6.6452e-02, 9.3355e-01, 0.0000e+00],
+        [4.7322e-01, 5.2678e-01, 0.0000e+00],
+        [1.1140e-01, 8.8860e-01, 0.0000e+00],
+        [8.3132e-03, 9.9169e-01, 0.0000e+00]])
+(info/"fold_1") test: tn=177,fp=11/tp=13,fn=1
+(info/"fold_1") ROC-AUC: 0.9354103343465046
+(info/"fold_1") PRC-AUC: 0.7513367157867478
+(info/"fold_6") Processing "data/fold_6"...
+(debug/"fold_6") batch_per_epoch=26
+(debug/"fold_0") [19] train:    loss=0.0644446741272178,min=0.061243769333318425
+(debug/"fold_0") [19] validate: tn=180,fp=8/tp=7,fn=7. roc=0.8985562310030395,prc=0.5989341461287792,fβ=0.4827586206896552
+(debug/"fold_0") [19] watcher: maximal=(0.8505429405850716, 0.9384498480243162),count=6
+(debug/"fold_0") [19] epoch time=20.209s
+(debug/"fold_0") checkpoint loaded.
+(debug/"fold_2") [19] train:    loss=0.025352785570753947,min=0.035050914799622086
+(debug/"fold_2") [19] validate: tn=197,fp=1/tp=0,fn=4. roc=0.5997474747474747,prc=0.02442577222306134,fβ=0.0
+(debug/"fold_2") [19] watcher: maximal=(0.06615940579556921, 0.7159090909090909),count=6
+(debug/"fold_2") [19] epoch time=19.614s
+(debug/"fold_2") checkpoint loaded.
+(debug/"fold_4") [19] train:    loss=0.032333478452292855,min=0.04593595355335209
+(debug/"fold_4") [19] validate: tn=188,fp=10/tp=2,fn=1. roc=0.8872053872053872,prc=0.11715765402206078,fβ=0.26666666666666666
+(debug/"fold_4") [19] watcher: maximal=(0.4816280785381909, 0.8518518518518519),count=4
+(debug/"fold_4") [19] epoch time=18.187s
+(debug/"fold_4") checkpoint loaded.
+(debug/"fold_0") tensor([[0.1639, 0.8361, 0.0000],
+        [0.4413, 0.5587, 0.0000],
+        [0.2495, 0.7505, 0.0000],
+        [0.3690, 0.6310, 0.0000],
+        [0.3159, 0.6841, 0.0000],
+        [0.1505, 0.8495, 0.0000],
+        [0.3262, 0.6738, 0.0000],
+        [0.0444, 0.9556, 1.0000],
+        [0.0052, 0.9948, 1.0000],
+        [0.3679, 0.6321, 0.0000],
+        [0.4056, 0.5944, 0.0000],
+        [0.0243, 0.9757, 0.0000]])
+(info/"fold_0") test: tn=186,fp=10/tp=2,fn=3
+(info/"fold_0") ROC-AUC: 0.7908163265306123
+(info/"fold_0") PRC-AUC: 0.3935764785443856
+(info/"fold_7") Processing "data/fold_7"...
+(debug/"fold_7") batch_per_epoch=27
+(debug/"fold_2") tensor([[4.1517e-01, 5.8483e-01, 0.0000e+00],
+        [4.1518e-01, 5.8482e-01, 0.0000e+00],
+        [4.1518e-01, 5.8482e-01, 0.0000e+00],
+        [1.8819e-01, 8.1181e-01, 1.0000e+00],
+        [1.9417e-01, 8.0583e-01, 1.0000e+00],
+        [3.1576e-01, 6.8424e-01, 0.0000e+00],
+        [2.3019e-01, 7.6981e-01, 0.0000e+00],
+        [3.4379e-04, 9.9966e-01, 0.0000e+00]])
+(info/"fold_2") test: tn=191,fp=6/tp=2,fn=2
+(info/"fold_2") ROC-AUC: 0.833756345177665
+(info/"fold_2") PRC-AUC: 0.23200965700965698
+(info/"fold_8") Processing "data/fold_8"...
+(debug/"fold_8") batch_per_epoch=27
+(debug/"fold_4") tensor([[2.2935e-01, 7.7065e-01, 0.0000e+00],
+        [2.3295e-01, 7.6705e-01, 0.0000e+00],
+        [2.2935e-01, 7.7065e-01, 0.0000e+00],
+        [4.0662e-01, 5.9338e-01, 0.0000e+00],
+        [2.5879e-05, 9.9997e-01, 1.0000e+00],
+        [1.4024e-06, 1.0000e+00, 1.0000e+00],
+        [4.0740e-08, 1.0000e+00, 1.0000e+00],
+        [4.1526e-08, 1.0000e+00, 1.0000e+00],
+        [4.5100e-01, 5.4900e-01, 0.0000e+00],
+        [1.4902e-01, 8.5098e-01, 0.0000e+00],
+        [1.8944e-03, 9.9811e-01, 1.0000e+00],
+        [3.6701e-01, 6.3299e-01, 0.0000e+00],
+        [4.6243e-01, 5.3757e-01, 0.0000e+00]])
+(info/"fold_4") test: tn=187,fp=8/tp=5,fn=1
+(info/"fold_4") ROC-AUC: 0.8999999999999999
+(info/"fold_4") PRC-AUC: 0.840813674530188
+(info/"fold_9") Processing "data/fold_9"...
+(debug/"fold_9") batch_per_epoch=27
+(debug/"fold_6") [0] train:    loss=0.7290743635250971,min=1e+99
+(debug/"fold_6") [0] validate: tn=49,fp=158/tp=1,fn=0. roc=0.8357487922705313,prc=0.014285714285714285,fβ=0.0125
+(debug/"fold_6") [0] watcher: maximal=(0.014285714285714285, 0.8357487922705313),count=1
+(debug/"fold_6") [0] epoch time=18.085s
+(debug/"fold_6") checkpoint saved.
+(debug/"fold_5") [0] train:    loss=0.690769612789154,min=1e+99
+(debug/"fold_5") [0] validate: tn=258,fp=16/tp=1,fn=3. roc=0.6131386861313869,prc=0.023676460237361772,fβ=0.09523809523809523
+(debug/"fold_5") [0] watcher: maximal=(0.023676460237361772, 0.6131386861313869),count=1
+(debug/"fold_5") [0] epoch time=19.981s
+(debug/"fold_5") checkpoint saved.
+(debug/"fold_7") [0] train:    loss=0.6973651493037188,min=1e+99
+(debug/"fold_7") [0] validate: tn=179,fp=18/tp=3,fn=1. roc=0.8857868020304568,prc=0.1812472442680776,fβ=0.24
+(debug/"fold_7") [0] watcher: maximal=(0.1812472442680776, 0.8857868020304568),count=1
+(debug/"fold_7") [0] epoch time=19.341s
+(debug/"fold_7") checkpoint saved.
+(debug/"fold_9") [0] train:    loss=0.6799257806053868,min=1e+99
+(debug/"fold_9") [0] validate: tn=181,fp=15/tp=4,fn=1. roc=0.7826530612244899,prc=0.10765241942307911,fβ=0.3333333333333333
+(debug/"fold_9") [0] watcher: maximal=(0.10765241942307911, 0.7826530612244899),count=1
+(debug/"fold_9") [0] epoch time=19.219s
+(debug/"fold_9") checkpoint saved.
+(debug/"fold_8") [0] train:    loss=0.7157408970373648,min=1e+99
+(debug/"fold_8") [0] validate: tn=153,fp=46/tp=3,fn=0. roc=0.8308207705192631,prc=0.0400717029273437,fβ=0.11538461538461538
+(debug/"fold_8") [0] watcher: maximal=(0.0400717029273437, 0.8308207705192631),count=1
+(debug/"fold_8") [0] epoch time=19.739s
+(debug/"fold_8") checkpoint saved.
+(debug/"fold_6") [1] train:    loss=0.42916123282450896,min=0.7290743635250971
+(debug/"fold_6") [1] validate: tn=169,fp=38/tp=0,fn=1. roc=0.4251207729468599,prc=0.004166666666666667,fβ=0.0
+(debug/"fold_6") [1] watcher: maximal=(0.014285714285714285, 0.8357487922705313),count=1
+(debug/"fold_6") [1] epoch time=19.084s
+(debug/"fold_5") [1] train:    loss=0.5024183117426358,min=0.690769612789154
+(debug/"fold_5") [1] validate: tn=237,fp=37/tp=2,fn=2. roc=0.6195255474452555,prc=0.07501724458788353,fβ=0.09302325581395347
+(debug/"fold_5") [1] watcher: maximal=(0.07501724458788353, 0.6195255474452555),count=2
+(debug/"fold_5") [1] epoch time=18.721s
+(debug/"fold_5") checkpoint saved.
+(debug/"fold_7") [1] train:    loss=0.49239985920764784,min=0.6973651493037188
+(debug/"fold_7") [1] validate: tn=124,fp=73/tp=4,fn=0. roc=0.9022842639593909,prc=0.15386584741423448,fβ=0.09876543209876544
+(debug/"fold_7") [1] watcher: maximal=(0.1812472442680776, 0.8857868020304568),count=1
+(debug/"fold_7") [1] epoch time=19.147s
+(debug/"fold_8") [1] train:    loss=0.4959350766407119,min=0.7157408970373648
+(debug/"fold_8") [1] validate: tn=199,fp=0/tp=0,fn=3. roc=0.6415410385259631,prc=0.01919096374591944,fβ=0.0
+(debug/"fold_8") [1] watcher: maximal=(0.0400717029273437, 0.8308207705192631),count=1
+(debug/"fold_8") [1] epoch time=19.455s
+(debug/"fold_9") [1] train:    loss=0.4213483902039351,min=0.6799257806053868
+(debug/"fold_9") [1] validate: tn=119,fp=77/tp=4,fn=1. roc=0.7704081632653061,prc=0.32542898261521747,fβ=0.09302325581395349
+(debug/"fold_9") [1] watcher: maximal=(0.32542898261521747, 0.7704081632653061),count=2
+(debug/"fold_9") [1] epoch time=19.741s
+(debug/"fold_9") checkpoint saved.
+(debug/"fold_5") [2] train:    loss=0.3590974406554149,min=0.5024183117426358
+(debug/"fold_5") [2] validate: tn=268,fp=6/tp=1,fn=3. roc=0.46441605839416056,prc=0.03648245063837468,fβ=0.18181818181818182
+(debug/"fold_5") [2] watcher: maximal=(0.07501724458788353, 0.6195255474452555),count=2
+(debug/"fold_5") [2] epoch time=18.353s
+(debug/"fold_6") [2] train:    loss=0.298750727222516,min=0.42916123282450896
+(debug/"fold_6") [2] validate: tn=200,fp=7/tp=0,fn=1. roc=0.42995169082125606,prc=0.004201680672268907,fβ=0.0
+(debug/"fold_6") [2] watcher: maximal=(0.014285714285714285, 0.8357487922705313),count=1
+(debug/"fold_6") [2] epoch time=19.885s
+(debug/"fold_7") [2] train:    loss=0.3970882539395933,min=0.49239985920764784
+(debug/"fold_7") [2] validate: tn=164,fp=33/tp=3,fn=1. roc=0.9162436548223349,prc=0.20809485541732764,fβ=0.15
+(debug/"fold_7") [2] watcher: maximal=(0.20809485541732764, 0.9162436548223349),count=2
+(debug/"fold_7") [2] epoch time=18.942s
+(debug/"fold_7") checkpoint saved.
+(debug/"fold_8") [2] train:    loss=0.45850151004614653,min=0.4959350766407119
+(debug/"fold_8") [2] validate: tn=128,fp=71/tp=3,fn=0. roc=0.830820770519263,prc=0.08103527677995763,fβ=0.07792207792207792
+(debug/"fold_8") [2] watcher: maximal=(0.08103527677995763, 0.830820770519263),count=2
+(debug/"fold_8") [2] epoch time=19.730s
+(debug/"fold_8") checkpoint saved.
+(debug/"fold_9") [2] train:    loss=0.28267386003776834,min=0.4213483902039351
+(debug/"fold_9") [2] validate: tn=160,fp=36/tp=4,fn=1. roc=0.7948979591836736,prc=0.29395040245497417,fβ=0.1777777777777778
+(debug/"fold_9") [2] watcher: maximal=(0.32542898261521747, 0.7704081632653061),count=2
+(debug/"fold_9") [2] epoch time=19.529s
+(debug/"fold_5") [3] train:    loss=0.2251093118236615,min=0.3590974406554149
+(debug/"fold_5") [3] validate: tn=209,fp=65/tp=2,fn=2. roc=0.41423357664233573,prc=0.014405944274291756,fβ=0.056338028169014086
+(debug/"fold_5") [3] watcher: maximal=(0.07501724458788353, 0.6195255474452555),count=2
+(debug/"fold_5") [3] epoch time=19.396s
+(debug/"fold_6") [3] train:    loss=0.25181875836390716,min=0.298750727222516
+(debug/"fold_6") [3] validate: tn=176,fp=31/tp=0,fn=1. roc=0.36714975845410625,prc=0.003787878787878788,fβ=0.0
+(debug/"fold_6") [3] watcher: maximal=(0.014285714285714285, 0.8357487922705313),count=1
+(debug/"fold_6") [3] epoch time=19.476s
+(debug/"fold_7") [3] train:    loss=0.28700842184049113,min=0.3970882539395933
+(debug/"fold_7") [3] validate: tn=170,fp=27/tp=3,fn=1. roc=0.9454314720812182,prc=0.768790471785384,fβ=0.17647058823529416
+(debug/"fold_7") [3] watcher: maximal=(0.768790471785384, 0.9454314720812182),count=3
+(debug/"fold_7") [3] epoch time=20.262s
+(debug/"fold_7") checkpoint saved.
+(debug/"fold_8") [3] train:    loss=0.30346001381123505,min=0.45850151004614653
+(debug/"fold_8") [3] validate: tn=189,fp=10/tp=1,fn=2. roc=0.5293132328308208,prc=0.34313050447071064,fβ=0.14285714285714288
+(debug/"fold_8") [3] watcher: maximal=(0.34313050447071064, 0.5293132328308208),count=3
+(debug/"fold_8") [3] epoch time=18.592s
+(debug/"fold_8") checkpoint saved.
+(debug/"fold_9") [3] train:    loss=0.2377545921890824,min=0.28267386003776834
+(debug/"fold_9") [3] validate: tn=189,fp=7/tp=4,fn=1. roc=0.8153061224489797,prc=0.23998238940546635,fβ=0.5000000000000001
+(debug/"fold_9") [3] watcher: maximal=(0.32542898261521747, 0.7704081632653061),count=2
+(debug/"fold_9") [3] epoch time=19.420s
+(debug/"fold_5") [4] train:    loss=0.21452956789961228,min=0.2251093118236615
+(debug/"fold_5") [4] validate: tn=267,fp=7/tp=0,fn=4. roc=0.48722627737226276,prc=0.03408547669402344,fβ=0.0
+(debug/"fold_5") [4] watcher: maximal=(0.07501724458788353, 0.6195255474452555),count=2
+(debug/"fold_5") [4] epoch time=18.865s
+(debug/"fold_6") [4] train:    loss=0.1611790992319584,min=0.25181875836390716
+(debug/"fold_6") [4] validate: tn=187,fp=20/tp=0,fn=1. roc=0.5120772946859904,prc=0.004901960784313725,fβ=0.0
+(debug/"fold_6") [4] watcher: maximal=(0.014285714285714285, 0.8357487922705313),count=1
+(debug/"fold_6") [4] epoch time=18.237s
+(debug/"fold_9") [4] train:    loss=0.22533382089049728,min=0.2377545921890824
+(debug/"fold_9") [4] validate: tn=169,fp=27/tp=4,fn=1. roc=0.7755102040816326,prc=0.1332361628455357,fβ=0.2222222222222222
+(debug/"fold_9") [4] watcher: maximal=(0.32542898261521747, 0.7704081632653061),count=2
+(debug/"fold_9") [4] epoch time=18.288s
+(debug/"fold_8") [4] train:    loss=0.2353078325589498,min=0.30346001381123505
+(debug/"fold_8") [4] validate: tn=179,fp=20/tp=1,fn=2. roc=0.525963149078727,prc=0.34248959002582746,fβ=0.08333333333333333
+(debug/"fold_8") [4] watcher: maximal=(0.34313050447071064, 0.5293132328308208),count=3
+(debug/"fold_8") [4] epoch time=19.592s
+(debug/"fold_7") [4] train:    loss=0.2411419133897181,min=0.28700842184049113
+(debug/"fold_7") [4] validate: tn=188,fp=9/tp=3,fn=1. roc=0.9517766497461929,prc=0.40810560053981104,fβ=0.375
+(debug/"fold_7") [4] watcher: maximal=(0.768790471785384, 0.9454314720812182),count=3
+(debug/"fold_7") [4] epoch time=20.054s
+(debug/"fold_5") [5] train:    loss=0.17987999248390013,min=0.21452956789961228
+(debug/"fold_5") [5] validate: tn=264,fp=10/tp=2,fn=2. roc=0.4927007299270073,prc=0.0793087321491191,fβ=0.25
+(debug/"fold_5") [5] watcher: maximal=(0.0793087321491191, 0.4927007299270073),count=3
+(debug/"fold_5") [5] epoch time=19.598s
+(debug/"fold_5") checkpoint saved.
+(debug/"fold_6") [5] train:    loss=0.18256654733648667,min=0.1611790992319584
+(debug/"fold_6") [5] validate: tn=189,fp=18/tp=0,fn=1. roc=0.36714975845410625,prc=0.003787878787878788,fβ=0.0
+(debug/"fold_6") [5] watcher: maximal=(0.014285714285714285, 0.8357487922705313),count=1
+(debug/"fold_6") [5] epoch time=19.544s
+(debug/"fold_8") [5] train:    loss=0.14064040476525272,min=0.2353078325589498
+(debug/"fold_8") [5] validate: tn=173,fp=26/tp=1,fn=2. roc=0.43216080402010054,prc=0.3410806564329383,fβ=0.06666666666666667
+(debug/"fold_8") [5] watcher: maximal=(0.34313050447071064, 0.5293132328308208),count=3
+(debug/"fold_8") [5] epoch time=18.620s
+(debug/"fold_9") [5] train:    loss=0.1813771494284824,min=0.22533382089049728
+(debug/"fold_9") [5] validate: tn=172,fp=24/tp=2,fn=3. roc=0.763265306122449,prc=0.2640189940051977,fβ=0.12903225806451613
+(debug/"fold_9") [5] watcher: maximal=(0.32542898261521747, 0.7704081632653061),count=2
+(debug/"fold_9") [5] epoch time=19.750s
+(debug/"fold_7") [5] train:    loss=0.18520015781676327,min=0.2411419133897181
+(debug/"fold_7") [5] validate: tn=177,fp=20/tp=3,fn=1. roc=0.9631979695431472,prc=0.7768702651515151,fβ=0.22222222222222218
+(debug/"fold_7") [5] watcher: maximal=(0.7768702651515151, 0.9631979695431472),count=4
+(debug/"fold_7") [5] epoch time=19.053s
+(debug/"fold_7") checkpoint saved.
+(debug/"fold_5") [6] train:    loss=0.09874022307877357,min=0.17987999248390013
+(debug/"fold_5") [6] validate: tn=257,fp=17/tp=2,fn=2. roc=0.4854014598540146,prc=0.04543212209349943,fβ=0.17391304347826086
+(debug/"fold_5") [6] watcher: maximal=(0.0793087321491191, 0.4927007299270073),count=3
+(debug/"fold_5") [6] epoch time=19.235s
+(debug/"fold_6") [6] train:    loss=0.2095555496903566,min=0.1611790992319584
+(debug/"fold_6") [6] validate: tn=177,fp=30/tp=0,fn=1. roc=0.3381642512077294,prc=0.0036231884057971015,fβ=0.0
+(debug/"fold_6") [6] watcher: maximal=(0.014285714285714285, 0.8357487922705313),count=1
+(debug/"fold_6") [6] epoch time=19.201s
+(debug/"fold_9") [6] train:    loss=0.1053291172892959,min=0.1813771494284824
+(debug/"fold_9") [6] validate: tn=179,fp=17/tp=4,fn=1. roc=0.8071428571428572,prc=0.21169998176785507,fβ=0.3076923076923077
+(debug/"fold_9") [6] watcher: maximal=(0.32542898261521747, 0.7704081632653061),count=2
+(debug/"fold_9") [6] epoch time=18.939s
+(debug/"fold_8") [6] train:    loss=0.10924484511768376,min=0.14064040476525272
+(debug/"fold_8") [6] validate: tn=190,fp=9/tp=1,fn=2. roc=0.4690117252931323,prc=0.029245720226064243,fβ=0.15384615384615383
+(debug/"fold_8") [6] watcher: maximal=(0.34313050447071064, 0.5293132328308208),count=3
+(debug/"fold_8") [6] epoch time=20.011s
+(debug/"fold_7") [6] train:    loss=0.1781079137214908,min=0.18520015781676327
+(debug/"fold_7") [6] validate: tn=187,fp=10/tp=3,fn=1. roc=0.965736040609137,prc=0.6035509031198686,fβ=0.3529411764705882
+(debug/"fold_7") [6] watcher: maximal=(0.7768702651515151, 0.9631979695431472),count=4
+(debug/"fold_7") [6] epoch time=19.277s
+(debug/"fold_6") [7] train:    loss=0.14533421468849367,min=0.1611790992319584
+(debug/"fold_6") [7] validate: tn=199,fp=8/tp=0,fn=1. roc=0.25120772946859904,prc=0.003205128205128205,fβ=0.0
+(debug/"fold_6") [7] watcher: maximal=(0.014285714285714285, 0.8357487922705313),count=1
+(debug/"fold_6") [7] epoch time=18.885s
+(debug/"fold_5") [7] train:    loss=0.06722636073111342,min=0.09874022307877357
+(debug/"fold_5") [7] validate: tn=253,fp=21/tp=1,fn=3. roc=0.5255474452554745,prc=0.02927767343036949,fβ=0.07692307692307693
+(debug/"fold_5") [7] watcher: maximal=(0.0793087321491191, 0.4927007299270073),count=3
+(debug/"fold_5") [7] epoch time=19.414s
+(debug/"fold_8") [7] train:    loss=0.11758849990588648,min=0.10924484511768376
+(debug/"fold_8") [7] validate: tn=185,fp=14/tp=1,fn=2. roc=0.5628140703517588,prc=0.34323517944415993,fβ=0.1111111111111111
+(debug/"fold_8") [7] watcher: maximal=(0.34323517944415993, 0.5628140703517588),count=4
+(debug/"fold_8") [7] epoch time=18.845s
+(debug/"fold_8") checkpoint saved.
+(debug/"fold_9") [7] train:    loss=0.18049564695468656,min=0.1053291172892959
+(debug/"fold_9") [7] validate: tn=177,fp=19/tp=4,fn=1. roc=0.7959183673469389,prc=0.3377166336488371,fβ=0.2857142857142857
+(debug/"fold_9") [7] watcher: maximal=(0.3377166336488371, 0.7959183673469389),count=3
+(debug/"fold_9") [7] epoch time=19.869s
+(debug/"fold_9") checkpoint saved.
+(debug/"fold_7") [7] train:    loss=0.2024248374833001,min=0.1781079137214908
+(debug/"fold_7") [7] validate: tn=182,fp=15/tp=4,fn=0. roc=0.9911167512690355,prc=0.8329545454545455,fβ=0.34782608695652173
+(debug/"fold_7") [7] watcher: maximal=(0.8329545454545455, 0.9911167512690355),count=5
+(debug/"fold_7") [7] epoch time=19.476s
+(debug/"fold_7") checkpoint saved.
+(debug/"fold_5") [8] train:    loss=0.09204842623036641,min=0.06722636073111342
+(debug/"fold_5") [8] validate: tn=260,fp=14/tp=2,fn=2. roc=0.6414233576642335,prc=0.07777370538289924,fβ=0.2
+(debug/"fold_5") [8] watcher: maximal=(0.0793087321491191, 0.4927007299270073),count=3
+(debug/"fold_5") [8] epoch time=18.416s
+(debug/"fold_6") [8] train:    loss=0.1342637829769116,min=0.14533421468849367
+(debug/"fold_6") [8] validate: tn=190,fp=17/tp=0,fn=1. roc=0.26086956521739135,prc=0.003246753246753247,fβ=0.0
+(debug/"fold_6") [8] watcher: maximal=(0.014285714285714285, 0.8357487922705313),count=1
+(debug/"fold_6") [8] epoch time=19.844s
+(debug/"fold_7") [8] train:    loss=0.15431890602189083,min=0.1781079137214908
+(debug/"fold_7") [8] validate: tn=187,fp=10/tp=3,fn=1. roc=0.9682741116751269,prc=0.6058582621082621,fβ=0.3529411764705882
+(debug/"fold_7") [8] watcher: maximal=(0.8329545454545455, 0.9911167512690355),count=5
+(debug/"fold_7") [8] epoch time=18.601s
+(debug/"fold_8") [8] train:    loss=0.13747878634819277,min=0.10924484511768376
+(debug/"fold_8") [8] validate: tn=181,fp=18/tp=1,fn=2. roc=0.5912897822445561,prc=0.031711116039153824,fβ=0.09090909090909091
+(debug/"fold_8") [8] watcher: maximal=(0.34323517944415993, 0.5628140703517588),count=4
+(debug/"fold_8") [8] epoch time=19.343s
+(debug/"fold_9") [8] train:    loss=0.16893858545356327,min=0.1053291172892959
+(debug/"fold_9") [8] validate: tn=164,fp=32/tp=2,fn=3. roc=0.7918367346938776,prc=0.4372385847864368,fβ=0.10256410256410256
+(debug/"fold_9") [8] watcher: maximal=(0.4372385847864368, 0.7918367346938776),count=4
+(debug/"fold_9") [8] epoch time=18.949s
+(debug/"fold_9") checkpoint saved.
+(debug/"fold_5") [9] train:    loss=0.07305178153686799,min=0.06722636073111342
+(debug/"fold_5") [9] validate: tn=268,fp=6/tp=1,fn=3. roc=0.6268248175182481,prc=0.09051550137483592,fβ=0.18181818181818182
+(debug/"fold_5") [9] watcher: maximal=(0.09051550137483592, 0.6268248175182481),count=4
+(debug/"fold_5") [9] epoch time=18.600s
+(debug/"fold_5") checkpoint saved.
+(debug/"fold_6") [9] train:    loss=0.08264956243622762,min=0.1342637829769116
+(debug/"fold_6") [9] validate: tn=199,fp=8/tp=0,fn=1. roc=0.22705314009661837,prc=0.003105590062111801,fβ=0.0
+(debug/"fold_6") [9] watcher: maximal=(0.014285714285714285, 0.8357487922705313),count=1
+(debug/"fold_6") [9] epoch time=19.487s
+(debug/"fold_7") [9] train:    loss=0.15310853195411187,min=0.15431890602189083
+(debug/"fold_7") [9] validate: tn=170,fp=27/tp=4,fn=0. roc=0.9835025380710659,prc=0.5613782051282051,fβ=0.2285714285714286
+(debug/"fold_7") [9] watcher: maximal=(0.8329545454545455, 0.9911167512690355),count=5
+(debug/"fold_7") [9] epoch time=19.458s
+(debug/"fold_8") [9] train:    loss=0.15322339217419978,min=0.10924484511768376
+(debug/"fold_8") [9] validate: tn=179,fp=20/tp=1,fn=2. roc=0.4304857621440536,prc=0.018452715967954607,fβ=0.08333333333333333
+(debug/"fold_8") [9] watcher: maximal=(0.34323517944415993, 0.5628140703517588),count=4
+(debug/"fold_8") [9] epoch time=19.538s
+(debug/"fold_9") [9] train:    loss=0.10190377791446668,min=0.1053291172892959
+(debug/"fold_9") [9] validate: tn=185,fp=11/tp=4,fn=1. roc=0.8153061224489797,prc=0.4071117120401374,fβ=0.4
+(debug/"fold_9") [9] watcher: maximal=(0.4372385847864368, 0.7918367346938776),count=4
+(debug/"fold_9") [9] epoch time=19.591s
+(debug/"fold_5") [10] train:    loss=0.0565163525663173,min=0.06722636073111342
+(debug/"fold_5") [10] validate: tn=266,fp=8/tp=1,fn=3. roc=0.625,prc=0.06420197009424944,fβ=0.15384615384615383
+(debug/"fold_5") [10] watcher: maximal=(0.09051550137483592, 0.6268248175182481),count=4
+(debug/"fold_5") [10] epoch time=19.881s
+(debug/"fold_6") [10] train:    loss=0.11639090903246632,min=0.08264956243622762
+(debug/"fold_6") [10] validate: tn=207,fp=0/tp=0,fn=1. roc=0.07729468599033817,prc=0.0026041666666666665,fβ=0.0
+(debug/"fold_6") [10] watcher: maximal=(0.014285714285714285, 0.8357487922705313),count=1
+(debug/"fold_6") [10] epoch time=18.731s
+(debug/"fold_7") [10] train:    loss=0.16058580867118305,min=0.15310853195411187
+(debug/"fold_7") [10] validate: tn=190,fp=7/tp=3,fn=1. roc=0.9631979695431472,prc=0.26213768115942027,fβ=0.4285714285714285
+(debug/"fold_7") [10] watcher: maximal=(0.8329545454545455, 0.9911167512690355),count=5
+(debug/"fold_7") [10] epoch time=19.321s
+(debug/"fold_8") [10] train:    loss=0.09247354687088066,min=0.10924484511768376
+(debug/"fold_8") [10] validate: tn=196,fp=3/tp=1,fn=2. roc=0.4338358458961474,prc=0.34110846884747303,fβ=0.28571428571428575
+(debug/"fold_8") [10] watcher: maximal=(0.34323517944415993, 0.5628140703517588),count=4
+(debug/"fold_8") [10] epoch time=19.323s
+(debug/"fold_9") [10] train:    loss=0.11080048712729304,min=0.10190377791446668
+(debug/"fold_9") [10] validate: tn=147,fp=49/tp=2,fn=3. roc=0.7408163265306122,prc=0.28046871598998846,fβ=0.07142857142857142
+(debug/"fold_9") [10] watcher: maximal=(0.4372385847864368, 0.7918367346938776),count=4
+(debug/"fold_9") [10] epoch time=19.434s
+(debug/"fold_5") [11] train:    loss=0.04015508087692209,min=0.0565163525663173
+(debug/"fold_5") [11] validate: tn=254,fp=20/tp=2,fn=2. roc=0.593065693430657,prc=0.050464241539467485,fβ=0.15384615384615385
+(debug/"fold_5") [11] watcher: maximal=(0.09051550137483592, 0.6268248175182481),count=4
+(debug/"fold_5") [11] epoch time=19.063s
+(debug/"fold_6") [11] train:    loss=0.09682635533121917,min=0.08264956243622762
+(debug/"fold_6") [11] validate: tn=198,fp=9/tp=0,fn=1. roc=0.14492753623188404,prc=0.0028089887640449437,fβ=0.0
+(debug/"fold_6") [11] watcher: maximal=(0.014285714285714285, 0.8357487922705313),count=1
+(debug/"fold_6") [11] epoch time=18.678s
+(debug/"fold_9") [11] train:    loss=0.1252569527261787,min=0.10190377791446668
+(debug/"fold_9") [11] validate: tn=184,fp=12/tp=4,fn=1. roc=0.8255102040816327,prc=0.3902835804132974,fβ=0.38095238095238093
+(debug/"fold_9") [11] watcher: maximal=(0.4372385847864368, 0.7918367346938776),count=4
+(debug/"fold_9") [11] epoch time=18.786s
+(debug/"fold_7") [11] train:    loss=0.0768884129960228,min=0.15310853195411187
+(debug/"fold_7") [11] validate: tn=189,fp=8/tp=3,fn=1. roc=0.9657360406091371,prc=0.7786290322580645,fβ=0.39999999999999997
+(debug/"fold_7") [11] watcher: maximal=(0.8329545454545455, 0.9911167512690355),count=5
+(debug/"fold_7") [11] epoch time=19.609s
+(debug/"fold_8") [11] train:    loss=0.050964016217255485,min=0.09247354687088066
+(debug/"fold_8") [11] validate: tn=188,fp=11/tp=1,fn=2. roc=0.37018425460636517,prc=0.025603590202937555,fβ=0.13333333333333333
+(debug/"fold_8") [11] watcher: maximal=(0.34323517944415993, 0.5628140703517588),count=4
+(debug/"fold_8") [11] epoch time=19.885s
+(debug/"fold_5") [12] train:    loss=0.04119510972836556,min=0.04015508087692209
+(debug/"fold_5") [12] validate: tn=266,fp=8/tp=1,fn=3. roc=0.5967153284671532,prc=0.07854129774418607,fβ=0.15384615384615383
+(debug/"fold_5") [12] watcher: maximal=(0.09051550137483592, 0.6268248175182481),count=4
+(debug/"fold_5") [12] epoch time=19.928s
+(debug/"fold_6") [12] train:    loss=0.06346728810324119,min=0.08264956243622762
+(debug/"fold_6") [12] validate: tn=201,fp=6/tp=0,fn=1. roc=0.18840579710144922,prc=0.0029585798816568047,fβ=0.0
+(debug/"fold_6") [12] watcher: maximal=(0.014285714285714285, 0.8357487922705313),count=1
+(debug/"fold_6") [12] epoch time=19.762s
+(debug/"fold_7") [12] train:    loss=0.05471807783814492,min=0.0768884129960228
+(debug/"fold_7") [12] validate: tn=186,fp=11/tp=3,fn=1. roc=0.9555837563451777,prc=0.31020359848484846,fβ=0.3333333333333333
+(debug/"fold_7") [12] watcher: maximal=(0.8329545454545455, 0.9911167512690355),count=5
+(debug/"fold_7") [12] epoch time=18.348s
+(debug/"fold_9") [12] train:    loss=0.0758563674710415,min=0.10190377791446668
+(debug/"fold_9") [12] validate: tn=192,fp=4/tp=4,fn=1. roc=0.8336734693877552,prc=0.6738026607538803,fβ=0.6153846153846154
+(debug/"fold_9") [12] watcher: maximal=(0.6738026607538803, 0.8336734693877552),count=5
+(debug/"fold_9") [12] epoch time=19.210s
+(debug/"fold_9") checkpoint saved.
+(debug/"fold_8") [12] train:    loss=0.04254085246335577,min=0.050964016217255485
+(debug/"fold_8") [12] validate: tn=185,fp=14/tp=0,fn=3. roc=0.474036850921273,prc=0.015589281654263416,fβ=0.0
+(debug/"fold_8") [12] watcher: maximal=(0.34323517944415993, 0.5628140703517588),count=4
+(debug/"fold_8") [12] epoch time=19.228s
+(debug/"fold_5") [13] train:    loss=0.0239511482247438,min=0.04015508087692209
+(debug/"fold_5") [13] validate: tn=267,fp=7/tp=1,fn=3. roc=0.5109489051094891,prc=0.042126970549344285,fβ=0.16666666666666666
+(debug/"fold_5") [13] watcher: maximal=(0.09051550137483592, 0.6268248175182481),count=4
+(debug/"fold_5") [13] epoch time=18.717s
+(debug/"fold_6") [13] train:    loss=0.08239470028246824,min=0.06346728810324119
+(debug/"fold_6") [13] validate: tn=205,fp=2/tp=0,fn=1. roc=0.07246376811594202,prc=0.0025906735751295338,fβ=0.0
+(debug/"fold_6") [13] watcher: maximal=(0.014285714285714285, 0.8357487922705313),count=1
+(debug/"fold_6") [13] epoch time=19.799s
+(debug/"fold_9") [13] train:    loss=0.04599701425198604,min=0.0758563674710415
+(debug/"fold_9") [13] validate: tn=191,fp=5/tp=4,fn=1. roc=0.8214285714285715,prc=0.36905568184025955,fβ=0.5714285714285714
+(debug/"fold_9") [13] watcher: maximal=(0.6738026607538803, 0.8336734693877552),count=5
+(debug/"fold_9") [13] epoch time=18.677s
+(debug/"fold_7") [13] train:    loss=0.10321627433101337,min=0.05471807783814492
+(debug/"fold_7") [13] validate: tn=195,fp=2/tp=3,fn=1. roc=0.9517766497461929,prc=0.6986534552845528,fβ=0.6666666666666665
+(debug/"fold_7") [13] watcher: maximal=(0.8329545454545455, 0.9911167512690355),count=5
+(debug/"fold_7") [13] epoch time=20.081s
+(debug/"fold_8") [13] train:    loss=0.05995158299251839,min=0.04254085246335577
+(debug/"fold_8") [13] validate: tn=170,fp=29/tp=1,fn=2. roc=0.730318257956449,prc=0.03746908345505635,fβ=0.0606060606060606
+(debug/"fold_8") [13] watcher: maximal=(0.34323517944415993, 0.5628140703517588),count=4
+(debug/"fold_8") [13] epoch time=20.048s
+(debug/"fold_5") [14] train:    loss=0.04226912443454449,min=0.0239511482247438
+(debug/"fold_5") [14] validate: tn=260,fp=14/tp=1,fn=3. roc=0.5757299270072993,prc=0.029109460277789524,fβ=0.10526315789473685
+(debug/"fold_5") [14] watcher: maximal=(0.09051550137483592, 0.6268248175182481),count=4
+(debug/"fold_5") [14] epoch time=19.725s
+(debug/"fold_6") [14] train:    loss=0.11160080611275938,min=0.06346728810324119
+(debug/"fold_6") [14] validate: tn=195,fp=12/tp=0,fn=1. roc=0.21739130434782605,prc=0.003067484662576687,fβ=0.0
+(debug/"fold_6") [14] watcher: maximal=(0.014285714285714285, 0.8357487922705313),count=1
+(debug/"fold_6") [14] epoch time=19.434s
+(debug/"fold_9") [14] train:    loss=0.03705903675614132,min=0.04599701425198604
+(debug/"fold_9") [14] validate: tn=194,fp=2/tp=4,fn=1. roc=0.8193877551020409,prc=0.35851903528004786,fβ=0.7272727272727272
+(debug/"fold_9") [14] watcher: maximal=(0.6738026607538803, 0.8336734693877552),count=5
+(debug/"fold_9") [14] epoch time=19.104s
+(debug/"fold_7") [14] train:    loss=0.08988197648000938,min=0.05471807783814492
+(debug/"fold_7") [14] validate: tn=191,fp=6/tp=3,fn=1. roc=0.9758883248730965,prc=0.7887845849802372,fβ=0.46153846153846156
+(debug/"fold_7") [14] watcher: maximal=(0.8329545454545455, 0.9911167512690355),count=5
+(debug/"fold_7") [14] epoch time=19.384s
+(debug/"fold_8") [14] train:    loss=0.14034174065347071,min=0.04254085246335577
+(debug/"fold_8") [14] validate: tn=193,fp=6/tp=1,fn=2. roc=0.6080402010050251,prc=0.34524660840678334,fβ=0.2
+(debug/"fold_8") [14] watcher: maximal=(0.34524660840678334, 0.6080402010050251),count=5
+(debug/"fold_8") [14] epoch time=19.454s
+(debug/"fold_8") checkpoint saved.
+(debug/"fold_5") [15] train:    loss=0.03905592633124728,min=0.0239511482247438
+(debug/"fold_5") [15] validate: tn=266,fp=8/tp=1,fn=3. roc=0.5574817518248175,prc=0.03770866492481616,fβ=0.15384615384615383
+(debug/"fold_5") [15] watcher: maximal=(0.09051550137483592, 0.6268248175182481),count=4
+(debug/"fold_5") [15] epoch time=19.560s
+(debug/"fold_6") [15] train:    loss=0.07827544858894096,min=0.06346728810324119
+(debug/"fold_6") [15] validate: tn=196,fp=11/tp=0,fn=1. roc=0.12077294685990336,prc=0.00273224043715847,fβ=0.0
+(debug/"fold_6") [15] watcher: maximal=(0.014285714285714285, 0.8357487922705313),count=1
+(debug/"fold_6") [15] epoch time=18.726s
+(debug/"fold_9") [15] train:    loss=0.04636945249081624,min=0.03705903675614132
+(debug/"fold_9") [15] validate: tn=191,fp=5/tp=4,fn=1. roc=0.8153061224489797,prc=0.558317986494782,fβ=0.5714285714285714
+(debug/"fold_9") [15] watcher: maximal=(0.6738026607538803, 0.8336734693877552),count=5
+(debug/"fold_9") [15] epoch time=18.850s
+(debug/"fold_7") [15] train:    loss=0.06329468497575295,min=0.05471807783814492
+(debug/"fold_7") [15] validate: tn=185,fp=12/tp=3,fn=1. roc=0.9644670050761421,prc=0.31756410256410256,fβ=0.31578947368421056
+(debug/"fold_7") [15] watcher: maximal=(0.8329545454545455, 0.9911167512690355),count=5
+(debug/"fold_7") [15] epoch time=20.160s
+(debug/"fold_8") [15] train:    loss=0.19057899065039777,min=0.04254085246335577
+(debug/"fold_8") [15] validate: tn=183,fp=16/tp=1,fn=2. roc=0.6532663316582914,prc=0.34592805189481257,fβ=0.1
+(debug/"fold_8") [15] watcher: maximal=(0.34592805189481257, 0.6532663316582914),count=6
+(debug/"fold_8") [15] epoch time=18.951s
+(debug/"fold_8") checkpoint saved.
+(debug/"fold_5") [16] train:    loss=0.04446224224431297,min=0.0239511482247438
+(debug/"fold_5") [16] validate: tn=272,fp=2/tp=1,fn=3. roc=0.5757299270072993,prc=0.06121751625311181,fβ=0.28571428571428575
+(debug/"fold_5") [16] watcher: maximal=(0.09051550137483592, 0.6268248175182481),count=4
+(debug/"fold_5") [16] epoch time=18.389s
+(debug/"fold_6") [16] train:    loss=0.0998305875199059,min=0.06346728810324119
+(debug/"fold_6") [16] validate: tn=188,fp=19/tp=0,fn=1. roc=0.17874396135265702,prc=0.0029239766081871343,fβ=0.0
+(debug/"fold_6") [16] watcher: maximal=(0.014285714285714285, 0.8357487922705313),count=1
+(debug/"fold_6") [16] epoch time=19.269s
+(debug/"fold_9") [16] train:    loss=0.07988311017484025,min=0.03705903675614132
+(debug/"fold_9") [16] validate: tn=192,fp=4/tp=4,fn=1. roc=0.8346938775510204,prc=0.5256055900621118,fβ=0.6153846153846154
+(debug/"fold_9") [16] watcher: maximal=(0.6738026607538803, 0.8336734693877552),count=5
+(debug/"fold_9") [16] epoch time=19.664s
+(debug/"fold_8") [16] train:    loss=0.08252465179948895,min=0.04254085246335577
+(debug/"fold_8") [16] validate: tn=190,fp=9/tp=1,fn=2. roc=0.5142378559463987,prc=0.34226768628903004,fβ=0.15384615384615383
+(debug/"fold_8") [16] watcher: maximal=(0.34592805189481257, 0.6532663316582914),count=6
+(debug/"fold_8") [16] epoch time=19.778s
+(debug/"fold_7") [16] train:    loss=0.07139926072623995,min=0.05471807783814492
+(debug/"fold_7") [16] validate: tn=191,fp=6/tp=3,fn=1. roc=0.9746192893401016,prc=0.7871376811594203,fβ=0.46153846153846156
+(debug/"fold_7") [16] watcher: maximal=(0.8329545454545455, 0.9911167512690355),count=5
+(debug/"fold_7") [16] epoch time=19.991s
+(debug/"fold_5") [17] train:    loss=0.1507778546343056,min=0.0239511482247438
+(debug/"fold_5") [17] validate: tn=254,fp=20/tp=1,fn=3. roc=0.6259124087591241,prc=0.040561604870995784,fβ=0.08
+(debug/"fold_5") [17] watcher: maximal=(0.09051550137483592, 0.6268248175182481),count=4
+(debug/"fold_5") [17] epoch time=19.023s
+(debug/"fold_6") [17] train:    loss=0.09919855149032977,min=0.06346728810324119
+(debug/"fold_6") [17] validate: tn=195,fp=12/tp=0,fn=1. roc=0.05797101449275366,prc=0.002551020408163265,fβ=0.0
+(debug/"fold_6") [17] watcher: maximal=(0.014285714285714285, 0.8357487922705313),count=1
+(debug/"fold_6") [17] epoch time=18.956s
+(debug/"fold_9") [17] train:    loss=0.06487294940139961,min=0.03705903675614132
+(debug/"fold_9") [17] validate: tn=190,fp=6/tp=4,fn=1. roc=0.8602040816326532,prc=0.6432095631016609,fβ=0.5333333333333333
+(debug/"fold_9") [17] watcher: maximal=(0.6738026607538803, 0.8336734693877552),count=5
+(debug/"fold_9") [17] epoch time=18.867s
+(debug/"fold_8") [17] train:    loss=0.104744218841747,min=0.04254085246335577
+(debug/"fold_8") [17] validate: tn=194,fp=5/tp=1,fn=2. roc=0.6834170854271356,prc=0.09698763792361888,fβ=0.2222222222222222
+(debug/"fold_8") [17] watcher: maximal=(0.34592805189481257, 0.6532663316582914),count=6
+(debug/"fold_8") [17] epoch time=18.813s
+(debug/"fold_7") [17] train:    loss=0.04286537421608551,min=0.05471807783814492
+(debug/"fold_7") [17] validate: tn=186,fp=11/tp=3,fn=1. roc=0.9733502538071066,prc=0.785625,fβ=0.3333333333333333
+(debug/"fold_7") [17] watcher: maximal=(0.8329545454545455, 0.9911167512690355),count=5
+(debug/"fold_7") [17] epoch time=19.458s
+(debug/"fold_6") [18] train:    loss=0.06129997040933141,min=0.06346728810324119
+(debug/"fold_6") [18] validate: tn=196,fp=11/tp=0,fn=1. roc=0.01449275362318836,prc=0.0024390243902439024,fβ=0.0
+(debug/"fold_6") [18] watcher: maximal=(0.014285714285714285, 0.8357487922705313),count=1
+(debug/"fold_6") [18] epoch time=19.047s
+(debug/"fold_5") [18] train:    loss=0.13844458286005717,min=0.0239511482247438
+(debug/"fold_5") [18] validate: tn=259,fp=15/tp=1,fn=3. roc=0.6468978102189781,prc=0.03885186652428032,fβ=0.1
+(debug/"fold_5") [18] watcher: maximal=(0.09051550137483592, 0.6268248175182481),count=4
+(debug/"fold_5") [18] epoch time=20.260s
+(debug/"fold_9") [18] train:    loss=0.03082891515697594,min=0.03705903675614132
+(debug/"fold_9") [18] validate: tn=192,fp=4/tp=2,fn=3. roc=0.8448979591836735,prc=0.5751060264483083,fβ=0.3636363636363636
+(debug/"fold_9") [18] watcher: maximal=(0.6738026607538803, 0.8336734693877552),count=5
+(debug/"fold_9") [18] epoch time=19.506s
+(debug/"fold_8") [18] train:    loss=0.05438641274209927,min=0.04254085246335577
+(debug/"fold_8") [18] validate: tn=190,fp=9/tp=0,fn=3. roc=0.5912897822445561,prc=0.02437473833083152,fβ=0.0
+(debug/"fold_8") [18] watcher: maximal=(0.34592805189481257, 0.6532663316582914),count=6
+(debug/"fold_8") [18] epoch time=18.211s
+(debug/"fold_7") [18] train:    loss=0.0288498566692902,min=0.04286537421608551
+(debug/"fold_7") [18] validate: tn=192,fp=5/tp=3,fn=1. roc=0.9746192893401014,prc=0.42797619047619045,fβ=0.5
+(debug/"fold_7") [18] watcher: maximal=(0.8329545454545455, 0.9911167512690355),count=5
+(debug/"fold_7") [18] epoch time=19.398s
+(debug/"fold_6") [19] train:    loss=0.02642991710364675,min=0.06129997040933141
+(debug/"fold_6") [19] validate: tn=198,fp=9/tp=0,fn=1. roc=0.009661835748792313,prc=0.0024271844660194173,fβ=0.0
+(debug/"fold_6") [19] watcher: maximal=(0.014285714285714285, 0.8357487922705313),count=1
+(debug/"fold_6") [19] epoch time=18.844s
+(debug/"fold_6") checkpoint loaded.
+(debug/"fold_5") [19] train:    loss=0.1337827077278724,min=0.0239511482247438
+(debug/"fold_5") [19] validate: tn=258,fp=16/tp=2,fn=2. roc=0.636405109489051,prc=0.044217805181577974,fβ=0.1818181818181818
+(debug/"fold_5") [19] watcher: maximal=(0.09051550137483592, 0.6268248175182481),count=4
+(debug/"fold_5") [19] epoch time=19.654s
+(debug/"fold_5") checkpoint loaded.
+(debug/"fold_6") tensor([[0.2053, 0.7947, 0.0000],
+        [0.2071, 0.7929, 0.0000],
+        [0.3724, 0.6276, 0.0000],
+        [0.4231, 0.5769, 0.0000],
+        [0.0994, 0.9006, 0.0000],
+        [0.3569, 0.6431, 0.0000],
+        [0.4848, 0.5152, 0.0000],
+        [0.3923, 0.6077, 0.0000],
+        [0.1771, 0.8229, 0.0000],
+        [0.3225, 0.6775, 0.0000],
+        [0.3229, 0.6771, 0.0000],
+        [0.3570, 0.6430, 0.0000],
+        [0.2909, 0.7091, 0.0000],
+        [0.4227, 0.5773, 0.0000],
+        [0.4875, 0.5125, 0.0000],
+        [0.2032, 0.7968, 0.0000],
+        [0.3899, 0.6101, 0.0000],
+        [0.4246, 0.5754, 0.0000],
+        [0.4923, 0.5077, 0.0000],
+        [0.1408, 0.8592, 0.0000],
+        [0.2303, 0.7697, 0.0000],
+        [0.1988, 0.8012, 0.0000],
+        [0.1002, 0.8998, 0.0000],
+        [0.3121, 0.6879, 0.0000],
+        [0.2925, 0.7075, 0.0000],
+        [0.2064, 0.7936, 0.0000],
+        [0.3648, 0.6352, 0.0000],
+        [0.2703, 0.7297, 0.0000],
+        [0.0287, 0.9713, 0.0000],
+        [0.4909, 0.5091, 0.0000],
+        [0.3605, 0.6395, 0.0000],
+        [0.0933, 0.9067, 0.0000],
+        [0.2224, 0.7776, 0.0000],
+        [0.4642, 0.5358, 0.0000],
+        [0.3359, 0.6641, 0.0000],
+        [0.1158, 0.8842, 0.0000],
+        [0.3483, 0.6517, 0.0000],
+        [0.3928, 0.6072, 0.0000],
+        [0.4845, 0.5155, 0.0000],
+        [0.3260, 0.6740, 0.0000],
+        [0.3348, 0.6652, 0.0000],
+        [0.2433, 0.7567, 0.0000],
+        [0.3386, 0.6614, 0.0000],
+        [0.3981, 0.6019, 0.0000],
+        [0.1951, 0.8049, 0.0000],
+        [0.1736, 0.8264, 0.0000],
+        [0.3483, 0.6517, 0.0000],
+        [0.3552, 0.6448, 0.0000],
+        [0.4695, 0.5305, 0.0000],
+        [0.4897, 0.5103, 0.0000],
+        [0.3337, 0.6663, 0.0000],
+        [0.3949, 0.6051, 0.0000],
+        [0.4189, 0.5811, 0.0000],
+        [0.3385, 0.6615, 0.0000],
+        [0.4598, 0.5402, 0.0000],
+        [0.4705, 0.5295, 0.0000],
+        [0.4776, 0.5224, 0.0000],
+        [0.2749, 0.7251, 0.0000],
+        [0.3426, 0.6574, 0.0000],
+        [0.4638, 0.5362, 0.0000],
+        [0.1707, 0.8293, 0.0000],
+        [0.1745, 0.8255, 0.0000],
+        [0.1148, 0.8852, 0.0000],
+        [0.0511, 0.9489, 0.0000],
+        [0.3715, 0.6285, 0.0000],
+        [0.2677, 0.7323, 0.0000],
+        [0.3855, 0.6145, 0.0000],
+        [0.4644, 0.5356, 0.0000],
+        [0.4201, 0.5799, 0.0000],
+        [0.4680, 0.5320, 0.0000],
+        [0.3188, 0.6812, 0.0000],
+        [0.4820, 0.5180, 0.0000],
+        [0.2432, 0.7568, 0.0000],
+        [0.3570, 0.6430, 0.0000],
+        [0.3133, 0.6867, 0.0000]])
+(info/"fold_6") test: tn=199,fp=75/tp=0,fn=4
+(info/"fold_6") ROC-AUC: 0.5428832116788321
+(info/"fold_6") PRC-AUC: 0.015435698742393844
+(debug/"fold_5") tensor([[4.5529e-01, 5.4471e-01, 0.0000e+00],
+        [8.3401e-02, 9.1660e-01, 0.0000e+00],
+        [2.8736e-01, 7.1264e-01, 0.0000e+00],
+        [4.0112e-01, 5.9888e-01, 0.0000e+00],
+        [8.9331e-02, 9.1067e-01, 1.0000e+00],
+        [2.3527e-04, 9.9976e-01, 1.0000e+00],
+        [4.3404e-04, 9.9957e-01, 0.0000e+00],
+        [1.0020e-02, 9.8998e-01, 0.0000e+00],
+        [3.0932e-02, 9.6907e-01, 0.0000e+00],
+        [5.3783e-02, 9.4622e-01, 0.0000e+00],
+        [4.3439e-01, 5.6561e-01, 0.0000e+00],
+        [1.7084e-03, 9.9829e-01, 0.0000e+00]])
+(info/"fold_5") test: tn=188,fp=10/tp=2,fn=1
+(info/"fold_5") ROC-AUC: 0.8619528619528619
+(info/"fold_5") PRC-AUC: 0.4094121420070787
+(debug/"fold_9") [19] train:    loss=0.13250402050713697,min=0.03082891515697594
+(debug/"fold_9") [19] validate: tn=170,fp=26/tp=4,fn=1. roc=0.8489795918367348,prc=0.8058995528035776,fβ=0.2285714285714286
+(debug/"fold_9") [19] watcher: maximal=(0.8058995528035776, 0.8489795918367348),count=6
+(debug/"fold_9") [19] epoch time=18.762s
+(debug/"fold_9") checkpoint saved.
+(debug/"fold_9") checkpoint loaded.
+(debug/"fold_9") tensor([[4.4012e-01, 5.5988e-01, 0.0000e+00],
+        [4.5702e-01, 5.4298e-01, 0.0000e+00],
+        [3.8595e-01, 6.1405e-01, 0.0000e+00],
+        [3.2796e-01, 6.7204e-01, 0.0000e+00],
+        [1.4504e-02, 9.8550e-01, 0.0000e+00],
+        [3.5368e-02, 9.6463e-01, 0.0000e+00],
+        [1.0375e-02, 9.8963e-01, 0.0000e+00],
+        [1.6858e-04, 9.9983e-01, 0.0000e+00],
+        [2.9308e-01, 7.0692e-01, 0.0000e+00],
+        [2.2510e-01, 7.7490e-01, 0.0000e+00],
+        [1.9582e-01, 8.0418e-01, 0.0000e+00],
+        [2.5796e-01, 7.4204e-01, 0.0000e+00],
+        [3.2835e-01, 6.7165e-01, 1.0000e+00],
+        [4.3438e-01, 5.6563e-01, 1.0000e+00],
+        [2.5740e-06, 1.0000e+00, 0.0000e+00],
+        [2.8667e-01, 7.1333e-01, 0.0000e+00],
+        [8.0334e-03, 9.9197e-01, 0.0000e+00],
+        [3.9842e-01, 6.0158e-01, 0.0000e+00],
+        [1.0937e-01, 8.9063e-01, 0.0000e+00],
+        [3.4550e-01, 6.5450e-01, 0.0000e+00],
+        [1.7177e-03, 9.9828e-01, 0.0000e+00],
+        [2.8833e-02, 9.7117e-01, 0.0000e+00],
+        [1.6172e-01, 8.3828e-01, 0.0000e+00]])
+(info/"fold_9") test: tn=178,fp=21/tp=2,fn=1
+(info/"fold_9") ROC-AUC: 0.8509212730318257
+(info/"fold_9") PRC-AUC: 0.04873458155191901
+(debug/"fold_8") [19] train:    loss=0.12862888137223544,min=0.04254085246335577
+(debug/"fold_8") [19] validate: tn=177,fp=22/tp=1,fn=2. roc=0.3869346733668341,prc=0.020206261186990475,fβ=0.07692307692307691
+(debug/"fold_8") [19] watcher: maximal=(0.34592805189481257, 0.6532663316582914),count=6
+(debug/"fold_8") [19] epoch time=18.633s
+(debug/"fold_8") checkpoint loaded.
+(debug/"fold_8") tensor([[0.2710, 0.7290, 0.0000],
+        [0.1888, 0.8112, 0.0000],
+        [0.2710, 0.7290, 0.0000],
+        [0.1889, 0.8111, 0.0000],
+        [0.3989, 0.6011, 1.0000],
+        [0.2547, 0.7453, 1.0000],
+        [0.3376, 0.6624, 0.0000],
+        [0.0154, 0.9846, 1.0000],
+        [0.2307, 0.7693, 0.0000],
+        [0.3776, 0.6224, 0.0000],
+        [0.0230, 0.9770, 0.0000],
+        [0.4939, 0.5061, 0.0000],
+        [0.3223, 0.6777, 0.0000],
+        [0.4211, 0.5789, 0.0000],
+        [0.0836, 0.9164, 0.0000],
+        [0.4886, 0.5114, 0.0000],
+        [0.0426, 0.9574, 0.0000],
+        [0.1577, 0.8423, 0.0000],
+        [0.3416, 0.6584, 0.0000]])
+(info/"fold_8") test: tn=181,fp=16/tp=3,fn=1
+(info/"fold_8") ROC-AUC: 0.898477157360406
+(info/"fold_8") PRC-AUC: 0.3472718253968254
+(debug/"fold_7") [19] train:    loss=0.3004459987084071,min=0.0288498566692902
+(debug/"fold_7") [19] validate: tn=185,fp=12/tp=3,fn=1. roc=0.8781725888324873,prc=0.3549890350877193,fβ=0.31578947368421056
+(debug/"fold_7") [19] watcher: maximal=(0.8329545454545455, 0.9911167512690355),count=5
+(debug/"fold_7") [19] epoch time=17.954s
+(debug/"fold_7") checkpoint loaded.
+(debug/"fold_7") tensor([[0.4979, 0.5021, 0.0000],
+        [0.0954, 0.9046, 0.0000],
+        [0.2069, 0.7931, 0.0000],
+        [0.0252, 0.9748, 0.0000],
+        [0.0058, 0.9942, 0.0000],
+        [0.1394, 0.8606, 0.0000],
+        [0.0043, 0.9957, 0.0000],
+        [0.0112, 0.9888, 0.0000],
+        [0.0126, 0.9874, 0.0000],
+        [0.0153, 0.9847, 0.0000],
+        [0.0037, 0.9963, 0.0000],
+        [0.0125, 0.9875, 0.0000],
+        [0.0069, 0.9931, 0.0000]])
+(info/"fold_7") test: tn=194,fp=13/tp=0,fn=1
+(info/"fold_7") ROC-AUC: 0.5603864734299517
+(info/"fold_7") PRC-AUC: 0.005434782608695652
+(info) roc = [0.5556, 0.9354, 0.7908, 0.8338, 0.9, 0.5429, 0.862, 0.8509, 0.8985, 0.5604]
+(info) prc = [0.2882, 0.7513, 0.3936, 0.232, 0.8408, 0.0154, 0.4094, 0.0487, 0.3473, 0.0054]
+(info) All folds: ROC-AUC = 0.773±0.157, PRC-AUC = 0.333±0.287
