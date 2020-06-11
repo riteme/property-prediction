@@ -44,15 +44,22 @@ python src/main.py -v train -m toy-gcn --ndrop=0.85 > result/toy-gcn.txt
 python src/main.py -v train -m gcn > result/gcn.txt
 ```
 
+* GAT
+
+```
+python src/main.py -v train -m gat -t1 -j5 --cuda --max-iteration=20 > result/gat.txt
+```
+
 ## TODO
 
 * Training framework
     * [x] Memory cache for molecule parsing.
     * [x] Disk cache for molecule parsing. See `cache` subcommand and `--cache-file` (`-c`) option.
     * [x] Multiprocessing. See `--num-threads` (`-t`), `--num-workers` (`-j`) and `--spawn-method` (`-sp`) options.
+    * [ ] Disk cache compatibility with CUDA tensors.
 * Models
     * [x] GCN
-    * [ ] GAT
+    * [x] GAT
 
 ## Notes
 

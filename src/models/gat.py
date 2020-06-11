@@ -9,17 +9,16 @@ from torch import nn
 from rdkit.Chem import Mol
 from dgl import DGLGraph
 
-# NOTICE: GraphConv is somewhat slow. Use DenseGraphConv instead.
-from dgl.nn.pytorch import GraphConv, DenseGraphConv
+from dgl.nn.pytorch import GATConv
 
 
-class GCNData(NamedTuple):
+class GATData(NamedTuple):
     n: int
-    adj: torch.Tensor
+    graph: DGLGraph
     vec: torch.Tensor
 
 
-class GCN(BaseModel):
+class GAT(BaseModel):
     def __init__(self, device: torch.device, *,
         embedding_dim: int = 64,
         no_shortcut: bool = False,
@@ -29,10 +28,11 @@ class GCN(BaseModel):
         self.embedding_dim = embedding_dim
         self.no_shortcut = no_shortcut
 
-        self.embed = DenseGraphConv(feature.FEATURE_DIM, embedding_dim)
-        self.conv = DenseGraphConv(embedding_dim, embedding_dim)
+        use_residual = not no_shortcut
+        self.embed = GATConv(feature.FEATURE_DIM, embedding_dim, 4, residual=use_residual)
+        self.conv = GATConv(embedding_dim, embedding_dim, 6, residual=use_residual)
         self.fc = nn.Linear(embedding_dim, 2)
-        self.activate = nn.ReLU()
+        self.activate = nn.ELU()
 
     @staticmethod
     def process(mol: Mol, device: torch.device):
@@ -47,26 +47,23 @@ class GCN(BaseModel):
             u, v = e.GetBeginAtomIdx(), e.GetEndAtomIdx()
             graph.add_edge(u + 1, v + 1)
             graph.add_edge(v + 1, u + 1)
-        adj = graph.adjacency_matrix(transpose=False).to_dense()
 
         v, m = feature.mol_feature(mol)
         vec = torch.cat([
             torch.zeros((1, m)), v
         ]).to(device)
 
-        return GCNData(n, adj, vec)
+        return GATData(n, graph, vec)
 
     def forward(self, data):
-        data: GCNData
+        data: GATData
 
-        x0 = self.embed(data.adj, data.vec)
-        x = self.activate(x0)
-        y0 = self.conv(data.adj, x)
-        y = self.activate(y0)
+        x0 = self.embed(data.graph, data.vec)
+        x1 = torch.mean(x0, dim=1)
+        x = self.activate(x1)
+        y0 = self.conv(data.graph, x)
+        y1 = torch.mean(y0, dim=1)
+        y = self.activate(y1)
 
-        if self.no_shortcut:
-            z = self.fc(y[0])
-        else:
-            z = self.fc(y[0] + x[0])
-
+        z = self.fc(y[0])
         return z
