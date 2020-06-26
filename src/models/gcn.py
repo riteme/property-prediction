@@ -1,12 +1,9 @@
 from typing import NamedTuple
 
-from .base import BaseModel
+from .base import *
 from . import feature
 import log
 
-import torch
-from torch import nn
-from rdkit.Chem import Mol
 from dgl import DGLGraph
 
 # NOTICE: GraphConv is somewhat slow. Use DenseGraphConv instead.

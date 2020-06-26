@@ -308,7 +308,7 @@ def stats(data: TextIO):
 @click.option('-o', '--output', type=click.File('wb'), required=True,
     help='Path to place the cache file.')
 def _cache(data: TextIO, model_name: Text, output: BinaryIO):
-    cpu = require_device(False)
+    cpu = require_device(prefer_cuda=False)
     model_type = models.select(model_name)
     model = ModelInterface(model_type, cpu, False)
 
@@ -316,7 +316,8 @@ def _cache(data: TextIO, model_name: Text, output: BinaryIO):
     cache = {}
     for smiles in csv.keys():
         cache_key = (smiles, )  # memcached is indexed on argument list
-        cache[cache_key] = model.process(smiles)
+        data = model.process(smiles)
+        cache[cache_key] = model.encode_data(data)
 
     pickle.dump(cache, output)
 

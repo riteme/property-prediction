@@ -2,13 +2,9 @@ from typing import List, NamedTuple, Dict
 
 from math import sqrt
 
-from .base import BaseModel
+from .base import *
 from . import feature
 import log
-
-import torch
-from torch import nn
-from rdkit import Chem as chem
 
 
 class GCNGraph(NamedTuple):
@@ -35,7 +31,7 @@ class ToyGCN(BaseModel):
         self.activate = nn.LeakyReLU()
 
     @staticmethod
-    def process(mol: chem.Mol, device: torch.device) -> GCNGraph:
+    def process(mol: Mol, device: torch.device) -> GCNGraph:
         n = mol.GetNumAtoms() + 1  # allocate a new node for graph embedding
 
         # all edges (including all self-loops) as index

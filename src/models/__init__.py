@@ -8,6 +8,10 @@ from .gat import GAT
 
 
 def select(name: Text) -> Type[BaseModel]:
+    '''
+    name: the model name from "-m"/"--model-name" command line argument.
+    '''
+
     return {
         'toy-gcn': ToyGCN,
         'gcn': GCN,

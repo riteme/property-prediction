@@ -1,5 +1,21 @@
-from typing import Callable, Dict, Tuple, Any, Optional, Text
-TFunction = Callable[..., Any]
+from typing import (
+    Callable, Dict, Tuple, Any,
+    Optional, Text, Protocol,
+    TypeVar
+)
+
+# from interface import ModelInterface  # circular import
+class _ModelInterface(Protocol):
+    def decode_data(self, data: Any) -> Any: ...
+    def process(self, smiles: Text) -> Any: ...
+
+# https://stackoverflow.com/a/59406717: accept subclasses in callable arguments
+# however, it seems that TypeVar simply shuts up mypy about `TProcessFn`, even
+# if ModelInterface does not match the signature of the protocol `_ModelInterface`.
+TModelInterface = TypeVar('TModelInterface', bound=_ModelInterface)
+
+# ModelInterface.process
+TProcessFn = Callable[[TModelInterface, Text], Any]
 
 import pickle
 import functools
@@ -7,15 +23,21 @@ import functools
 import log
 
 
+# cache file paths stored in _PROVIDERS. For compatibility with "spawn" method.
 # _PROVIDERS can be set by external code via `register_provider`
 _PROVIDERS: Dict[Text, Text] = {}
 
-def register_provider(fn: TFunction, fp: Text):
+def register_provider(fn: Callable, fp: Text):
     qualname = fn.__qualname__
     _PROVIDERS[qualname] = fp
 
-def memcached(_fn: Optional[TFunction] = None, *, ignore_self: bool = False):
-    def decorator(fn: TFunction):
+def memcached(_fn: Optional[Callable] = None, *, ignore_self: bool = False):
+    '''
+    ignore_self: for class member functions: the first argument `self`
+        will not be part of the key.
+    '''
+
+    def decorator(fn: Callable):
         checked = False
         mem: Dict[Tuple[Any, ...], Any] = {}
 
@@ -47,3 +69,19 @@ def memcached(_fn: Optional[TFunction] = None, *, ignore_self: bool = False):
         return decorator
     else:
         return decorator(_fn)
+
+def smiles_cache(fn: TProcessFn):
+    cached_fn = memcached(fn, ignore_self=True)
+    mem: Dict[Text, Any] = {}
+
+    @functools.wraps(fn)
+    def wrapper(self: TModelInterface, smiles: Text):
+        nonlocal cached_fn
+        nonlocal mem
+
+        if smiles not in mem:
+            data = cached_fn(self, smiles)
+            mem[smiles] = self.decode_data(data)
+        return mem[smiles]
+
+    return wrapper
