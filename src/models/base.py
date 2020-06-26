@@ -4,6 +4,8 @@ import torch
 from torch import nn
 from rdkit.Chem import Mol
 
+# NOTE: you may use `from .base import *` to ease your life.
+
 
 class BaseModel(nn.Module):
     def __init__(self, device: torch.device, **kwargs):
@@ -12,4 +14,24 @@ class BaseModel(nn.Module):
 
     @staticmethod
     def process(mol: Mol, device: torch.device):
-        ...
+        '''
+        process molecules. The processed molecules will be directly
+        passed to forward phase.
+        '''
+        raise NotImplementedError
+
+    @staticmethod
+    def encode_data(data: Any, device: torch.device) -> Any:
+        '''
+        encode data for cache storing. e.g. move CUDA tensors
+        back to CPU.
+        '''
+        return data
+
+    @staticmethod
+    def decode_data(data: Any, device: torch.device) -> Any:
+        '''
+        decode data for forward phase. This is the reverse procedure
+        of `encode_data`. e.g. move tensors to CUDA device.
+        '''
+        return data

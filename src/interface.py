@@ -4,7 +4,7 @@ import os
 from tempfile import TemporaryFile
 
 from models import BaseModel
-from cache import memcached
+from cache import smiles_cache
 
 import torch
 
@@ -34,9 +34,16 @@ class ModelInterface:
         self.clear_checkpoint()
         self.initialize_model()
 
-    @memcached(ignore_self=True)
+    def encode_data(self, data: Any) -> Any:
+        return self.model_type.encode_data(data, self.device)
+
+    def decode_data(self, data: Any) -> Any:
+        return self.model_type.decode_data(data, self.device)
+
+    @smiles_cache
     def process(self, smiles: Text) -> Any:
-        '''Parse molecules.
+        '''
+        Parse molecules.
         '''
         mol = util.parse_smiles(smiles)
         assert mol is not None, 'Failed to parse SMILES string'

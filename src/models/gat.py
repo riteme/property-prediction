@@ -1,18 +1,15 @@
-from typing import NamedTuple
+from dataclasses import dataclass
 
-from .base import BaseModel
+from .base import *
 from . import feature
 import log
 
-import torch
-from torch import nn
-from rdkit.Chem import Mol
 from dgl import DGLGraph
-
 from dgl.nn.pytorch import GATConv
 
 
-class GATData(NamedTuple):
+@dataclass
+class GATData:
     n: int
     graph: DGLGraph
     vec: torch.Tensor
@@ -35,7 +32,12 @@ class GAT(BaseModel):
         self.activate = nn.ELU()
 
     @staticmethod
-    def process(mol: Mol, device: torch.device):
+    def decode_data(data: GATData, device: torch.device) -> GATData:
+        data.vec = data.vec.to(device)
+        return data
+
+    @staticmethod
+    def process(mol: Mol, device: torch.device) -> GATData:
         n = mol.GetNumAtoms() + 1
 
         graph = DGLGraph()

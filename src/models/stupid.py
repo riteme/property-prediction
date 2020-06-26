@@ -1,9 +1,6 @@
 from random import random
 
-from .base import BaseModel
-
-import torch
-from rdkit.Chem import Mol
+from .base import *
 
 
 class StupidModel(BaseModel):

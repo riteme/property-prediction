@@ -56,14 +56,14 @@ python src/main.py -v train -m gat -t1 -j5 --cuda --max-iteration=20 > result/ga
     * [x] Memory cache for molecule parsing.
     * [x] Disk cache for molecule parsing. See `cache` subcommand and `--cache-file` (`-c`) option.
     * [x] Multiprocessing. See `--num-threads` (`-t`), `--num-workers` (`-j`) and `--spawn-method` (`-sp`) options.
-    * [ ] Disk cache compatibility with CUDA tensors.
+    * [x] Disk cache compatibility with CUDA tensors.
 * Models
     * [x] GCN
     * [x] GAT
 
 ## Notes
 
-Since PyTorch uses OpenMP for multithreaded training, it will incur great penalty for Python's multiprocessing. It is suggested that use `-t1 -j5 -sp fork` to run cross validation (5 single-threaded worker processes). The reason for using "fork" method is that it preserves memory cache.
+Since PyTorch uses OpenMP for multithreaded training, it will incur great penalty for Python's multiprocessing. It is suggested that use `-t1 -j5 -sp fork` to run cross validations (5 single-threaded worker processes). The reason for using "fork" method is that it preserves memory cache.
 
 e.g.
 
