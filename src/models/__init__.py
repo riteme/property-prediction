@@ -5,15 +5,14 @@ from .stupid import StupidModel
 from .toygcn import ToyGCN
 from .gcn import GCN
 from .gat import GAT
-
+from .graphsage import GraphSAGE
+from .chebnet import ChebNet
 
 def select(name: Text) -> Type[BaseModel]:
-    '''
-    name: the model name from "-m"/"--model-name" command line argument.
-    '''
-
     return {
         'toy-gcn': ToyGCN,
         'gcn': GCN,
-        'gat': GAT
+        'gat': GAT,
+        'graphsage': GraphSAGE,
+        'chebnet': ChebNet
     }[name]
