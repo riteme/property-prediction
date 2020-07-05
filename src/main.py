@@ -73,6 +73,8 @@ def global_initialize(args: GlobalInitArgs):
     help='Number of maximals assumed to be converged.')
 @click.option('--train-validate', is_flag=True,
     help='Train with validate set (data[1]).')
+@click.option('--train-test', is_flag=True,
+    help='Train with test set (data[2]).')
 @click.option('--min-iteration', type=int, default=6, show_default=True,
     help='Minimum number of iterations.')
 @click.option('--max-iteration', type=int, default=50, show_default=True,
@@ -199,6 +201,7 @@ def process_fold(
     *,
     batch_size: int,
     train_validate: bool,
+    train_test: bool,
     positive_percentage: float,
     ndrop: Optional[float] = None,
     **kwargs
@@ -206,15 +209,16 @@ def process_fold(
     log.info(f'Processing "{fold}"...')
 
     # load the fold and let the model parse these molecules
-    # data[0]: training set
-    # data[1]: validate set
-    # data[2]: test set
     data = load_data(model, fold, ['train.csv', 'dev.csv', 'test.csv'])
+    train_data, validate_set, test_set = data
 
     # prepare data
-    val_batch, val_label = util.separate_items(data[1])
-    test_batch, test_label = util.separate_items(data[2])
-    train_data = data[0] + data[1] if train_validate else data[0]
+    val_batch, val_label = util.separate_items(validate_set)
+    test_batch, test_label = util.separate_items(test_set)
+    if train_validate:
+        train_data += validate_set
+    if train_test:
+        train_data += test_set
 
     sampler: util.Sampler
     if ndrop is not None:
