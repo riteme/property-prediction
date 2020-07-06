@@ -97,7 +97,9 @@ def global_initialize(args: GlobalInitArgs):
 # if you want to pass some parameters directly to models,
 # store them in kwargs. e.g. "embedding_dim" below
 @click.option('--embedding-dim', type=int)
+@click.option('--num-estimator', type=int)
 @click.option('--no-shortcut', is_flag=True)
+@click.option('--hard-predict', is_flag=True)
 def _train(
     directory: Text,
     model_name: Text,
@@ -279,6 +281,7 @@ def process_fold(
     if train_validate:
         train_data += validate_set
     if train_test:
+        log.warn('ARE YOU CHEATING?')
         train_data += test_set
 
     sampler: util.Sampler
@@ -299,7 +302,7 @@ def process_fold(
 
     # training phase
     train_fold(
-        model, sampler, len(train_data), val_batch, val_label,
+        model, train_data, sampler, val_batch, val_label,
         batch_size=batch_size, **kwargs
     )
 

@@ -7,6 +7,7 @@ from .gcn import GCN
 from .gat import GAT
 from .graphsage import GraphSAGE
 from .chebnet import ChebNet
+from .adaboost import AdaBoost
 
 def select(name: Text) -> Type[BaseModel]:
     return {
@@ -14,5 +15,6 @@ def select(name: Text) -> Type[BaseModel]:
         'gcn': GCN,
         'gat': GAT,
         'graphsage': GraphSAGE,
-        'chebnet': ChebNet
+        'chebnet': ChebNet,
+        'adaboost': AdaBoost
     }[name]

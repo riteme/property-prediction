@@ -1,8 +1,10 @@
-from typing import Any
+from typing import Any, List
 
 import torch
 from torch import nn
 from rdkit.Chem import Mol
+
+from util import Item
 
 # NOTE: you may use `from .base import *` to ease your life.
 
@@ -11,9 +13,13 @@ class BaseModel(nn.Module):
     def __init__(self, device: torch.device, **kwargs):
         super().__init__()
         self.device = device
+        self.in_training = False
+
+    def set_mode(self, training: bool = False):
+        self.in_training = training
 
     @staticmethod
-    def process(mol: Mol, device: torch.device):
+    def process(mol: Mol, device: torch.device) -> Any:
         '''
         process molecules. The processed molecules will be directly
         passed to forward phase.
@@ -35,3 +41,27 @@ class BaseModel(nn.Module):
         of `encode_data`. e.g. move tensors to CUDA device.
         '''
         return data
+
+    def preprocess(self, train_data: List[Item]):
+        '''
+        this is a hook function to be called before training phase.
+        '''
+        pass
+
+    def postprocess(self, train_data: List[Item]):
+        '''
+        this is a hook function to be called after training phase.
+        '''
+        pass
+
+    def predict(self, data: Any) -> torch.Tensor:
+        '''
+        give probability prediction on `data`.
+        ModelInterface.predict guarantees this function will be called
+        in `torch.no_grad()` environment.
+
+        output size: array of length 2, containing probabilies for
+        label 0 & 1 respectively. You must ensure that the sum of probabilites
+        summed to 1.
+        '''
+        return self.forward(data).softmax(dim=0)

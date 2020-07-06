@@ -27,11 +27,11 @@ class GraphSAGE(BaseModel):
         self.embedding_dim = embedding_dim
         self.no_shortcut = no_shortcut
         # self.aggregator_type = aggregator_type
-        self.embed = DenseSAGEConv(feature.FEATURE_DIM, embedding_dim)
-        self.conv = DenseSAGEConv(embedding_dim, embedding_dim)
+        self.embed_layer = DenseSAGEConv(feature.FEATURE_DIM, embedding_dim)
+        self.conv_layer = DenseSAGEConv(embedding_dim, embedding_dim)
         self.fc = nn.Linear(embedding_dim, 2)
-        self.activate = nn.ReLU()
-    
+        self.activate = nn.Tanh()
+
     @staticmethod
     def process(mol: Mol, device: torch.device):
         n = mol.GetNumAtoms() + 1
@@ -53,18 +53,17 @@ class GraphSAGE(BaseModel):
         ]).to(device)
 
         return GraphSAGEData(n, adj, vec)
-    
-    def forward(self, data):
-        data: GraphSAGEData
 
-        x0 = self.embed(data.adj, data.vec)
+    def embed(self, data: GraphSAGEData):
+        x0 = self.embed_layer(data.adj, data.vec)
         x = self.activate(x0)
-        y0 = self.conv(data.adj, x)
+        y0 = self.conv_layer(data.adj, x)
         y = self.activate(y0)
 
         if self.no_shortcut:
-            z = self.fc(y[0])
+            return y[0]
         else:
-            z = self.fc(y[0] + x[0])
+            return y[0] + x[0]
 
-        return z
+    def forward(self, data):
+        return self.fc(self.embed(data))
