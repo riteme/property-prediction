@@ -1,5 +1,5 @@
 from typing import *
-from typing import TextIO
+from typing import IO
 S = TypeVar('S')
 T = TypeVar('T')
 
@@ -117,15 +117,20 @@ def sha1hex(text: Text) -> Text:
     return sha1(text.encode('utf-8')).hexdigest()
 
 
-def load_csv(src: Union[Text, Path, TextIO]) -> Dict[Text, int]:
+SourceLike = Union[Text, Path, IO]
+def resolve_source(src: SourceLike, mode: Text = 'r') -> IO:
     if isinstance(src, Text):
         src = Path(src)
 
     if isinstance(src, Path):
         assert src.exists(), 'Source file does not exist'
-        fp = src.open('r')
+        return src.open(mode)
     else:
-        fp = src
+        return src
+
+
+def load_csv(src: SourceLike) -> Dict[Text, int]:
+    fp = resolve_source(src)
 
     try:
         header = fp.readline().strip()

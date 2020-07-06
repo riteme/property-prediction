@@ -70,6 +70,16 @@ class ModelInterface:
             self.checkpoint_fp.close()
         self.checkpoint_fp = None
 
+    def save_model(self, dst: util.SourceLike):
+        fp = util.resolve_source(dst, mode='w')
+        state_dict = self.inst.state_dict()
+        torch.save(state_dict, fp)
+
+    def load_model(self, src: util.SourceLike):
+        fp = util.resolve_source(src)
+        state_dict = torch.load(fp)
+        self.inst.load_state_dict(state_dict)
+
     def forward(self, batch: Sequence[Any]) -> torch.Tensor:
         result = torch.zeros((len(batch), 2))
         for i, data in enumerate(batch):

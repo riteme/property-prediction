@@ -1,12 +1,8 @@
-from typing import (
-    Text, List, Sequence,
-    Any, Tuple, Optional,
-    Iterable, TextIO, Dict,
-    DefaultDict, Hashable, Type,
-    NamedTuple, BinaryIO
-)
+from typing import *
+from typing import BinaryIO, TextIO, IO
 from typing import Counter as TCounter
 
+import json
 import pickle
 from itertools import repeat
 from pathlib import Path
@@ -57,6 +53,8 @@ def global_initialize(args: GlobalInitArgs):
 @cli.command('train', short_help='Train model.')
 @click.option('-d', '--directory', type=str, default='data', show_default=True,
     help='Data directory.')
+@click.option('-o', '--output', type=click.File('wb'),
+    help='Save model parameters to local file.')
 @click.option('-m', '--model-name', type=str, required=True,
     help='The name of the model to be trained.')
 @click.option('-b', '--batch-size', type=int, default=64, show_default=True,
@@ -107,6 +105,7 @@ def _train(
     num_threads: int,
     num_workers: int,
     spawn_method: Text,
+    output: Optional[BinaryIO],
     cache_file: Optional[Text],
     **kwargs
 ) -> None:
@@ -121,20 +120,16 @@ def _train(
 
     if cuda and cache_file is not None:
         log.warn('Disk cache file may not be compatible with CUDA tensors.')
-    device = require_device(cuda)
-    model_type = models.select(model_name)  # see models/__init__.py
 
-    # filter out options that are not set in command line
-    # default to ignore both None and False (for flag options)
-    model_kwargs = util.dict_filter(kwargs, lambda k, v: bool(v))
-    model_info = (model_type, device, model_kwargs)
-    model = get_model(model_info, no_initialize=True)
+    model, model_info = get_model(model_name, cuda, kwargs)
 
     # preload data into memcache
-    log.info('Preparing data...')
-    full_data = util.load_csv(data_folder/'train.csv')
-    for smiles in full_data.keys():
-        _ = model.process(smiles)
+    full_data_path = data_folder/'train.csv'
+    if full_data_path.exists():
+        full_data = util.load_csv(full_data_path)
+        log.info('Preparing data...')
+        for smiles in full_data.keys():
+            _ = model.process(smiles)
 
     # process folds
     folds = []
@@ -146,12 +141,21 @@ def _train(
             continue
         folds.append(fold)
 
+    if output is not None and num_workers > 1:
+        log.fatal('Attempt to save multiple instances of model.')
+
+    # multiprocessing configuration
     if num_workers == 1:
-        model = get_model(model_info)
+        model = build_model(model_info)
         for fold in folds:
             roc_auc, prc_auc = process_fold(model, fold, **kwargs)
             roc_record.append(roc_auc)
             prc_record.append(prc_auc)
+
+        # saving model parameter
+        if output is not None:
+            log.info('Saving model...')
+            model.save_model(output)
     else:
         log.info(f'Number of workers: {num_workers}')
 
@@ -180,9 +184,66 @@ def _train(
         roc.mean(), roc.std(), prc.mean(), prc.std()
     ))
 
-def get_model(model_info: TModelInfo, no_initialize: bool = False) -> ModelInterface:
+def build_model(model_info: TModelInfo, no_initialize: bool = False) -> ModelInterface:
     model_type, device, kwargs = model_info
     return ModelInterface(model_type, device, no_initialize=no_initialize, **kwargs)
+
+def get_model(
+    model_name: Text,
+    prefer_cuda: bool,
+    kwargs: Dict
+):
+    device = require_device(prefer_cuda)
+    model_type = models.select(model_name)  # see models/__init__.py
+
+    # filter out options that are not set in command line
+    # default to ignore both None and False (for flag options)
+    model_kwargs = util.dict_filter(kwargs, lambda k, v: bool(v))
+    model_info = (model_type, device, model_kwargs)
+    model = build_model(model_info, no_initialize=True)
+    return model, model_info
+
+def report_scores(
+    model: ModelInterface,
+    batch: List[object],
+    label: List[int]
+) -> Tuple[float, float]:
+    roc_auc, prc_auc, pred_label = evaluate_model(
+        model, batch, label, show_stats=True
+    )
+    log.info(f'test: {util.stat_string(label, pred_label)}')
+    log.info(f'ROC-AUC: {roc_auc}')
+    log.info(f'PRC-AUC: {prc_auc}')
+
+    return roc_auc, prc_auc
+
+def require_device(prefer_cuda: bool) -> torch.device:
+    if prefer_cuda and not torch.cuda.is_available():
+        log.warn('CUDA not available.')
+        prefer_cuda = False
+    return torch.device('cuda' if prefer_cuda else 'cpu')
+
+def process_csv(
+    model: ModelInterface,
+    csv: Dict[Text, int]
+) -> List[Item]:
+    return [
+        Item(model.process(smiles), activity)
+        for smiles, activity in csv.items()
+    ]
+
+def load_folds(
+    model: ModelInterface,
+    folder: Path,
+    files: Iterable[Text]
+) -> List[List[Item]]:
+    return [
+        process_csv(
+            model,
+            util.load_csv(folder/name)
+        )
+        for name in files
+    ]
 
 def task_wrapper(arg_pack: Tuple[Path, TModelInfo, Dict[Text, Any]]) -> Tuple[float, float]:
     '''For multiprocessing.
@@ -192,7 +253,7 @@ def task_wrapper(arg_pack: Tuple[Path, TModelInfo, Dict[Text, Any]]) -> Tuple[fl
 
     # each worker has to instantiate its own model.
     # molecule memory cache is shared among all `ModelInterface`.
-    model = get_model(model_info)
+    model = build_model(model_info)
     return process_fold(model, fold, **kwargs)
 
 def process_fold(
@@ -209,7 +270,7 @@ def process_fold(
     log.info(f'Processing "{fold}"...')
 
     # load the fold and let the model parse these molecules
-    data = load_data(model, fold, ['train.csv', 'dev.csv', 'test.csv'])
+    data = load_folds(model, fold, ['train.csv', 'dev.csv', 'test.csv'])
     train_data, validate_set, test_set = data
 
     # prepare data
@@ -243,45 +304,13 @@ def process_fold(
     )
 
     # model evaluation on `dev.csv`
-    roc_auc, prc_auc, pred_label = evaluate_model(
-        model, test_batch, test_label, show_stats=True
-    )
-    log.info(f'test: {util.stat_string(test_label, pred_label)}')
-    log.info(f'ROC-AUC: {roc_auc}')
-    log.info(f'PRC-AUC: {prc_auc}')
-
-    return roc_auc, prc_auc
-
-def require_device(prefer_cuda: bool) -> torch.device:
-    if prefer_cuda and not torch.cuda.is_available():
-        log.warn('CUDA not available.')
-        prefer_cuda = False
-    return torch.device('cuda' if prefer_cuda else 'cpu')
-
-def load_data(
-    model: ModelInterface,
-    folder: Path,
-    files: Iterable[Text]
-) -> List[List[Item]]:
-    raw = [
-        util.load_csv(folder/name)
-        for name in files
-    ]
-
-    data = []
-    for csv in raw:
-        buf = []
-        for smiles, activity in csv.items():
-            obj = model.process(smiles)
-            buf.append(Item(obj, activity))
-        data.append(buf)
-
-    return data
+    scores = report_scores(model, test_batch, test_label)
+    return scores
 
 
-@cli.command(short_help='Show statistics of data.')
+@cli.command('stats', short_help='Show statistics of data.')
 @click.argument('data', type=click.File('r'))
-def stats(data: TextIO):
+def _stats(data: TextIO):
     fn_list = [
         'GetAtomicNum', 'GetExplicitValence', 'GetImplicitValence',
         'GetHybridization', 'GetMass', 'GetTotalNumHs',
@@ -324,6 +353,44 @@ def _cache(data: TextIO, model_name: Text, output: BinaryIO):
         cache[cache_key] = model.encode_data(data)
 
     pickle.dump(cache, output)
+
+
+@cli.command('evaluate', short_help='Evaluate model.')
+@click.argument('state_fp', type=click.File('rb'))
+@click.option('-m', '--model-name', type=str, required=True,
+    help='The name of the model to be evaluated.')
+@click.option('-d', '--data', type=click.File('r'), required=True,
+    help='Target CSV data file.')
+@click.option('-c', '--cache-file', type=click.Path(exists=True),
+    help='Path for cache file.')
+@click.option('-r', '--args', type=str, default='{}', show_default='"{}"',
+    help='Model parameters in JSON format.')
+@click.option('--cuda', is_flag=True,
+    help='Prefer CUDA for PyTorch.')
+def _evaluate(
+    state_fp: IO,
+    model_name: Text,
+    data: IO,
+    cuda: bool,
+    args: Text,
+    cache_file: Optional[Text]
+):
+    log.debug('Parsing JSON...')
+    kwargs = json.loads(args)
+
+    log.info('Initialize model...')
+    model, _ = get_model(model_name, cuda, kwargs)
+    model.initialize_model()
+    model.load_model(state_fp)
+
+    log.info('Loading data...')
+    if cache_file:
+        cache.register_provider(ModelInterface.process, cache_file)
+    raw = process_csv(model, util.load_csv(data))
+    mols, labels = util.separate_items(raw)
+
+    log.info('Evaluating...')
+    report_scores(model, mols, labels)
 
 
 if __name__ == '__main__':
