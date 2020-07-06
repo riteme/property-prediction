@@ -50,6 +50,33 @@ python src/main.py -v train -m gcn > result/gcn.txt
 python src/main.py -v train -m gat -t1 -j5 --cuda --max-iteration=20 > result/gat.txt
 ```
 
+## Training & Evaluating
+
+* GraphSAGE:
+
+```shell
+# preparation
+mkdir .onefold
+cd .onefold
+ln -s ../data/fold_0 .
+cd ..
+mkdir .cache
+mkdir .model
+
+# training
+python src/main.py cache -m graphsage data/train.csv -o .cache/sage.out
+python src/main.py -v train -m graphsage --train-validate --train-test -c .cache/sage.out -t1 -d .onefold -s f_score -o .model/sage.out
+python src/main.py -v evaluate .model/sage.out -m graphsage -d data/train.csv -c .cache/sage.out
+```
+
+Sample output:
+
+```
+(info) test: tn=2042,fp=7/tp=48,fn=0
+(info) ROC-AUC: 0.9999796648771759
+(info) PRC-AUC: 0.9991581632653062
+```
+
 ## TODO
 
 * Training framework
@@ -60,6 +87,8 @@ python src/main.py -v train -m gat -t1 -j5 --cuda --max-iteration=20 > result/ga
 * Models
     * [x] GCN
     * [x] GAT
+    * [ ] AdaBoost
+    * [ ] SVM
 
 ## Notes
 
