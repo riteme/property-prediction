@@ -30,11 +30,12 @@ def train_fold(
     **kwargs
 ):
     if no_reset:
-        log.warn('Model reset disabled.')
+        log.warn('Model resetting disabled.')
     else:
         model.reset()
 
-    optimizer = torch.optim.Adam(params=model.inst.parameters(), lr=learning_rate)
+    model.preprocess()
+    optimizer = torch.optim.Adam(params=model.params(), lr=learning_rate)
     watcher = util.MaximalCounter()
 
     # training iterations
@@ -84,6 +85,7 @@ def train_fold(
 
     # load best model
     model.load_checkpoint()
+    model.postprocess()
 
 def train_step(
     model: ModelInterface,
