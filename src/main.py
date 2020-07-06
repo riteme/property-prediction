@@ -279,6 +279,7 @@ def process_fold(
     if train_validate:
         train_data += validate_set
     if train_test:
+        log.warn('ARE YOU CHEATING?')
         train_data += test_set
 
     sampler: util.Sampler
@@ -299,7 +300,7 @@ def process_fold(
 
     # training phase
     train_fold(
-        model, sampler, len(train_data), val_batch, val_label,
+        model, train_data, sampler, val_batch, val_label,
         batch_size=batch_size, **kwargs
     )
 

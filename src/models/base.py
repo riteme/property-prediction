@@ -1,8 +1,10 @@
-from typing import Any
+from typing import Any, List
 
 import torch
 from torch import nn
 from rdkit.Chem import Mol
+
+from util import Item
 
 # NOTE: you may use `from .base import *` to ease your life.
 
@@ -13,7 +15,7 @@ class BaseModel(nn.Module):
         self.device = device
 
     @staticmethod
-    def process(mol: Mol, device: torch.device):
+    def process(mol: Mol, device: torch.device) -> Any:
         '''
         process molecules. The processed molecules will be directly
         passed to forward phase.
@@ -36,13 +38,13 @@ class BaseModel(nn.Module):
         '''
         return data
 
-    def preprocess(self):
+    def preprocess(self, train_data: List[Item]):
         '''
         this is a hook function to be called before training phase.
         '''
         pass
 
-    def postprocess(self):
+    def postprocess(self, train_data: List[Item]):
         '''
         this is a hook function to be called after training phase.
         '''

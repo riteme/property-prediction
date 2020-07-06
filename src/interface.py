@@ -86,11 +86,11 @@ class ModelInterface:
             result[i, :] = self._inst.forward(data)
         return result
 
-    def preprocess(self):
-        self._inst.preprocess()
+    def preprocess(self, train_data: List[util.Item]):
+        self._inst.preprocess(train_data)
 
-    def postprocess(self):
-        self._inst.postprocess()
+    def postprocess(self, train_data: List[util.Item]):
+        self._inst.postprocess(train_data)
 
     def predict(self, batch: Sequence[Any]) -> torch.Tensor:
         with torch.no_grad():

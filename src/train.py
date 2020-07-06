@@ -13,8 +13,8 @@ from interface import ModelInterface
 
 def train_fold(
     model: ModelInterface,
+    train_data: List[Item],
     sampler: util.Sampler,
-    train_data_size: int,
     val_batch: List[Any],
     val_label: List[int],
     *,
@@ -34,13 +34,13 @@ def train_fold(
     else:
         model.reset()
 
-    model.preprocess()
+    model.preprocess(train_data)
     optimizer = torch.optim.Adam(params=model.params(), lr=learning_rate)
     watcher = util.MaximalCounter()
 
     # training iterations
     min_loss = 1e99  # track history minimal loss
-    batch_per_epoch = ceil(train_data_size / batch_size)
+    batch_per_epoch = ceil(len(train_data) / batch_size)
     log.debug(f'batch_per_epoch={batch_per_epoch}')
     for i in range(max_iteration):  # epochs
         sum_loss = 0.0
@@ -85,7 +85,7 @@ def train_fold(
 
     # load best model
     model.load_checkpoint()
-    model.postprocess()
+    model.postprocess(train_data)
 
 def train_step(
     model: ModelInterface,
