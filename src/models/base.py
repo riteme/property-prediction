@@ -13,6 +13,10 @@ class BaseModel(nn.Module):
     def __init__(self, device: torch.device, **kwargs):
         super().__init__()
         self.device = device
+        self.in_training = False
+
+    def set_mode(self, training: bool = False):
+        self.in_training = training
 
     @staticmethod
     def process(mol: Mol, device: torch.device) -> Any:

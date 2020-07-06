@@ -34,6 +34,8 @@ def train_fold(
     else:
         model.reset()
 
+    log.debug('in preprocessing...')
+    model.set_mode(training=True)
     model.preprocess(train_data)
     optimizer = torch.optim.Adam(params=model.params(), lr=learning_rate)
     watcher = util.MaximalCounter()
@@ -85,7 +87,10 @@ def train_fold(
 
     # load best model
     model.load_checkpoint()
+
+    log.debug('in postprocessing...')
     model.postprocess(train_data)
+    model.set_mode(training=False)
 
 def train_step(
     model: ModelInterface,

@@ -34,6 +34,11 @@ class ModelInterface:
         self.clear_checkpoint()
         self.initialize_model()
 
+    def set_mode(self, training: bool):
+        self._inst.set_mode(
+            training=training
+        )
+
     def encode_data(self, data: Any) -> Any:
         return self.model_type.encode_data(data, self.device)
 
