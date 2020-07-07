@@ -6,6 +6,7 @@
 
 * Python 3
 * PyTorch (see <https://pytorch.org/get-started/locally/>)
+* PyTorch Geometric (see <https://pytorch-geometric.readthedocs.io/en/latest/notes/installation.html>)
 * RDKit (see <http://www.rdkit.org/docs/Install.html>)
 * DGL (see <https://www.dgl.ai/pages/start.html>)
 * scikit-learn

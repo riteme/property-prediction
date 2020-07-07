@@ -1,0 +1,15 @@
+python src/main.py -v train -m mpnn -c .cache/mpnn.out --cuda -t1 --max-iteration=10
+(info) roc = [0.7811, 0.7914, 0.8515, 0.6881, 0.9291, 0.8569, 0.677, 0.0193, 0.8261, 0.7387]
+(info) prc = [0.0909, 0.2144, 0.3162, 0.0393, 0.1865, 0.0465, 0.0387, 0.0025, 0.1521, 0.0321]
+(info) All folds: ROC-AUC = 0.716±0.257, PRC-AUC = 0.112±0.102
+
+python src/main.py -v train -m mpnn -c .cache/mpnn.out --cuda -t1 --max-iteration=10
+(info) roc = [0.4541, 0.8051, 0.9353, 0.7008, 0.8966, 0.4848, 0.8266, 0.1353, 0.882, 0.9246]
+(info) prc = [0.0649, 0.1779, 0.3926, 0.0375, 0.1564, 0.0133, 0.0375, 0.0028, 0.0719, 0.0824]
+(info) All folds: ROC-AUC = 0.705±0.265, PRC-AUC = 0.104±0.116
+
+边随机特征：
+python src/main.py -v train -m mpnn --cuda -t1 --max-iteration=5
+(info) roc = [0.4622, 0.4918, 0.8617, 0.5991, 0.5774, 0.6027, 0.7327, 0.1014, 0.4746, 0.2178]
+(info) prc = [0.0238, 0.0958, 0.4237, 0.0323, 0.0467, 0.025, 0.1883, 0.0027, 0.01, 0.0079]
+(info) All folds: ROC-AUC = 0.512±0.224, PRC-AUC = 0.086±0.131
