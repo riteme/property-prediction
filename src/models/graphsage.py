@@ -1,14 +1,10 @@
 from typing import NamedTuple
 
-from .base import BaseModel
+from .base import *
 from . import feature
 import log
 
-import torch
-from torch import nn
-from rdkit.Chem import Mol
 from dgl import DGLGraph
-
 from dgl.nn.pytorch import SAGEConv, DenseSAGEConv
 
 class GraphSAGEData(NamedTuple):
@@ -16,7 +12,7 @@ class GraphSAGEData(NamedTuple):
     adj: torch.Tensor
     vec: torch.Tensor
 
-class GraphSAGE(BaseModel):
+class GraphSAGE(EmbeddableModel):
     def __init__(self, device: torch.device, *,
         embedding_dim: int = 64,
         aggregator_type: str = 'pool',
@@ -33,7 +29,7 @@ class GraphSAGE(BaseModel):
         self.activate = nn.Tanh()
 
     @staticmethod
-    def process(mol: Mol, device: torch.device):
+    def process(mol: Mol, device: torch.device, **kwargs):
         n = mol.GetNumAtoms() + 1
 
         graph = DGLGraph()

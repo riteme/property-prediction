@@ -47,14 +47,14 @@ class MPNN(BaseModel):
         self.activate = nn.ReLU()
 
     @staticmethod
-    def decode_data(data: MPNNData, device: torch.device) -> MPNNData:
+    def decode_data(data: MPNNData, device: torch.device, **kwargs) -> MPNNData:
         data.x = data.x.to(device)
         data.edge_index = data.edge_index.to(device)
         data.edge_attr = data.edge_attr.to(device)
         return data
 
     @staticmethod
-    def process(mol: Mol, device: torch.device):
+    def process(mol: Mol, device: torch.device, **kwargs):
         n = mol.GetNumAtoms() + 1
 
         # graph = DGLGraph()

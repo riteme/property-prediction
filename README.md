@@ -57,6 +57,12 @@ python src/main.py -v train -m gat -t1 -j5 --cuda --max-iteration=3 -c .cache/ga
 python src/main.py -v train -m mpnn -c .cache/mpnn.out --cuda -t1 --max-iteration=5
 ```
 
+* AdaBoost (with GAT embedding)
+
+```
+python src/main.py -v train --max-iteration=3 -c .cache/gat.out -s f_score -t1 -j5 --cuda -m adaboost --inner-model=gat
+```
+
 ## Training & Evaluating
 
 * GraphSAGE:

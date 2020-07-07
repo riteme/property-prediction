@@ -19,7 +19,7 @@ class BaseModel(nn.Module):
         self.in_training = training
 
     @staticmethod
-    def process(mol: Mol, device: torch.device) -> Any:
+    def process(mol: Mol, device: torch.device, **kwargs) -> Any:
         '''
         process molecules. The processed molecules will be directly
         passed to forward phase.
@@ -27,7 +27,7 @@ class BaseModel(nn.Module):
         raise NotImplementedError
 
     @staticmethod
-    def encode_data(data: Any, device: torch.device) -> Any:
+    def encode_data(data: Any, device: torch.device, **kwargs) -> Any:
         '''
         encode data for cache storing. e.g. move CUDA tensors
         back to CPU.
@@ -35,7 +35,7 @@ class BaseModel(nn.Module):
         return data
 
     @staticmethod
-    def decode_data(data: Any, device: torch.device) -> Any:
+    def decode_data(data: Any, device: torch.device, **kwargs) -> Any:
         '''
         decode data for forward phase. This is the reverse procedure
         of `encode_data`. e.g. move tensors to CUDA device.
@@ -65,3 +65,8 @@ class BaseModel(nn.Module):
         summed to 1.
         '''
         return self.forward(data).softmax(dim=0)
+
+
+class EmbeddableModel(BaseModel):
+    def embed(self, data: Any) -> torch.Tensor:
+        raise NotImplementedError

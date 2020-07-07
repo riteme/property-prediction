@@ -9,8 +9,8 @@ if sys.version_info.minor >= 8:  # Protocol is only available in Python 3.8+
     from typing import Protocol
     # from interface import ModelInterface  # circular import
     class _ModelInterface(Protocol):
-        def decode_data(self, data: Any) -> Any: ...
-        def process(self, smiles: Text) -> Any: ...
+        def decode_data(self, data: Any, **kwargs) -> Any: ...
+        def process(self, smiles: Text, **kwargs) -> Any: ...
 
     # https://stackoverflow.com/a/59406717: accept subclasses in callable arguments
     # however, it seems that TypeVar simply shuts up mypy about `TProcessFn`, even
@@ -78,13 +78,13 @@ def smiles_cache(fn: TProcessFn):
     mem: Dict[Text, Any] = {}
 
     @functools.wraps(fn)
-    def wrapper(self: TModelInterface, smiles: Text):
+    def wrapper(self: TModelInterface, smiles: Text, **kwargs):
         nonlocal cached_fn
         nonlocal mem
 
         if smiles not in mem:
-            data = cached_fn(self, smiles)
-            mem[smiles] = self.decode_data(data)
+            data = cached_fn(self, smiles, **kwargs)
+            mem[smiles] = self.decode_data(data, **kwargs)
         return mem[smiles]
 
     return wrapper

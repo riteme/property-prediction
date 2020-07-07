@@ -34,7 +34,7 @@ class ChebNet(BaseModel):
         self.activate = nn.ReLU()
 
     @staticmethod
-    def process(mol: Mol, device: torch.device):
+    def process(mol: Mol, device: torch.device, **kwargs):
         n = mol.GetNumAtoms() + 1
 
         graph = DGLGraph()

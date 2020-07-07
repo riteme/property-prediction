@@ -31,7 +31,7 @@ class ToyGCN(BaseModel):
         self.activate = nn.LeakyReLU()
 
     @staticmethod
-    def process(mol: Mol, device: torch.device) -> GCNGraph:
+    def process(mol: Mol, device: torch.device, **kwargs) -> GCNGraph:
         n = mol.GetNumAtoms() + 1  # allocate a new node for graph embedding
 
         # all edges (including all self-loops) as index
