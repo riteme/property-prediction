@@ -26,7 +26,7 @@ class GAT(BaseModel):
         self.no_shortcut = no_shortcut
 
         use_residual = not no_shortcut
-        self.embed = GATConv(feature.FEATURE_DIM, embedding_dim, 4, residual=use_residual)
+        self.embed = GATConv(feature.ATOM_FDIM, embedding_dim, 4, residual=use_residual)
         self.conv = GATConv(embedding_dim, embedding_dim, 6, residual=use_residual)
         self.fc = nn.Linear(embedding_dim, 2)
         self.activate = nn.ELU()

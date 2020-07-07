@@ -26,7 +26,7 @@ class GCN(BaseModel):
         self.embedding_dim = embedding_dim
         self.no_shortcut = no_shortcut
 
-        self.embed = DenseGraphConv(feature.FEATURE_DIM, embedding_dim)
+        self.embed = DenseGraphConv(feature.ATOM_FDIM, embedding_dim)
         self.conv = DenseGraphConv(embedding_dim, embedding_dim)
         self.fc = nn.Linear(embedding_dim, 2)
         self.activate = nn.ReLU()

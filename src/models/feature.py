@@ -5,7 +5,8 @@ from rdkit.Chem import Mol, Atom, HybridizationType
 from rdkit import Chem
 
 # see docstring of `atom_feature`
-FEATURE_DIM = 63
+ATOM_FDIM = 63
+BOND_FDIM = 14
 OFFSET = torch.tensor([  # mass excluded
     0, 25, 7, 4, 7, 5, 6, 6, 1,
 ]).cumsum(dim=0)
@@ -60,11 +61,11 @@ def atom_feature(atom: Atom) -> Tuple[torch.Tensor, int]:
         int(atom.GetIsAromatic())
     ]) + OFFSET
 
-    vec = torch.zeros(FEATURE_DIM)
+    vec = torch.zeros(ATOM_FDIM)
     vec[index] = 1.0
     vec[-1] = atom.GetMass() / 100
 
-    return vec, FEATURE_DIM
+    return vec, ATOM_FDIM
 
 def mol_feature(mol: Mol) -> Tuple[torch.Tensor, int]:
     '''
@@ -73,7 +74,7 @@ def mol_feature(mol: Mol) -> Tuple[torch.Tensor, int]:
     return torch.cat([
         atom_feature(atom)[0][None, :]
         for atom in mol.GetAtoms()
-    ]), FEATURE_DIM
+    ]), ATOM_FDIM
 
 def onek_encoding_unk(value: int, choices: List[int]) -> List[int]:
     """
@@ -89,26 +90,24 @@ def onek_encoding_unk(value: int, choices: List[int]) -> List[int]:
 
     return encoding
 
-def bond_features(bond: Chem.rdchem.Bond) -> List[ Union[bool, int, float]]:
+def bond_features(bond: Chem.rdchem.Bond) -> List[int]:
     """
     Builds a feature vector for a bond.
     :param bond: A RDKit bond.
     :return: A list containing the bond features.
     """
-    if bond is None:
-        fbond = [1] + [0] * (BOND_FDIM - 1)
-    else:
-        bt = bond.GetBondType()
-        fbond = [
-            0,  # bond is not None
-            bt == Chem.rdchem.BondType.SINGLE,
-            bt == Chem.rdchem.BondType.DOUBLE,
-            bt == Chem.rdchem.BondType.TRIPLE,
-            bt == Chem.rdchem.BondType.AROMATIC,
-            (bond.GetIsConjugated() if bt is not None else 0),
-            (bond.IsInRing() if bt is not None else 0)
-        ]
-        fbond += onek_encoding_unk(int(bond.GetStereo()), list(range(6)))
+    assert bond is not None
+    bt = bond.GetBondType()
+    fbond = [
+        0,  # bond is not None
+        bt == Chem.rdchem.BondType.SINGLE,
+        bt == Chem.rdchem.BondType.DOUBLE,
+        bt == Chem.rdchem.BondType.TRIPLE,
+        bt == Chem.rdchem.BondType.AROMATIC,
+        (bond.GetIsConjugated() if bt is not None else 0),
+        (bond.IsInRing() if bt is not None else 0)
+    ]
+    fbond += onek_encoding_unk(int(bond.GetStereo()), list(range(6)))
     return fbond
 
 def total_bond_feature(mol: Mol) -> Tuple[torch.Tensor, int]:
@@ -125,10 +124,10 @@ def total_bond_feature(mol: Mol) -> Tuple[torch.Tensor, int]:
     for a1 in range(n_atoms):
         for a2 in range(a1+1, n_atoms):
             bond = mol.GetBondBetweenAtoms(a1, a2)
-            
+
             if bond is None:
                 continue
-            
+
             f_bond = bond_features(bond)
             f_bonds.append(f_bond)
 

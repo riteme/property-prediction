@@ -28,11 +28,11 @@ class ChebNet(BaseModel):
         self.no_shortcut = no_shortcut
         # self.aggregator_type = aggregator_type
         self.k = k
-        self.embed = DenseChebConv(feature.FEATURE_DIM, embedding_dim, k)
+        self.embed = DenseChebConv(feature.ATOM_FDIM, embedding_dim, k)
         self.conv = DenseChebConv(embedding_dim, embedding_dim, k)
         self.fc = nn.Linear(embedding_dim, 2)
         self.activate = nn.ReLU()
-    
+
     @staticmethod
     def process(mol: Mol, device: torch.device):
         n = mol.GetNumAtoms() + 1
@@ -54,7 +54,7 @@ class ChebNet(BaseModel):
         ]).to(device)
 
         return ChebNetData(n, adj, vec)
-    
+
     def forward(self, data):
         data: ChebNetData
 

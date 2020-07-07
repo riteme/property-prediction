@@ -27,7 +27,7 @@ class GraphSAGE(BaseModel):
         self.embedding_dim = embedding_dim
         self.no_shortcut = no_shortcut
         # self.aggregator_type = aggregator_type
-        self.embed_layer = DenseSAGEConv(feature.FEATURE_DIM, embedding_dim)
+        self.embed_layer = DenseSAGEConv(feature.ATOM_FDIM, embedding_dim)
         self.conv_layer = DenseSAGEConv(embedding_dim, embedding_dim)
         self.fc = nn.Linear(embedding_dim, 2)
         self.activate = nn.Tanh()
