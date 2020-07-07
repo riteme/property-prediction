@@ -1,18 +1,21 @@
 from typing import (
     Callable, Dict, Tuple, Any,
-    Optional, Text, Protocol,
-    TypeVar
+    Optional, Text, TypeVar
 )
 
-# from interface import ModelInterface  # circular import
-class _ModelInterface(Protocol):
-    def decode_data(self, data: Any) -> Any: ...
-    def process(self, smiles: Text) -> Any: ...
+import sys
 
-# https://stackoverflow.com/a/59406717: accept subclasses in callable arguments
-# however, it seems that TypeVar simply shuts up mypy about `TProcessFn`, even
-# if ModelInterface does not match the signature of the protocol `_ModelInterface`.
-TModelInterface = TypeVar('TModelInterface', bound=_ModelInterface)
+if sys.version_info.minor >= 8:  # Protocol is only available in Python 3.8+
+    from typing import Protocol
+    # from interface import ModelInterface  # circular import
+    class _ModelInterface(Protocol):
+        def decode_data(self, data: Any) -> Any: ...
+        def process(self, smiles: Text) -> Any: ...
+
+    # https://stackoverflow.com/a/59406717: accept subclasses in callable arguments
+    # however, it seems that TypeVar simply shuts up mypy about `TProcessFn`, even
+    # if ModelInterface does not match the signature of the protocol `_ModelInterface`.
+    TModelInterface = TypeVar('TModelInterface', bound=_ModelInterface)
 
 # ModelInterface.process
 TProcessFn = Callable[[TModelInterface, Text], Any]

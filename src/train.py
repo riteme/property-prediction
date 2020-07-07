@@ -135,4 +135,5 @@ def evaluate_model(
             ], dim=1)
             log.debug(stats)
 
-    return *util.evaluate_auc(label, pred[:, 1]), pred_label.tolist()
+    roc_auc, prc_auc = util.evaluate_auc(label, pred[:, 1])
+    return roc_auc, prc_auc, pred_label.tolist()
