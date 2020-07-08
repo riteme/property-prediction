@@ -65,7 +65,7 @@ def global_initialize(args: GlobalInitArgs):
     help='Maximum difference assumed to be converged.')
 @click.option('--beta', type=float, default=1.0, show_default=True,
     help='Parameter for F_β score.')
-@click.option('-s', '--score-expression', type=str, default='(prc_auc,roc_auc)', show_default=True,
+@click.option('-s', '--score-expression', type=str, default='(roc_auc,prc_auc)', show_default=True,
     help='The expression of score for maximal counter. Available metrics: "prc_auc", "roc_auc", "f_score", "loss".')
 @click.option('--maximal-count', type=int, default=15, show_default=True,
     help='Number of maximals assumed to be converged.')
@@ -75,7 +75,7 @@ def global_initialize(args: GlobalInitArgs):
     help='Train with test set (data[2]).')
 @click.option('--min-iteration', type=int, default=6, show_default=True,
     help='Minimum number of iterations.')
-@click.option('--max-iteration', type=int, default=50, show_default=True,
+@click.option('--max-iteration', type=int, default=10, show_default=True,
     help='Maximum number of iterations.')
 @click.option('-p', '--positive-percentage', type=float, default=0.5, show_default=True,
     help='Percentage of positive samples in one batch.')
