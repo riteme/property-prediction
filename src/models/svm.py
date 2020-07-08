@@ -19,7 +19,6 @@ class SVM(BaseModel):
         self.classifier = make_pipeline(
             StandardScaler(),
             SVC(
-                probability=True,
                 kernel='rbf',
                 cache_size=512,
                 class_weight='balanced'
@@ -51,8 +50,5 @@ class SVM(BaseModel):
             return self._inst.predict(data)
         else:
             X = self._inst.embed(data).cpu().numpy()[None, :]
-            pred = self.classifier.predict_proba(X)[0]
-            log.debug(pred)
-            return torch.tensor(pred)
-            # who = self.classifier.predict(X)[0]
-            # return torch.tensor([1 - who, who])
+            who = self.classifier.predict(X)[0]
+            return torch.tensor([1 - who, who])

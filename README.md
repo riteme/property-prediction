@@ -61,6 +61,13 @@ python src/main.py -v train -m mpnn -c .cache/mpnn.out --cuda -t1 --max-iteratio
 
 ```
 python src/main.py -v train --max-iteration=3 -c .cache/gat.out -s f_score -t1 -j5 --cuda -m adaboost --inner-model=gat
+python src/main.py -v train --max-iteration=3 -c .cache/gat.out -t1 -j5 --cuda -m adaboost --inner-model=gat --ndrop 0 --train-validate -s "-loss" --swap-threshold=0.15
+```
+
+* SVM (with GAT embedding)
+
+```
+python src/main.py -v train --max-iteration=2 -c .cache/gat.out -t1 -j5 --cuda --ndrop 0 --train-validate -s "-loss" -m svm
 ```
 
 ## Training & Evaluating
@@ -100,8 +107,8 @@ Sample output:
 * Models
     * [x] GCN
     * [x] GAT
-    * [ ] AdaBoost
-    * [ ] SVM
+    * [x] AdaBoost
+    * [x] SVM
 
 ## Notes
 

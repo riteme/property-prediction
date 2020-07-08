@@ -101,6 +101,7 @@ def global_initialize(args: GlobalInitArgs):
 @click.option('--no-shortcut', is_flag=True)
 @click.option('--hard-predict', is_flag=True)
 @click.option('--inner-model', type=str)
+@click.option('--swap-threshold', type=float)
 def _train(
     directory: Text,
     model_name: Text,

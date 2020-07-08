@@ -28,6 +28,7 @@ class AdaBoost(BaseModel):
         num_estimator: int = 100,
         hard_predict: bool = False,
         inner_model: Text = 'gat',
+        swap_threshold: float = 0.15,
         **kwargs
     ):
         super().__init__(device)
@@ -44,6 +45,7 @@ class AdaBoost(BaseModel):
         ])
 
         self.hard_predict = hard_predict
+        self.swap_threshold = swap_threshold
 
     @staticmethod
     def decode_data(
@@ -97,5 +99,7 @@ class AdaBoost(BaseModel):
                 who = self.classifier.predict(X)[0]
                 return torch.tensor([1 - who, who])
             else:
-                result = self.classifier.predict_proba(X)[0]
-                return torch.tensor(result)
+                p0, p1 = self.classifier.predict_proba(X)[0]
+                if p0 < p1 and p1 - p0 < self.swap_threshold:
+                    p0, p1 = p1, p0
+                return torch.tensor([p0, p1])
