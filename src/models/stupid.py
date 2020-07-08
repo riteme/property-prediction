@@ -11,7 +11,7 @@ class StupidModel(BaseModel):
         )
 
     @staticmethod
-    def process(mol: Mol, device: torch.device):
+    def process(mol: Mol, device: torch.device, **kwargs):
         return None
 
     def forward(self, data):

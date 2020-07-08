@@ -36,19 +36,31 @@ python src/main.py -v train -e 0.001 --train-with-test -m gcn --ndrop 0.90 --cud
 * ToyGCN
 
 ```
-python src/main.py -v train -m toy-gcn --ndrop=0.85 > result/toy-gcn.txt
+python src/main.py -v train -m toy-gcn --ndrop=0.85
 ```
 
 * GCN
 
 ```
-python src/main.py -v train -m gcn > result/gcn.txt
+python src/main.py -v train -m gcn
 ```
 
 * GAT
 
 ```
-python src/main.py -v train -m gat -t1 -j5 --cuda --max-iteration=20 > result/gat.txt
+python src/main.py -v train -m gat -t1 -j5 --cuda --max-iteration=3 -c .cache/gat.out -s f_score
+```
+
+* MPNN
+
+```
+python src/main.py -v train -m mpnn -c .cache/mpnn.out --cuda -t1 --max-iteration=5
+```
+
+* AdaBoost (with GAT embedding)
+
+```
+python src/main.py -v train --max-iteration=3 -c .cache/gat.out -s f_score -t1 -j5 --cuda -m adaboost --inner-model=gat
 ```
 
 ## Training & Evaluating

@@ -100,6 +100,7 @@ def global_initialize(args: GlobalInitArgs):
 @click.option('--num-estimator', type=int)
 @click.option('--no-shortcut', is_flag=True)
 @click.option('--hard-predict', is_flag=True)
+@click.option('--inner-model', type=str)
 def _train(
     directory: Text,
     model_name: Text,
@@ -131,7 +132,7 @@ def _train(
         full_data = util.load_csv(full_data_path)
         log.info('Preparing data...')
         for smiles in full_data.keys():
-            _ = model.process(smiles)
+            _ = model.process(smiles, **kwargs)
 
     # process folds
     folds = []
@@ -227,22 +228,25 @@ def require_device(prefer_cuda: bool) -> torch.device:
 
 def process_csv(
     model: ModelInterface,
-    csv: Dict[Text, int]
+    csv: Dict[Text, int],
+    **kwargs
 ) -> List[Item]:
     return [
-        Item(model.process(smiles), activity)
+        Item(model.process(smiles, **kwargs), activity)
         for smiles, activity in csv.items()
     ]
 
 def load_folds(
     model: ModelInterface,
     folder: Path,
-    files: Iterable[Text]
+    files: Iterable[Text],
+    **kwargs
 ) -> List[List[Item]]:
     return [
         process_csv(
             model,
-            util.load_csv(folder/name)
+            util.load_csv(folder/name),
+            **kwargs
         )
         for name in files
     ]
@@ -272,7 +276,9 @@ def process_fold(
     log.info(f'Processing "{fold}"...')
 
     # load the fold and let the model parse these molecules
-    data = load_folds(model, fold, ['train.csv', 'dev.csv', 'test.csv'])
+    data = load_folds(
+        model, fold, ['train.csv', 'dev.csv', 'test.csv'], **kwargs
+    )
     train_data, validate_set, test_set = data
 
     # prepare data
@@ -343,7 +349,9 @@ def _stats(data: TextIO):
     help='The name of the model to be cached.')
 @click.option('-o', '--output', type=click.File('wb'), required=True,
     help='Path to place the cache file.')
-def _cache(data: TextIO, model_name: Text, output: BinaryIO):
+
+@click.option('--inner-model', type=str)
+def _cache(data: TextIO, model_name: Text, output: BinaryIO, **kwargs):
     cpu = require_device(prefer_cuda=False)
     model_type = models.select(model_name)
     model = ModelInterface(model_type, cpu, False)
@@ -353,7 +361,7 @@ def _cache(data: TextIO, model_name: Text, output: BinaryIO):
     for smiles in csv.keys():
         cache_key = (smiles, )  # memcached is indexed on argument list
         data = model.process(smiles)
-        cache[cache_key] = model.encode_data(data)
+        cache[cache_key] = model.encode_data(data, **kwargs)
 
     pickle.dump(cache, output)
 
@@ -370,13 +378,16 @@ def _cache(data: TextIO, model_name: Text, output: BinaryIO):
     help='Model parameters in JSON format.')
 @click.option('--cuda', is_flag=True,
     help='Prefer CUDA for PyTorch.')
+
+@click.option('--inner-model', type=str)
 def _evaluate(
     state_fp: IO,
     model_name: Text,
     data: IO,
     cuda: bool,
     args: Text,
-    cache_file: Optional[Text]
+    cache_file: Optional[Text],
+    **kwargs
 ):
     log.debug('Parsing JSON...')
     kwargs = json.loads(args)
@@ -389,7 +400,7 @@ def _evaluate(
     log.info('Loading data...')
     if cache_file:
         cache.register_provider(ModelInterface.process, cache_file)
-    raw = process_csv(model, util.load_csv(data))
+    raw = process_csv(model, util.load_csv(data), **kwargs)
     mols, labels = util.separate_items(raw)
 
     log.info('Evaluating...')

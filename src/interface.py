@@ -39,21 +39,21 @@ class ModelInterface:
             training=training
         )
 
-    def encode_data(self, data: Any) -> Any:
-        return self.model_type.encode_data(data, self.device)
+    def encode_data(self, data: Any, **kwargs) -> Any:
+        return self.model_type.encode_data(data, self.device, **kwargs)
 
-    def decode_data(self, data: Any) -> Any:
-        return self.model_type.decode_data(data, self.device)
+    def decode_data(self, data: Any, **kwargs) -> Any:
+        return self.model_type.decode_data(data, self.device, **kwargs)
 
     @smiles_cache
-    def process(self, smiles: Text) -> Any:
+    def process(self, smiles: Text, **kwargs) -> Any:
         '''
         Parse molecules.
         '''
         mol = util.parse_smiles(smiles)
         assert mol is not None, 'Failed to parse SMILES string'
 
-        result = self.model_type.process(mol, self.device)
+        result = self.model_type.process(mol, self.device, **kwargs)
         return result
 
     def save_checkpoint(self):

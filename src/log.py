@@ -1,4 +1,4 @@
-from typing import Text, TextIO, Optional
+from typing import Text, TextIO, Optional, NoReturn
 
 import sys
 
@@ -32,6 +32,6 @@ def warn(message: object):
 def error(message: object):
     _output(3, sys.stderr, 'ERROR', Fore.RED, message)
 
-def fatal(message: object, returncode: Optional[int] = -1):
+def fatal(message: object, returncode: Optional[int] = -1) -> NoReturn:
     _output(999, sys.stderr, 'FATAL', Fore.RED, message)
     exit(returncode)

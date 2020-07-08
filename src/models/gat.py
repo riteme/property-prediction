@@ -15,7 +15,7 @@ class GATData:
     vec: torch.Tensor
 
 
-class GAT(BaseModel):
+class GAT(EmbeddableModel):
     def __init__(self, device: torch.device, *,
         embedding_dim: int = 64,
         no_shortcut: bool = False,
@@ -26,18 +26,18 @@ class GAT(BaseModel):
         self.no_shortcut = no_shortcut
 
         use_residual = not no_shortcut
-        self.embed = GATConv(feature.ATOM_FDIM, embedding_dim, 4, residual=use_residual)
-        self.conv = GATConv(embedding_dim, embedding_dim, 6, residual=use_residual)
+        self.embed_layer = GATConv(feature.ATOM_FDIM, embedding_dim, 4, residual=use_residual)
+        self.conv_layer = GATConv(embedding_dim, embedding_dim, 6, residual=use_residual)
         self.fc = nn.Linear(embedding_dim, 2)
         self.activate = nn.ELU()
 
     @staticmethod
-    def decode_data(data: GATData, device: torch.device) -> GATData:
+    def decode_data(data: GATData, device: torch.device, **kwargs) -> GATData:
         data.vec = data.vec.to(device)
         return data
 
     @staticmethod
-    def process(mol: Mol, device: torch.device) -> GATData:
+    def process(mol: Mol, device: torch.device, **kwargs) -> GATData:
         n = mol.GetNumAtoms() + 1
 
         graph = DGLGraph()
@@ -57,15 +57,14 @@ class GAT(BaseModel):
 
         return GATData(n, graph, vec)
 
-    def forward(self, data):
-        data: GATData
-
-        x0 = self.embed(data.graph, data.vec)
+    def embed(self, data: GATData) -> torch.Tensor:
+        x0 = self.embed_layer(data.graph, data.vec)
         x1 = torch.mean(x0, dim=1)
         x = self.activate(x1)
-        y0 = self.conv(data.graph, x)
+        y0 = self.conv_layer(data.graph, x)
         y1 = torch.mean(y0, dim=1)
         y = self.activate(y1)
+        return y[0]
 
-        z = self.fc(y[0])
-        return z
+    def forward(self, data):
+        return self.fc(self.embed(data))
