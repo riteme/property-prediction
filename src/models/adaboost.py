@@ -1,7 +1,5 @@
 from typing import Optional, Type, Text, IO
 
-import sys
-
 import log
 from .base import *
 from .gat import GAT
