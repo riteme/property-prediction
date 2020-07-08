@@ -5,6 +5,7 @@ from typing import (
 
 import sys
 
+TProcessFn: Any
 if sys.version_info.minor >= 8:  # Protocol is only available in Python 3.8+
     from typing import Protocol
     # from interface import ModelInterface  # circular import
@@ -17,8 +18,10 @@ if sys.version_info.minor >= 8:  # Protocol is only available in Python 3.8+
     # if ModelInterface does not match the signature of the protocol `_ModelInterface`.
     TModelInterface = TypeVar('TModelInterface', bound=_ModelInterface)
 
-# ModelInterface.process
-TProcessFn = Callable[[TModelInterface, Text], Any]
+    # ModelInterface.process
+    TProcessFn = Callable[[TModelInterface, Text], Any]
+else:
+    TProcessFn = Any
 
 import pickle
 import functools
