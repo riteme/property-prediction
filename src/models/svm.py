@@ -2,6 +2,8 @@ from .base import *
 
 from .gat import GAT, GATData
 
+import log
+
 from sklearn.svm import SVC
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
@@ -17,7 +19,7 @@ class SVM(BaseModel):
         self.classifier = make_pipeline(
             StandardScaler(),
             SVC(
-                C=1.1,
+                probability=True,
                 kernel='rbf',
                 cache_size=512,
                 class_weight='balanced'
@@ -49,5 +51,8 @@ class SVM(BaseModel):
             return self._inst.predict(data)
         else:
             X = self._inst.embed(data).cpu().numpy()[None, :]
-            who = self.classifier.predict(X)[0]
-            return torch.tensor([1 - who, who])
+            pred = self.classifier.predict_proba(X)[0]
+            log.debug(pred)
+            return torch.tensor(pred)
+            # who = self.classifier.predict(X)[0]
+            # return torch.tensor([1 - who, who])
