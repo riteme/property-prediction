@@ -9,6 +9,7 @@ from .graphsage import GraphSAGE
 from .chebnet import ChebNet
 from .adaboost import AdaBoost
 from .mpnn import MPNN
+from .svm import SVM
 
 def select(name: Text) -> Type[BaseModel]:
     return {
@@ -18,5 +19,6 @@ def select(name: Text) -> Type[BaseModel]:
         'graphsage': GraphSAGE,
         'chebnet': ChebNet,
         'adaboost': AdaBoost,
-        'mpnn': MPNN
+        'mpnn': MPNN,
+        'svm': SVM
     }[name]
