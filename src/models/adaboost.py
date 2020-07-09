@@ -4,6 +4,7 @@ import log
 from .base import *
 from .gat import GAT
 from .graphsage import GraphSAGE
+from .lstm import LSTM
 
 from sklearn.pipeline import Pipeline
 from sklearn.calibration import CalibratedClassifierCV
@@ -12,12 +13,11 @@ from sklearn.ensemble import AdaBoostClassifier
 
 
 def select_model(inner_model: Text) -> Type[EmbeddableModel]:
-    if inner_model == 'gat':
-        return GAT
-    elif 'sage' in inner_model:
-        return GraphSAGE
-    else:
-        log.fatal(f'Invalid "inner_model": "{inner_model}"')
+    return {
+        'gat': GAT,
+        'sage': GraphSAGE,
+        'lstm': LSTM
+    }[inner_model]
 
 class AdaBoost(BaseModel):
     model_type: Type[EmbeddableModel]

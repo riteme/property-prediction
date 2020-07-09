@@ -70,6 +70,12 @@ python src/main.py -v train --max-iteration=3 -c .cache/gat.out -t1 -j5 --cuda -
 python src/main.py -v train --max-iteration=2 -c .cache/gat.out -t1 -j5 --cuda --ndrop 0 --train-validate -s "-loss" -m svm
 ```
 
+* LSTM
+
+```
+python src/main.py -v train -m lstm --max-iteration=1 -t1 -j5 --cuda --ndrop=0.85 --train-validate
+```
+
 ## Training & Evaluating
 
 * GraphSAGE:

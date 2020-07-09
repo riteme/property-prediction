@@ -97,6 +97,7 @@ def global_initialize(args: GlobalInitArgs):
 # if you want to pass some parameters directly to models,
 # store them in kwargs. e.g. "embedding_dim" below
 @click.option('--embedding-dim', type=int)
+@click.option('--num-layer', type=int)
 @click.option('--num-estimator', type=int)
 @click.option('--no-shortcut', is_flag=True)
 @click.option('--hard-predict', is_flag=True)

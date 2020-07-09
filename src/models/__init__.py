@@ -10,6 +10,7 @@ from .chebnet import ChebNet
 from .adaboost import AdaBoost
 from .mpnn import MPNN
 from .svm import SVM
+from .lstm import LSTM
 
 def select(name: Text) -> Type[BaseModel]:
     return {
@@ -20,5 +21,6 @@ def select(name: Text) -> Type[BaseModel]:
         'chebnet': ChebNet,
         'adaboost': AdaBoost,
         'mpnn': MPNN,
-        'svm': SVM
+        'svm': SVM,
+        'lstm': LSTM
     }[name]
