@@ -57,6 +57,12 @@ python src/main.py -v train -m gat -t1 -j5 --cuda --max-iteration=3 -c .cache/ga
 python src/main.py -v train -m mpnn -c .cache/mpnn.out --cuda -t1 --max-iteration=5
 ```
 
+* GatedGNN
+
+```
+python src/main.py -v train -m gatedgnn --max-iteration=5
+```
+
 * AdaBoost (with GAT embedding)
 
 ```
@@ -113,6 +119,9 @@ Sample output:
 * Models
     * [x] GCN
     * [x] GAT
+    * [x] Graphsage
+    * [x] MPNN
+    * [x] GatedGNN
     * [x] AdaBoost
     * [x] SVM
 

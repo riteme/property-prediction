@@ -11,6 +11,7 @@ from .adaboost import AdaBoost
 from .mpnn import MPNN
 from .svm import SVM
 from .lstm import LSTM
+from .gatedgnn import GatedGNN
 
 def select(name: Text) -> Type[BaseModel]:
     return {
@@ -22,5 +23,6 @@ def select(name: Text) -> Type[BaseModel]:
         'adaboost': AdaBoost,
         'mpnn': MPNN,
         'svm': SVM,
-        'lstm': LSTM
+        'lstm': LSTM,
+        'gatedgnn': GatedGNN
     }[name]
