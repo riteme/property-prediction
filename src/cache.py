@@ -4,29 +4,29 @@ from typing import (
 )
 
 import sys
-
-TProcessFn: Any
-if sys.version_info.minor >= 8:  # Protocol is only available in Python 3.8+
-    from typing import Protocol
-    # from interface import ModelInterface  # circular import
-    class _ModelInterface(Protocol):
-        def decode_data(self, data: Any, **kwargs) -> Any: ...
-        def process(self, smiles: Text, **kwargs) -> Any: ...
-
-    # https://stackoverflow.com/a/59406717: accept subclasses in callable arguments
-    # however, it seems that TypeVar simply shuts up mypy about `TProcessFn`, even
-    # if ModelInterface does not match the signature of the protocol `_ModelInterface`.
-    TModelInterface = TypeVar('TModelInterface', bound=_ModelInterface)
-
-    # ModelInterface.process
-    TProcessFn = Callable[[TModelInterface, Text], Any]
-else:
-    TProcessFn = Any
-
 import pickle
 import functools
 
 import log
+
+Protocol: Any
+if sys.version_info.minor >= 8:  # Protocol is only available in Python 3.8+
+    from typing import Protocol
+else:
+    from typing_extensions import Protocol
+
+# from interface import ModelInterface  # circular import
+class _ModelInterface(Protocol):
+    def decode_data(self, data: Any, **kwargs) -> Any: ...
+    def process(self, smiles: Text, **kwargs) -> Any: ...
+
+# https://stackoverflow.com/a/59406717: accept subclasses in callable arguments
+# however, it seems that TypeVar simply shuts up mypy about `TProcessFn`, even
+# if ModelInterface does not match the signature of the protocol `_ModelInterface`.
+TModelInterface = TypeVar('TModelInterface', bound=_ModelInterface)
+
+# ModelInterface.process
+TProcessFn = Callable[[TModelInterface, Text], Any]
 
 
 # cache file paths stored in _PROVIDERS. For compatibility with "spawn" method.
